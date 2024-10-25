@@ -20,18 +20,18 @@ if (!class_exists("wpdreamsCustomFSelect")) {
             echo "<select isparam=1 class='wpdreamscustomselect' id='wpdreamscustomselect_" . self::$_instancenumber . "' name='" . $this->name . "'>";
             foreach ($this->selects as $sel) {
                 if (($sel['value'] . "") == ($this->selected . ""))
-                    echo "<option value='" . $sel['value'] . "' selected='selected'>" . $sel['option'] . "</option>";
+                    echo "<option value='" . esc_attr($sel['value']) . "' selected='selected'>" . esc_attr($sel['option']) . "</option>";
                 else
-                    echo "<option value='" . $sel['value'] . "'>" . $sel['option'] . "</option>";
+                    echo "<option value='" . esc_attr($sel['value']) . "'>" . esc_attr($sel['option']) . "</option>";
             }
             $types = $this->get_custom_fields_list();
             if (count($types) > 0) {
                 echo "<option value='c_f' disabled>Custom Fields</option>";
                 foreach ($types as $sel) {
                     if (($sel['value'] . "") == ($this->selected . ""))
-                        echo "<option value='" . $sel['value'] . "' selected='selected'>" . $sel['option'] . "</option>";
+                        echo "<option value='" . esc_attr($sel['value']) . "' selected='selected'>" . esc_attr($sel['option']) . "</option>";
                     else
-                        echo "<option value='" . $sel['value'] . "'>" . $sel['option'] . "</option>";
+                        echo "<option value='" . esc_attr($sel['value']) . "'>" . esc_attr($sel['option']) . "</option>";
                 }
             }
             echo "</select>";
@@ -56,7 +56,7 @@ if (!class_exists("wpdreamsCustomFSelect")) {
         final function get_custom_fields_list() {
             global $wpdb;
             $ret = array();
-            $types = $wpdb->get_results("SELECT * FROM " . $wpdb->postmeta . " GROUP BY meta_key LIMIT 300", ARRAY_A);
+            $types = $wpdb->get_results("SELECT * FROM " . $wpdb->postmeta . " GROUP BY meta_key LIMIT 500", ARRAY_A);
             if ($types != null && is_array($types)) {
                 foreach ($types as $k => $v) {
                     $_t = array();

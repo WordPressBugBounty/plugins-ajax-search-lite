@@ -51,9 +51,9 @@ if (!class_exists("wpdreamsCategories")) {
             }
             echo "</ul></div>";
             echo "
-         <input isparam=1 type='hidden' value='" . $this->data . "' name='" . $this->name . "'>";
+         <input isparam=1 type='hidden' value='" . esc_attr($this->data) . "' name='" . esc_attr($this->name) . "'>";
             echo "
-         <input type='hidden' value='wpdreamsCategories' name='classname-" . $this->name . "'>";
+         <input type='hidden' value='wpdreamsCategories' name='classname-" . esc_attr($this->name) . "'>";
             echo "
         </fieldset>
       </div>";

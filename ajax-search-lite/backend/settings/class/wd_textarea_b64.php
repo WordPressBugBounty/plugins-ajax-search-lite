@@ -12,15 +12,14 @@ if (!class_exists("wd_Textarea_B64")) {
      * @copyright Copyright (c) 2014, Ernest Marcinko
      */
     class wd_Textarea_B64 extends wpdreamsType {
-        private $ddata, $pdata;
+        private string $ddata = '';
 
         public function getType() {
             parent::getType();
-            $this->pdata = "";
             $this->processData();
-            echo "<label style='vertical-align: top;' for='wpdreamstextarea_" . self::$_instancenumber . "'>" . $this->label . "</label>";
+            echo "<label style='vertical-align: top;' for='wpdreamstextarea_" . self::$_instancenumber . "'>" . esc_attr($this->label) . "</label>";
             echo "<input type='hidden' name='" . $this->name . "' value='".$this->data."' />";
-            echo "<textarea class='wd_textarea_b64' id='wd_textarea_b64_" . self::$_instancenumber . "'>" . stripcslashes($this->ddata) . "</textarea>";
+            echo "<textarea class='wd_textarea_b64' id='wd_textarea_b64_" . self::$_instancenumber . "'>" . esc_attr($this->ddata) . "</textarea>";
         }
         
         public function processData() {

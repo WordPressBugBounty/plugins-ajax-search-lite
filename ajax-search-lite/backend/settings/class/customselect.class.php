@@ -23,9 +23,9 @@ if (!class_exists("wpdreamsCustomSelect")) {
             echo "<select isparam=1 class='wpdreamscustomselect' id='wpdreamscustomselect_" . self::$_instancenumber . "' name='" . $this->name . "'>";
             foreach ($this->selects as $sel) {
                 if (($sel['value'] . "") == ($this->selected . ""))
-                    echo "<option value='" . $sel['value'] . "' selected='selected'>" . $sel['option'] . "</option>";
+                    echo "<option value='" . esc_attr($sel['value']) . "' selected='selected'>" . esc_attr($sel['option']) . "</option>";
                 else
-                    echo "<option value='" . $sel['value'] . "'>" . $sel['option'] . "</option>";
+                    echo "<option value='" . esc_attr($sel['value']) . "'>" . esc_attr($sel['option']) . "</option>";
             }
             echo "</select>";
             echo "<div class='triggerer'></div>

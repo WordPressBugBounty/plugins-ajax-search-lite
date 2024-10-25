@@ -24,6 +24,9 @@ if (!class_exists("wpdreamsCustomTaxonomyTerm")) {
           <select name='" . $this->name . "_taxonomies' id='taxonomy_selector_" . self::$_instancenumber . "'> ";
             foreach ($this->types as $taxonomy => $v) {
                 $tax = get_taxonomy($taxonomy);
+				if ( $tax === false ) {
+					continue;
+				}
                 $custom_post_type = "";
                 if ($tax->object_type != null && $tax->object_type[0] != null)
                     $custom_post_type = $tax->object_type[0] . " - ";
@@ -47,7 +50,9 @@ if (!class_exists("wpdreamsCustomTaxonomyTerm")) {
                 }
             }
             echo "</ul></div>";
-            echo '<div class="sortablecontainer"><p>Drag here the terms you want to <b>' . $this->otype . '</b>!</p><ul id="sortable_conn' . self::$_instancenumber . '" class="connectedSortable">';
+            echo '<div class="sortablecontainer">
+					<p>Drag here the terms you want to <b>' . esc_html($this->otype) . '</b>!</p>
+					<ul id="sortable_conn' . self::$_instancenumber . '" class="connectedSortable">';
             if ($this->selected != null && is_array($this->selected)) {
                 foreach ($this->selected as $k => $v) {
                     $term = get_term($v[0], $v[1]);
@@ -62,8 +67,8 @@ if (!class_exists("wpdreamsCustomTaxonomyTerm")) {
             }
             echo "</ul></div>";
             echo "
-         <input isparam=1 type='hidden' value='" . $this->data["value"] . "' name='" . $this->name . "'>
-         <input type='hidden' value='wpdreamsCustomTaxonomyTerm' name='classname-" . $this->name . "'>";
+         <input isparam=1 type='hidden' value='" . esc_attr($this->data["value"]) . "' name='" . esc_attr($this->name) . "'>
+         <input type='hidden' value='wpdreamsCustomTaxonomyTerm' name='classname-" . esc_attr($this->name) . "'>";
             echo "
         </fieldset>
       </div>";

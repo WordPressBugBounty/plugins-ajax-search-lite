@@ -33,7 +33,7 @@ if (!class_exists("wpdreamsTextSmall")) {
                 </span>
                 <?php
             }
-            echo "<input isparam=1 class='small ".$this->inputClasses."' type='text' id='wpdreamstextsmall_" . self::$_instancenumber . "' name='" . $this->name . "' value=\"" . stripslashes(esc_html($this->value)) . "\" />";
+            echo "<input isparam=1 class='small ".$this->inputClasses."' type='text' id='wpdreamstextsmall_" . self::$_instancenumber . "' name='" . esc_attr($this->name) . "' value=\"" . stripslashes(esc_html($this->value)) . "\" />";
             echo $this->suffix;
             echo "
         <div class='triggerer'></div>

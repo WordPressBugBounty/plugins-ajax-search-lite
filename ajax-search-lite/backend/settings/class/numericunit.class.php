@@ -17,16 +17,16 @@ if (!class_exists("wpdreamsNumericUnit")) {
             $this->processData();
             echo "
       <div class='wpdreamsNumericUnit'>";
-            echo "<label>" . $this->label . "</label><input type='text' class='twodigit' name='numeric' value='" . $this->numeric . "' />";
+            echo "<label>" . esc_html($this->label) . "</label><input type='text' class='twodigit' name='numeric' value='" . $this->numeric . "' />";
             echo "<div class='wpdreams-updown'><div class='wpdreams-uparrow'></div><div class='wpdreams-downarrow'></div></div>";
             echo "<select name='units'>";
             foreach ($this->units as $key => $value) {
-                echo "<option value='" . $key . "' " . (($key == $this->selected) ? 'selected=selected' : '') . ">" . $value . "</option>";
+                echo "<option value='" . esc_attr($key) . "' " . (($key == $this->selected) ? 'selected=selected' : '') . ">" . esc_attr($value) . "</option>";
             }
             echo "</select>";
 
             echo "
-         <input isparam=1 type='hidden' value='" . $this->data['value'] . "' name='" . $this->name . "'>
+         <input isparam=1 type='hidden' value='" . esc_attr($this->data['value']) . "' name='" . esc_attr($this->name) . "'>
          <div class='triggerer'></div>
       </div>";
         }

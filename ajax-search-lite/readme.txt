@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 6.6
-Stable tag: 4.12.3
+Stable tag: 4.12.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,6 +115,10 @@ notify the developers of this plugin.
 2. Administrator area - nice and smooth
 
 == Changelog ==
+= 4.12.4 =
+* Removed some unused code
+* Greatly improved security for the back-end UI against potential XSS attacks
+
 = 4.12.3 =
 * Added the missing Menu ordering ASC/DESC for the secondary ordering as well
 * Corrected the previous fix for the low rist XSS issue

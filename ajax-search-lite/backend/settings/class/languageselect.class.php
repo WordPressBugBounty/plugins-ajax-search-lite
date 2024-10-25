@@ -207,9 +207,9 @@ if (!class_exists("wpdreamsLanguageSelect")) {
             echo "<select class='wpdreamsselect' id='wpdreamsselect_" . self::$_instancenumber . "' name='" . $this->name . "'>";
             foreach ($this->languages as $k => $v) {
                 if ($k == $this->data)
-                    echo "<option value='" . $k . "' selected='selected'>" . $v . "</option>";
+                    echo "<option value='" . esc_attr($k) . "' selected='selected'>" . esc_attr($v) . "</option>";
                 else
-                    echo "<option value='" . $k . "'>" . $v . "</option>";
+                    echo "<option value='" . esc_attr($k) . "'>" . esc_attr($v) . "</option>";
             }
             echo "</select>";
             echo "</div>";

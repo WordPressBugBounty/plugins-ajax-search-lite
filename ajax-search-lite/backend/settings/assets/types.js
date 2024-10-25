@@ -26,13 +26,6 @@ jQuery(function($){
     });
 
     /**
-     * Textarea as parameter
-     */
-    $('.wpdreamsTextareaIsParam .triggerer').bind('click', function () {
-        $('textarea', $(this).parent()).change();
-    });
-
-    /**
      * OnOff button
      */
     $('.wpdreamsOnOff .wpdreamsOnOffInner').on('click', function () {

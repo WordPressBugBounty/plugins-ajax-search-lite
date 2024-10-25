@@ -43,8 +43,8 @@ if (!class_exists("wpdreamsCustomFields")) {
                 echo '<li class="ui-state-default" cf_name="' . $v . '">' . $v . '<a class="deleteIcon"></a></li>';
             }
             echo "</ul></div>
-                  <input isparam=1 type='hidden' value='" . $this->data . "' name='" . $this->name . "'>
-                  <input type='hidden' value='wpdreamsCustomFields' name='classname-" . $this->name . "'>
+                  <input isparam=1 type='hidden' value='" . esc_attr($this->data) . "' name='" . esc_attr($this->name) . "'>
+                  <input type='hidden' value='wpdreamsCustomFields' name='classname-" . esc_attr($this->name) . "'>
                 </fieldset>
               </div>";
         }

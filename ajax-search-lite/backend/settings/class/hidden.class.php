@@ -13,7 +13,7 @@ if (!class_exists("wpdreamsHidden")) {
      */
     class wpdreamsHidden extends wpdreamsType {
         function getType() {
-            echo "<input type='hidden' id='wpdreamshidden_" . self::$_instancenumber . "' name='" . $this->name . "' value='" . $this->data . "' />";
+            echo "<input type='hidden' id='wpdreamshidden_" . self::$_instancenumber . "' name='" . $this->name . "' value='" . esc_attr($this->data) . "' />";
         }
     }
 }

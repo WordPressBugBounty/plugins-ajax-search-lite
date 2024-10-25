@@ -18,8 +18,13 @@ if (!class_exists("wpdreamsColorPickerDummy")) {
             $this->name = $this->name . "_colorpicker";
             echo "<span class='wpdreamsColorPicker'>";
             if ($this->label != "")
-                echo "<label for='wpdreamscolorpicker_" . self::$_instancenumber . "'>" . $this->label . "</label>";
-            echo "<input type='text' class='color' id='" . $this->name . "' id='wpdreamscolorpicker_" . self::$_instancenumber . "'  name='" . $this->name . "' id='wpdreamscolorpicker_" . self::$_instancenumber . "' value='" . $this->data . "' />";
+                echo "<label for='wpdreamscolorpicker_" . self::$_instancenumber . "'>" . esc_attr($this->label) . "</label>";
+            echo "<input 
+            type='text' 
+            class='color' 
+            id='" . esc_attr($this->name) . "' id='wpdreamscolorpicker_" . self::$_instancenumber . "'  
+            name='" . esc_attr($this->name) . "' id='wpdreamscolorpicker_" . self::$_instancenumber . "' 
+            value='" . esc_attr($this->data) . "' />";
             echo "<div class='triggerer'></div>
       </span>";
         }

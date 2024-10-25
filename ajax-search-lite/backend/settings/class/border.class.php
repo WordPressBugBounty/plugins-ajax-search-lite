@@ -34,7 +34,7 @@ if (!class_exists("wpdreamsBorder")) {
                         <div>
                             <label>Style<select class='smaller _xx_style_xx_'>
                             <?php foreach($this->border_styles as $option): ?>
-                                <option value="<?php echo $option; ?>"<?php echo $this->style == $option ? ' selected="selected"' : ''; ?>><?php echo $option; ?></option>
+                                <option value="<?php echo $option; ?>"<?php echo $this->style == $option ? ' selected="selected"' : ''; ?>><?php echo esc_attr($option); ?></option>
                             <?php endforeach; ?>
                             </select></label>
                         </div>
@@ -46,14 +46,14 @@ if (!class_exists("wpdreamsBorder")) {
                         </div>
                         <fieldset class="wpd_border_radius">
                             <legend>Border Radius</legend>
-                            <label>Top left<input type='text' class='twodigit _xx_topleft_xx_'value="<?php echo $this->topleft; ?>" />px</label>
-                            <label>Top right<input type='text' class='twodigit _xx_topright_xx_' value="<?php echo $this->topright; ?>" />px</label><br>
-                            <label>Bottom right<input type='text' class='twodigit _xx_bottomright_xx_' value="<?php echo $this->bottomright; ?>" />px</label>
-                            <label>Bottom left<input type='text' class='twodigit _xx_bottomleft_xx_' value="<?php echo $this->bottomleft; ?>" />px</label>
+                            <label>Top left<input type='text' class='twodigit _xx_topleft_xx_'value="<?php echo esc_attr($this->topleft); ?>" />px</label>
+                            <label>Top right<input type='text' class='twodigit _xx_topright_xx_' value="<?php echo esc_attr($this->topright); ?>" />px</label><br>
+                            <label>Bottom right<input type='text' class='twodigit _xx_bottomright_xx_' value="<?php echo esc_attr($this->bottomright); ?>" />px</label>
+                            <label>Bottom left<input type='text' class='twodigit _xx_bottomleft_xx_' value="<?php echo esc_attr($this->bottomleft); ?>" />px</label>
                         </fieldset>
                     </div>
                 </fieldset>
-                <input isparam=1 type='hidden' value="<?php echo $this->data; ?>" name="<?php echo $this->name; ?>">
+                <input isparam=1 type='hidden' value="<?php echo esc_attr($this->data); ?>" name="<?php echo $this->name; ?>">
                 <div class='triggerer'></div>
             </div>
             <?php

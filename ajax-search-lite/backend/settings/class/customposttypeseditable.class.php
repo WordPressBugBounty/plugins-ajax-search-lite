@@ -43,8 +43,8 @@ if (!class_exists("wpdreamsCustomPostTypesEditable")) {
             foreach ($this->types as $k => $v) {
                 if ($this->selected == null || !wd_in_array_r($v, $this->selected)) {
                     echo '<li class="ui-state-default ui-left" style="background: #ddd;">
-				          <label>' . $k . '</label>
-				          <input type="text" value="' . $k . '"/>
+				          <label>' . esc_attr($k) . '</label>
+				          <input type="text" value="' . esc_attr($k) . '"/>
 				          </li>';
                 }
             }
@@ -52,15 +52,15 @@ if (!class_exists("wpdreamsCustomPostTypesEditable")) {
             echo '<div class="sortablecontainer"><p>Drag here the post types you want to use!</p><ul id="sortable_conn' . self::$_instancenumber . '" class="connectedSortable">';
             foreach ($this->selected as $v) {
                 echo '<li class="ui-state-default ui-left" style="background: #ddd;">
-				        <label>' . $v[0] . '</label>
-				        <input type="text" value="' . $v[1] . '"/>
+				        <label>' . esc_attr($v[0]) . '</label>
+				        <input type="text" value="' . esc_attr($v[1]) . '"/>
 				        </li>';
             }
             echo "</ul></div>";
             echo "
-         <input isparam=1 type='hidden' value='" . $this->data . "' name='" . $this->name . "'>";
+         <input isparam=1 type='hidden' value='" . esc_attr($this->data) . "' name='" . esc_attr($this->name) . "'>";
             echo "
-         <input type='hidden' value='wpdreamsCustomPostTypesEditable' name='classname-" . $this->name . "'>";
+         <input type='hidden' value='wpdreamsCustomPostTypesEditable' name='classname-" . esc_attr($this->name) . "'>";
             echo "
         </fieldset>
       </div>";

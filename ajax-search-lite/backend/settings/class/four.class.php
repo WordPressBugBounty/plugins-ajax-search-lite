@@ -25,15 +25,15 @@ if (!class_exists("wpdreamsFour")) {
             echo "
       <div class='wpdreamsFour'>
         <fieldset>
-          <legend>" . $this->label . "</legend>";
+          <legend>" . esc_attr($this->label) . "</legend>";
             echo "
-         <label>Top</label><input type='text' class='threedigit' name='topleft' value='" . $this->top . "' />
-         <label>Bottom</label><input type='text' class='threedigit' name='bottomright' value='" . $this->bottom . "' />
-         <label>Right</label><input type='text' class='threedigit' name='topright' value='" . $this->right . "' />
-         <label>Left</label><input type='text' class='threedigit' name='bottomleft' value='" . $this->left . "' />
-         <input isparam=1 type='hidden' value='" . $this->data . "' name='" . $this->name . "'>
+         <label>Top</label><input type='text' class='threedigit' name='topleft' value='" . esc_attr($this->top) . "' />
+         <label>Bottom</label><input type='text' class='threedigit' name='bottomright' value='" . esc_attr($this->bottom) . "' />
+         <label>Right</label><input type='text' class='threedigit' name='topright' value='" . esc_attr($this->right) . "' />
+         <label>Left</label><input type='text' class='threedigit' name='bottomleft' value='" . esc_attr($this->left) . "' />
+         <input isparam=1 type='hidden' value='" . esc_attr($this->data) . "' name='" . esc_attr($this->name) . "'>
          <div class='triggerer'></div>
-         <p class='descMsg'>$this->desc</p>
+         <p class='descMsg'>" . esc_html($this->desc) . "</p>
         </fieldset>
       </div>";
         }

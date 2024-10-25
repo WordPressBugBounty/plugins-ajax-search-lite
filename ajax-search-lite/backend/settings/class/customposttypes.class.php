@@ -43,6 +43,9 @@ if (!class_exists("wpdreamsCustomPostTypes")) {
             echo '<div class="sortablecontainer"><p>Drag here the post types you want to use!</p><ul id="sortable_conn' . self::$_instancenumber . '" class="connectedSortable">';
             if ($this->selected != null && is_array($this->selected)) {
                 foreach ($this->selected as $k => $v) {
+					if ( !isset($this->types[trim($v)]) ) {
+						continue;
+					}
                     echo '<li class="ui-state-default" data-ptype="'.$v.'">'
                         .$this->types[trim($v)]->labels->name.
                         '<span class="extra_info">['.$v.']</span></li>';
