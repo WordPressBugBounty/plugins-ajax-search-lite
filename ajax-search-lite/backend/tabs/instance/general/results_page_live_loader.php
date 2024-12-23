@@ -24,7 +24,7 @@
 	</div>
 	<div class="item" wd-enable-on="res_live_search:1">
 		<?php
-		$o = new wpdreamsText("res_live_selector", __('Results container jQuery element selector', 'ajax-search-lite'), $sd['res_live_selector']);
+		$o = new wpdreamsText("res_live_selector", __('Results container DOM selector', 'ajax-search-lite'), $sd['res_live_selector']);
 		$params[$o->getName()] = $o->getData();
 		?>
 		<div class="descMsg">

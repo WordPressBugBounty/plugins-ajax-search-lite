@@ -1,73 +1,92 @@
-=== Ajax Search Lite ===
+=== Ajax Search Lite - Live Search & Filter ===
 Contributors: wpdreams
 Donate link: http://wp-dreams.com
 Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
-Tested up to: 6.6
-Stable tag: 4.12.4
+Tested up to: 6.7
+Stable tag: 4.12.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A powerful ajax search engine for WordPress. Add a live search form to your site with filters. Custom post types, custom fields, categories supported
+The Best Ajax Live Search and Filter for WordPress. Live suggestions, Custom Post types, Custom fields, Categories, WooCommerce & Elementor support
 
 == Description ==
 
-**Ajax Search Lite** is a live search plugin for WordPress. This responsive live search engine, which will boost your user experience by providing a user friendly ajax powered search form - a live search bar. You can filter the results with the category and post type filter boxes as well. Google autocomplete and keyword suggestions also included.
+**Ajax Search Lite** is a live search plugin for WordPress. This responsive live search engine, which will boost your user experience by providing a user friendly ajax powered search form – a live search bar. You can filter the results with the category and post type filter boxes as well. Google autocomplete and keyword suggestions also included.
+
+[youtube https://www.youtube.com/watch?v=qI2_iKK4n_4]
 
 Very smooth animations with mobile device support and regular updates. Use **Ajax Search Lite** as a replacement for the default WordPress search with a better looking, more efficient search engine.
 Fine-tune the user experience by providing a powerful ajax search plugin to your visitors. Supports custom post types and custom fields and more. Boost your site search engine with this custom built live search engine.
 
-[Live Demo](https://ajaxsearchpro.com) | [Facebook](https://www.facebook.com/wpdreams/) | [Twitter](https://twitter.com/ernest_marcinko)
+[Home](https://ajaxsearchpro.com) | [Features](https://ajaxsearchpro.com/features) | [Lite Docs](https://documentation.ajaxsearchlite.com/) | [Pro Docs](https://documentation.ajaxsearchpro.com/)
+
+Ajax Search Lite and Ajax Search Pro **does not require monthly subscriptions**, does not store your data on external servers – **everything is done locally**, on your server.
 
 #### Features List
 
 * Search in **posts** and **pages**
 * Search in **custom post types** such as WooCommerce **Products**, **Events**, **Portfolio** items and more
 * Search in **title**, **description**, **excerpt**, **categories** and **tags** and any **custom fields**
+* Archive page live loader and filter
 * Automatic search replacement as well as **widget** and **shortcode** availalbe
 * Custom Filter boxes (checkbox filters) for categories and post types
-* **WPML** and **QtranslateX** compatible
-* 8 built in templates + options for color adjustments
+* **WPML**, **Polylang** and **QtranslateX** compatible
+* 10+ built in templates + options for color adjustments
 * Retina ready vectorized **SVG** and **CSS3** icons
 * Category and post exclusions
 * Frontend search settings boxes
 * Images in search results
 * Fully ajax powered
-* **40+ options** on the backend
+* **50+ options** on the backend
 * Caches images for faster response time
 * Performance Options
-* **Google analytics integration** - both as **Events** and Pageviews
+* **Google analytics integration** – both as **Events** and Pageviews
 * Primary and Secondary ordering options
 * Highly compatible and responsive
-
-[Demo](https://ajaxsearchpro.com)
 
 #### Support
 Feel free to [contact us](https://wordpress.org/support/plugin/ajax-search-lite/) via the support forums.
 
 #### In Pro version
 
-* [Front-end demo](https://ajaxsearchpro.com) | [Back-end demo](https://ajaxsearchpro.com/admin-demo/)
-* Search in BuddyPress, BBPress, JigoShop, Woocommerce
-* Search in Media Attachments and contents (PDF, Excel, Word, PowerPoint etc..)
-* Search in BuddyPress activity feed, users and group names
+* [Front-end demo](https://ajaxsearchpro.com) | [Back-end demo](https://ajaxsearchpro.com/try/)
+* Create multiple search bars with different configurations
+* All page builders supported (Elementor, Divi, Oxygen, Breakdance, Gutenberg, Beaver etc..)
+* Search in **Every custom post type**
+* Search in **[Media Attachments and contents](https://ajaxsearchpro.com/file-search/)** (PDF, Excel, Word, PowerPoint etc..)
+* Search in **BuddyPress activity feed, users and group names**
 * Search in PeepSo Groups and Group Activities
 * Search result grouping by categories or post types
-* Search in custom fields
-* Advanced caching technology - image precaching, search phrase caching
+* Search in custom fields including repeaters and special custom field taypes
+* **Predictive search** results suggestions
+* WooCommerce [Shop search and filter](https://ajaxsearchpro.com/shop-search/)
+* Search and filter Elementor [Loop Grid](https://ajaxsearchpro.com/elementor-live-filter/) and [JetEngine Listing Grid](https://ajaxsearchpro.com/jet-engine-listing-grid-filter/)
+* Advanced caching technology – image precaching, search phrase caching
 * Category filters, custom field filters, post type filters, tag filters, taxonomy term filters and date filters
-* Post grouping by category, post type or content type
-* Search in comments
-* 100+ Themes - Fully configurable and editable - with theme customizer & preview window
+* **Checkbox, Drop-down, Multiselect, Radio, Slider and Range slider filters**
+* Results grouping by category, post type or content type
+* [Load more and Inifinite scroll](https://ajaxsearchpro.com/load-more-infinite-scroll/)
+* 100+ Themes – Fully configurable and editable – with theme customizer & preview window
 * 4 layouts: Vertical, Horizontal, Polaroid and Isotopic (with pagination)
 * 400+ Admin options                                                    
 * Google keyword suggestions and autocomplete
 * Compatibility options and features
 * Caching options & Search statistics
-* Keyword Highlighting & more...
+* Keyword Highlighting & more…
 * Highly compatible and responsive
 * [Full Features List](https://ajaxsearchpro.com/features/)
+
+#### Testimonials
+
+> "Beyond the live search, it also makes your search much more complete. You’ll be able to include custom fields, comments, and more in your search index." – Ben Pines – Elementor
+
+> "Consider this plugin if you’re looking for a professional live search offering." – Tom Ewer – WPMU Dev
+
+> "Ajax Search Pro plugin gives you a live Ajax search, so much comfortable search experience" – Dragan Nikolic – Thematosoup
+
+> "As the name suggests, the core value of Ajax Search Pro is the ability to add Ajax live search to WordPress." – Colin Newcomer – aThemes
 
 
 == Installation ==
@@ -111,10 +130,14 @@ notify the developers of this plugin.
 
 == Screenshots ==
 
-1. Ajax Search Lite in action - 2 themes
-2. Administrator area - nice and smooth
+1. Ajax Search Lite in action – 2 themes
+2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.12.5 =
+* Further security improvements on the form inputs and labels
+* Changed some back-end labels for more clarity
+
 = 4.12.4 =
 * Removed some unused code
 * Greatly improved security for the back-end UI against potential XSS attacks
@@ -124,7 +147,7 @@ notify the developers of this plugin.
 * Corrected the previous fix for the low rist XSS issue
 
 = 4.12.2 =
-* Fixed a possible XSS security issue - reported by Dmitrii Ignatyev from cleantalk
+* Fixed a possible XSS security issue – reported by Dmitrii Ignatyev from cleantalk
 
 = 4.12.1 =
 * Fixed a dependency issue with the old widgets screen and the search bocks
@@ -132,14 +155,14 @@ notify the developers of this plugin.
 * Fixed a potential XSS vulnerability for the back-end options interface
 
 = 4.12 =
-* Added support for Block Editor - the Ajax Search Lite block should be available for Gutenberg
+* Added support for Block Editor – the Ajax Search Lite block should be available for Gutenberg
 * WPML String translations updates
 * PHP 8.3 compatibility fixes
 * Fixed an issue with the post_parent shortcode attribute
 * Fixed an issue with form width/flex with some themes
 
 = 4.11.5 =
-* Improved the results keyword highlighter - now does not need to use the local storage
+* Improved the results keyword highlighter – now does not need to use the local storage
 * Fixed a few PHP>8.2 deprecation issues
 * Removed some CSS files, which are no longer needed for the back-end
 * Fixed a potential CRSF & XSS issue identified by [Le Ngoc Anh](https://patchstack.com/database/researcher/be74d02b-c6f9-4a2b-bd48-5977f25413b3)
@@ -148,7 +171,7 @@ notify the developers of this plugin.
 * Fixed a layout issue with the magnifier icon
 
 = 4.11.3 =
-* New shortcode argument: post_parent="1,2,3" - where the search results can be restricted to the list of parent posts (or any other post type IDs). Ex: `[wpdreams_ajaxsearchlite post_parent="1, 2, 3, 4"]`
+* New shortcode argument: post_parent="1,2,3" – where the search results can be restricted to the list of parent posts (or any other post type IDs). Ex: `[wpdreams_ajaxsearchlite post_parent="1, 2, 3, 4"]`
 * Added tabindexes (tabindex=0) to the filters for better navigation
 * Moved the magnifier button in the DOM to after the input field
 * Greatly improved the custom field search logic and performance
@@ -159,7 +182,7 @@ notify the developers of this plugin.
 = 4.11.2 =
 * Fixed an issue with duplicated filter checkbox IDs (label removed, replaced with aria-label) for accessibility
 * Changed the "more results" element from an anchor to a span for better compatibility with menu positions
-* Added an inline position correction script - when the plugin is placed within a menu, the parent is usually an anchor - in that case the plugin will automatically replace the anchor with a DIV so the layout is valid
+* Added an inline position correction script – when the plugin is placed within a menu, the parent is usually an anchor – in that case the plugin will automatically replace the anchor with a DIV so the layout is valid
 * Various cosmetic fixes for the back-end
 
 = 4.11.1 =
@@ -191,37 +214,37 @@ notify the developers of this plugin.
 
 = 4.10.1 =
 * Added a new option to change the results box snapping
-* Improved Init method - Using intersection observer for the init script instead of the "inViewPort" solution
+* Improved Init method – Using intersection observer for the init script instead of the "inViewPort" solution
 * Greatly improved the overall script loading method. [Old (~8ms)](https://i.imgur.com/Li6v3jd.png) vs. [New (~0.5ms)](https://i.imgur.com/UAstMci.png)
 * Now every existing installation is switched to the new, more powerful non-legacy scripts. The legacy scripts are now deprecated.
 * Improved the browser pushstate (back and forward) button behavior
-* Scrollbar script disabled and deprecated by default - using modern browser scrollbar styling instead
+* Scrollbar script disabled and deprecated by default – using modern browser scrollbar styling instead
 * Greatly improved the loading of the single font asset
 * Fixed the keyboard navigation for the results
 * Fixed an issue with the thumbnail generator library
 * Fixed a z-index issue when the search was placed in a fixed container
 * Fixed an issue with accented characters in the keyword highlighter feature
-* Hovering results and settings box positioning - fixed an issue, where the body margin was incorrectly subtracted from the position, when body transformation was not present
+* Hovering results and settings box positioning – fixed an issue, where the body margin was incorrectly subtracted from the position, when body transformation was not present
 * Fixed an issue with accented characters in the keyword highlighter feature
 
 = 4.10 =
-* The plugin no longer requires jQuery, it had been reworked to more efficient ES6 standards. By default, the old "legacy" scripts are still in use for existing installations - please see [this documentation](https://documentation.ajaxsearchlite.com/compatibility-settings/javascript-compatibility) on how to change it. It will be automatically changed in a future release.
+* The plugin no longer requires jQuery, it had been reworked to more efficient ES6 standards. By default, the old "legacy" scripts are still in use for existing installations – please see [this documentation](https://documentation.ajaxsearchlite.com/compatibility-settings/javascript-compatibility) on how to change it. It will be automatically changed in a future release.
 * Added a [results page live loader](https://documentation.ajaxsearchlite.com/general-options/results-page-live-loader) feature.
 * Added an option to change the results window width
 * It is now possible to change the date format manually for the live results
 * Fixed various minor issues
 
 = 4.9.5 =
-* Image parser - now handles array (of images) values from custom field sources
+* Image parser – now handles array (of images) values from custom field sources
 * Scrolling now does not trigger checkbox selection on mobile devices
 * Scrollbar script updated to a newer release (IE Edge only support)
 
 = 4.9.4 =
 * wp_get_attachment_image_url instead of the wp_get_attachment_url is used for custom field images so the size argument is applied to them
 * Fixed the issues with the new widgets screen, the styling should now correctly appear
-* Polylang issue fixes - now the results page should respect when the polylang compatibility is turned off
+* Polylang issue fixes – now the results page should respect when the polylang compatibility is turned off
 * Keyword suggestions now working correctly
-* Polylang - better compatibility when the site language is selected
+* Polylang – better compatibility when the site language is selected
 * Fixed an issue with the script registration process
 
 = 4.9.3 =
@@ -240,7 +263,7 @@ notify the developers of this plugin.
 * Added: Keyword highlighting and scrolling on the single results page
 * Added: JS hooks
 * Added: Options to change theme colors, result background, results box background, title fonts, description and other fonts
-* Added: Ordering - by menu order and by custom field added
+* Added: Ordering – by menu order and by custom field added
 * Added: advanced title and content fields
 * Added: description context option
 * Added: exact match location option
@@ -248,14 +271,14 @@ notify the developers of this plugin.
 * Added: Advanced Options -> Keyword exceptions tab
 * Added: image options -> image filename exclusions
 * Changed: Updated the engine and the API from the Pro version
-* Changed: jquery.gestures.js removed - not needed anymore
+* Changed: jquery.gestures.js removed – not needed anymore
 * Compatibility checked against WP 5.7
-* Fixed: Posts per page option - changed to "auto" by default, parses the wordpress value if not set
+* Fixed: Posts per page option – changed to "auto" by default, parses the wordpress value if not set
 * Fixed: Results keyword highlighter now supports accented/non-accented keywords
-* Fixed: Context finder function - fixed an issue when the minimum word length is below the first phrase word lenght, the function returned the incorrect (long) string
-* Fixed: Context finder function - now accented and non-accented variations will also work
+* Fixed: Context finder function – fixed an issue when the minimum word length is below the first phrase word lenght, the function returned the incorrect (long) string
+* Fixed: Context finder function – now accented and non-accented variations will also work
 * Fixed: Russian quotation marks for exact matches are now recognized: «»
-* Fixed: wp_localize_script - some uses of that function replaced with an internal solution, to prevent cache plugin incompatibilities
+* Fixed: wp_localize_script – some uses of that function replaced with an internal solution, to prevent cache plugin incompatibilities
 * Fixed: Known possible jQuery.migrate deprecation warnings
 
 = 4.8.6 =
@@ -266,15 +289,15 @@ notify the developers of this plugin.
 
 = 4.8.5 =
 * Option to exclude Password protected posts
-* Exact matching - Full exact matching added (mathing a field exactly, from start to the end)
-* asl_load_css, asl_load_js and asl_load_css_js hooks - when returns true, the JS, CSS or both are stopped from loading
+* Exact matching – Full exact matching added (mathing a field exactly, from start to the end)
+* asl_load_css, asl_load_js and asl_load_css_js hooks – when returns true, the JS, CSS or both are stopped from loading
 * WP 5.6 compatible
-* Image parsing on multisite - now automatically tries to fetch the images from across blogs on the results page
+* Image parsing on multisite – now automatically tries to fetch the images from across blogs on the results page
 
 = 4.8.4 =
 * Option to exclude WooCommerce hidden catalog products
 * Fixed issues with the singleton class structures:   https://wordpress.org/support/topic/feature-requests-177/#post-13145770
-* Detection the search within dynamically loaded elements - like Elementor pop-ups and similar.
+* Detection the search within dynamically loaded elements – like Elementor pop-ups and similar.
 * Removes [embed] shortcodes and embed Gutenberg blocks from the content
 
 = 4.8.3 =
@@ -282,20 +305,20 @@ notify the developers of this plugin.
 * Possible security issue fixed
 
 = 4.8.2 =
-* Reworked Google Analytics integration - supporting Events tracking and both Universal and Gtag integration methods
+* Reworked Google Analytics integration – supporting Events tracking and both Universal and Gtag integration methods
 
 = 4.8.1 =
-* Image parser - now the number of image to get from the content can be defined. The parser will check for alternative image attributes as well
+* Image parser – now the number of image to get from the content can be defined. The parser will check for alternative image attributes as well
 * Scrollbar script switched to simplebar
 * Results box now supports multiple, adjustable number of columns
-* Width options - now adjustable for desktop/mobile/tablet versions
+* Width options – now adjustable for desktop/mobile/tablet versions
 * Multiple jQuery version detection
 * WordPress 5.4 compatibility tested
 * Some language strings corrected
 
 = 4.8 =
 * Basic RTL layout support
-* Duplication check - the script now detects and tries to fix duplicate output (ex. menus cloning the search bar) and fixing it's functionality automatically
+* Duplication check – the script now detects and tries to fix duplicate output (ex. menus cloning the search bar) and fixing it's functionality automatically
 * Removed some old MS CSS filters (alpha opacity)
 
 = 4.7.26 =
@@ -309,11 +332,11 @@ notify the developers of this plugin.
 * Fixed an issue with the content image parser, that was introduced in the previous release by accident
 
 = 4.7.24 =
-* Image parser - now correctly parsing images from post excerpt and contents, even if these fields are not in use
+* Image parser – now correctly parsing images from post excerpt and contents, even if these fields are not in use
 
 = 4.7.23 =
-* Exclude posts - input validation (to prevent extra commas at the end)
-* Image parser - now correctly gets the first image from post contents/excerpts, instead of the second
+* Exclude posts – input validation (to prevent extra commas at the end)
+* Image parser – now correctly gets the first image from post contents/excerpts, instead of the second
 
 = 4.7.22 =
 * Fixed a rapid return key trigger prevention method
@@ -335,18 +358,18 @@ notify the developers of this plugin.
 * Added a notice for the back-end, when choosing the Post override method, that the plugin may use Cookies to store the pagination and the filter states (functional cookies only)
 * Better stripping of CSS and script contents
 * Back-end override no longer triggers, when the Post method is enabled
-* Analytics tracker - support of 3rd party plugins and the __gaTracker function
+* Analytics tracker – support of 3rd party plugins and the __gaTracker function
 * domDocument and multibyte functions check before use
 
 = 4.7.18 =
-* Fix - Minification issue causing a scrollbar malfunction fixed
+* Fix – Minification issue causing a scrollbar malfunction fixed
 
 = 4.7.17 =
-* Change - Main LIKE query re-worked: better cross-field (title, content etc..) matching, better relevance calculation and faster execution
-* Change - Words within double quotes will now be matched exactly (in order), and can be combined with other keywords. For example, entering phrase - "nobel prize" 2018 - will use keywords: "nobel prize" and "2018"
-* Change - The default keyword logic set to AND
-* Fix - Remaining form title labels moved to aria-label attributes
-* Fix - Other minor code bugfixes
+* Change – Main LIKE query re-worked: better cross-field (title, content etc..) matching, better relevance calculation and faster execution
+* Change – Words within double quotes will now be matched exactly (in order), and can be combined with other keywords. For example, entering phrase – "nobel prize" 2018 – will use keywords: "nobel prize" and "2018"
+* Change – The default keyword logic set to AND
+* Fix – Remaining form title labels moved to aria-label attributes
+* Fix – Other minor code bugfixes
 
 = 4.7.16 =
 * Input font now can be changed
@@ -358,7 +381,7 @@ notify the developers of this plugin.
 
 = 4.7.15 =
 * New Option: to exclude out-of-stock WooCommerce results
-* New option: Exact match location - Starting with, Anywhere, Ending with
+* New option: Exact match location – Starting with, Anywhere, Ending with
 * Post type option re-worked for a better layout, merged with the 'Search in posts' and 'Search in pages' options
 * By default, the front-end filters are disabled now
 * FixURL function now only accepts 2 parameters, for better compabitlity
@@ -369,7 +392,7 @@ notify the developers of this plugin.
 * Post type and Content type CSS classes to results output + new filter: asl_result_css_class
 * The close icon now displays on more occasions
 * .label and .option deprecated classes removed (announced in 4.7.12)
-* $post().fail(...) handler. Outputs errors to the results box if any.
+* $post().fail(…) handler. Outputs errors to the results box if any.
 * The result max height option default value changed to the correct 'none' from 'auto'
 
 = 4.7.13 =
@@ -378,7 +401,7 @@ notify the developers of this plugin.
 * The magnifier and return redirection/action options have been merged
 * The main search input trigger method changed from 'keyup' to 'input' event
 * The main query now properly gets cancelled when the override query is executed.
-* Fixed container detection - The results and settings container no longer 'jumps' when the search bar is placed in a fixed container.
+* Fixed container detection – The results and settings container no longer 'jumps' when the search bar is placed in a fixed container.
 
 = 4.7.12 =
 * Results templating is available now as in the pro version
@@ -416,7 +439,7 @@ notify the developers of this plugin.
 * Checkbox labels are now clickable
 * Input focus and results opening now works if there is no search phrase entered
 * Back-end menu links were changed to a nicer URL
-* Context find bugfix - where with empty phrase the search might return the full text
+* Context find bugfix – where with empty phrase the search might return the full text
 * Fixed a bug with WPML where product variations were displayed in incorrect language
 * Fixed 3 WooCommerce related error messages
 * IOS devices will no longer zoom unexpectedly
@@ -430,7 +453,7 @@ notify the developers of this plugin.
 * WooCommerce: Product variations now respect the parent product status
 * WooCommerce: Hidden products now can be excluded (enabled by default)
 * Added an exception filter to allow stop plugin loading completely: asl_stop_loading filter
-* Content image parser - now converts the content to UTF8 first
+* Content image parser – now converts the content to UTF8 first
 
 = 4.7.5 =
 * A category filtering bug fixed
@@ -636,8 +659,3 @@ notify the developers of this plugin.
 
 == Upgrade notice ==
 * Nothing to say here :)
-
-
-== Plugin website ==
-
-`https://ajaxsearchpro.com`

@@ -22,8 +22,8 @@
 				   type='search' class='orig'
 				   tabindex="0"
 				   name='phrase'
-				   placeholder='<?php echo asl_icl_t( "Search bar placeholder text", w_isset_def($style['defaultsearchtext'], '') ); ?>'
-				   value='<?php echo apply_filters('asl_print_search_query', get_search_query()); ?>'
+				   placeholder='<?php echo esc_attr(asl_icl_t( "Search bar placeholder text", w_isset_def($style['defaultsearchtext'], '') )); ?>'
+				   value='<?php echo esc_attr(apply_filters('asl_print_search_query', get_search_query())); ?>'
 				   autocomplete="off"/>
 			<input aria-label="<?php echo esc_attr(asl_icl_t('Search autocomplete input aria-Label', $style['aria_search_autocomplete_label'])); ?>"
 				   type='text'

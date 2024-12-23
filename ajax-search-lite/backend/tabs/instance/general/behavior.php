@@ -29,7 +29,7 @@
 			?>
 		</div>
 	</div>
-	<div class="item">
+	<div class="item" wd-show-on="exactonly:0">
 		<?php
 		$o = new wpdreamsCustomSelect("keyword_logic", __("Keyword (phrase) logic?", "ajax-search-lite"), array(
 			'selects'=>array(

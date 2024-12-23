@@ -36,7 +36,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
 
             <?php do_action('asl_res_vertical_before_image'); ?>
 
-            <img class='asl_image' loading='lazy' src='<?php echo $r->image; ?>'>
+            <img class='asl_image' loading='lazy' src='<?php echo esc_attr($r->image); ?>'>
 
             <?php do_action('asl_res_vertical_after_image'); ?>
 
@@ -44,8 +44,8 @@ defined('ABSPATH') or die("You can't access this file directly.");
 
 
 
-        <h3><a class="asl_res_url" href='<?php echo $r->link; ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
-                <?php echo $r->title; ?>
+        <h3><a class="asl_res_url" href='<?php echo esc_attr($r->link); ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
+                <?php echo esc_html($r->title); ?>
                 <?php if ($s_options['resultareaclickable'] == 1): ?>
                     <span class='overlap'></span>
                 <?php endif; ?>
@@ -57,11 +57,11 @@ defined('ABSPATH') or die("You can't access this file directly.");
             <div class='etc'>
 
                 <?php if ( $s_options['showauthor'] == 1 && !empty($r->author) ): ?>
-                    <span class='asl_author'><?php echo $r->author; ?></span>
+                    <span class='asl_author'><?php echo esc_html($r->author); ?></span>
                 <?php endif; ?>
 
                 <?php if ( $s_options['showdate'] == 1 && !empty($r->date) ): ?>
-                    <span class='asl_date'><?php echo $r->date; ?></span>
+                    <span class='asl_date'><?php echo esc_html($r->date); ?></span>
                 <?php endif; ?>
 
             </div>
@@ -69,9 +69,9 @@ defined('ABSPATH') or die("You can't access this file directly.");
         <?php endif; ?>
 
         <?php if ($s_options['showdescription'] == 1): ?>
-            <p class="asl_desc">
+            <div class="asl_desc">
             <?php echo $r->content; ?>
-            </p>
+            </div>
         <?php endif; ?>
 
     </div>
