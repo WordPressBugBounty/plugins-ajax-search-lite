@@ -45,7 +45,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
 
 
         <h3><a class="asl_res_url" href='<?php echo esc_attr($r->link); ?>'<?php echo ($s_options['results_click_blank'])?" target='_blank'":""; ?>>
-                <?php echo esc_html($r->title); ?>
+		        <?php echo wp_kses_post($r->title); ?>
                 <?php if ($s_options['resultareaclickable'] == 1): ?>
                     <span class='overlap'></span>
                 <?php endif; ?>
@@ -70,7 +70,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
 
         <?php if ($s_options['showdescription'] == 1): ?>
             <div class="asl_desc">
-            <?php echo $r->content; ?>
+            <?php echo wp_kses_post($r->content); ?>
             </div>
         <?php endif; ?>
 

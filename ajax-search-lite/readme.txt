@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 6.7
-Stable tag: 4.12.5
+Stable tag: 4.12.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -134,6 +134,10 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.12.6 =
+* Fixed an issue with the advanced title and content fields where HTML was not properly processed and validated
+* Plugin is now compatible with [Search Exclude](https://wordpress.org/plugins/search-exclude/) plugin exclusions
+
 = 4.12.5 =
 * Further security improvements on the form inputs and labels
 * Changed some back-end labels for more clarity

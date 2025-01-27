@@ -53,6 +53,12 @@ if ( !class_exists("WD_ASL_Filters") ) {
                 "priority"    => 999999999,
                 "args"  => 2
             ),
+	        array(
+		        "filter" => "asl_query_args",
+		        "handler" => "Plugin_SearchExclude",
+		        "priority"    => 20,
+		        "args"  => 1
+	        ),
             array(
                 "filter" => "get_search_form",
                 "handler" => "FormOverride",

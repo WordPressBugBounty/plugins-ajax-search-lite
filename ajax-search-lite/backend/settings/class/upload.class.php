@@ -24,7 +24,7 @@ if (!class_exists("wpdreamsUpload")) {
                 <?php echo $this->label; ?>
             </label>
             <input id="wpdreamsUpload_input<?php echo self::$_instancenumber; ?>" type="text"
-                   size="36" name="<?php echo esc_attr($this->name); ?>" value="<?php echo esc_attr($this->data); ?>"/>
+                   size="36" name="<?php echo esc_attr($this->name); ?>" value="<?php echo stripslashes(esc_attr($this->data)); ?>"/>
             <input id="wpdreamsUpload_button<?php echo self::$_instancenumber; ?>" class="button" type="button"
                    value="Upload"/>
 
