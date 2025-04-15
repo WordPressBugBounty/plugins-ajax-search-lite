@@ -70,6 +70,9 @@ if (!class_exists("WD_ASL_Manager")) {
             if ( $this->stopLoading() )
                 return false;
 
+	        // After 6.7 this must be executed in the "init" hook
+	        load_plugin_textdomain( 'ajax-search-lite', false, ASL_DIR . '/languages' );
+
             $this->getContext();
             /**
              * Available after this point:

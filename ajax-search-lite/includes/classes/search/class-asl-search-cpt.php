@@ -1154,9 +1154,9 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				case "post_title ASC":
 					return strcasecmp($a->title, $b->title);
 				case "menu_order DESC":
-					return $b->menu_order - $a->menu_order;
+					return isset($b->menu_order) ? $b->menu_order - $a->menu_order : 0;
 				case "menu_order ASC":
-					return $a->menu_order - $b->menu_order;
+					return isset($b->menu_order) ? $a->menu_order - $b->menu_order : 0;
 				case "customfp DESC":
 					if ($this->args['post_primary_order_metatype'] == 'numeric')
 						return floatval($b->customfp) - floatval($a->customfp);
@@ -1206,9 +1206,9 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 					case "post_title ASC":
 						return strcasecmp($a->title, $b->title);
 					case "menu_order DESC":
-						return $b->menu_order - $a->menu_order;
+						return isset($b->menu_order) ? $b->menu_order - $a->menu_order : 0;
 					case "menu_order ASC":
-						return $a->menu_order - $b->menu_order;
+						return isset($b->menu_order) ? $a->menu_order - $b->menu_order : 0;
 					case "customfs DESC":
 						if ($this->args['post_secondary_order_metatype'] == 'numeric')
 							return $b->customfs - $a->customfs;

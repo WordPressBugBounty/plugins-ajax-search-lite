@@ -17,8 +17,6 @@ class WD_ASL_Init {
 
     private function __construct() {
         wd_asl()->db = WD_ASL_DBMan::getInstance();
-
-        load_plugin_textdomain( 'ajax-search-lite', false, ASL_DIR . '/languages' );
     }
 
     /**
