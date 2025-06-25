@@ -43,10 +43,14 @@ class WD_ASL_Styles {
 						height: " . $asl_options['image_height'] . "px;
 						object-fit: " . $asl_options['image_display_mode'] . ";
 					}
-					div.asl_r .results {
+					div[id*='ajaxsearchlite'].asl_r .results {
 						max-height: " . $asl_options['v_res_max_height'] . ";
 					}
+					div[id*='ajaxsearchlite'].asl_r {
+						position: " . ($asl_options['resultsposition'] === 'block' ? 'static' : 'absolute') . ";
+					}
 				";
+
 		if ( trim($asl_options['box_font']) != '' && $asl_options['box_font'] != 'Open Sans' ) {
 			$ffamily = wpd_font('font-family:'.$asl_options['box_font'])." !important;";
 			$inline_css .= "

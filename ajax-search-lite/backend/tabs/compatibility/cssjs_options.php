@@ -12,7 +12,7 @@
 	<?php
 	$o = new wpdreamsCustomSelect("script_loading_method", __('Script loading method', 'ajax-search-lite'), array(
 			'selects'=>array(
-				array('option'=>'Classic', 'value'=>'classic'),
+				array('option'=>'Classic (default)', 'value'=>'classic'),
 				array('option'=>'Optimized (recommended)', 'value'=>'optimized'),
 				array('option'=>'Optimized asynchronous', 'value'=>'optimized_async')
 			),

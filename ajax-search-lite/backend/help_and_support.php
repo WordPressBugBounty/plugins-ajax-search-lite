@@ -34,7 +34,7 @@
 	}
 	</style>
     <div class="wpdreams-box" style='vertical-align: middle;'>
-        <a class='gopro' href='https://ajaxsearchpro.com/?utm_source=ajax-search-lite&utm_content=helpsupport' target='_blank'>Get the pro version!</a>
+        <a class='gopro' href='https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&utm_content=helpsupport' target='_blank'>Get the pro version!</a>
 		<span class="socials">
 			<a class="facebook" target="_blank" href="https://www.facebook.com/wpdreams">
 				<svg width="18" height="18" aria-hidden="true" role="img" focusable="false">

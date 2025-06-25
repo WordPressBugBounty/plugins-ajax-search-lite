@@ -7,6 +7,6 @@
 		<li>Searching Files and File contents - including PDF, Word, Excel, PowerPoint and many more</li>
 	</ul>
 	<a class="gopro"
-	   href="https://ajaxsearchpro.com/?utm_source=ajax-search-lite&amp;utm_content=sources"
+	   href="https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&amp;utm_content=sources"
 	   target="_blank">Discover the pro version!</a>
 </div>

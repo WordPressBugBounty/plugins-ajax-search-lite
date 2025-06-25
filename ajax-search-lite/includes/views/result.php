@@ -70,7 +70,7 @@ defined('ABSPATH') or die("You can't access this file directly.");
 
         <?php if ($s_options['showdescription'] == 1): ?>
             <div class="asl_desc">
-            <?php echo wp_kses_post($r->content); ?>
+            <?php echo asl_kses_content($r->content); ?>
             </div>
         <?php endif; ?>
 

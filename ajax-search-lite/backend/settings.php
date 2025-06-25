@@ -61,7 +61,7 @@ $sd = wd_asl()->instances->get(0)['data'];
 	}
 	</style>
     <div class="wpdreams-box" style='vertical-align: middle;'>
-        <a class='gopro' href='https://ajaxsearchpro.com/?utm_source=ajax-search-lite&utm_content=instancetop' target='_blank'>Get the pro version!</a>
+        <a class='gopro' href='https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&utm_content=instancetop' target='_blank'>Get the pro version!</a>
         <a class="whypro" href="#">Why Pro?</a>
 		<span class="socials">
 			<a class="facebook" target="_blank" href="https://www.facebook.com/wpdreams">
@@ -166,5 +166,15 @@ $sd = wd_asl()->instances->get(0)['data'];
 	<?php include(ASL_PATH . "backend/sidebar.php"); ?>
     <div class="clear"></div>
 </div>
-<?php wp_enqueue_script('wd_asl_helpers_jquery_conditionals', plugin_dir_url(__FILE__) . 'settings/assets/js/jquery.conditionals.js', array('jquery'), ASL_CURR_VER_STRING, true); ?>
+<?php
+$metadata = require_once ASL_PATH . 'build/js/search-instance.asset.php';
+wp_enqueue_script(
+	'wpd-asp-search-instance',
+	ASL_URL_NP . 'build/js/search-instance.js',
+	$metadata['dependencies'],
+	$metadata['version'],
+	array( 'in_footer' =>true ),
+);
+wp_enqueue_script('wd_asl_helpers_jquery_conditionals', plugin_dir_url(__FILE__) . 'settings/assets/js/jquery.conditionals.js', array('jquery'), ASL_CURR_VER_STRING, true);
+?>
 <?php wp_enqueue_script('wd_asl_search_instance', plugin_dir_url(__FILE__) . 'settings/assets/search_instance.js', array('jquery'), ASL_CURR_VER_STRING, true); ?>

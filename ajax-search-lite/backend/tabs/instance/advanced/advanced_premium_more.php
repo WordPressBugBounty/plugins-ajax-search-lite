@@ -8,7 +8,7 @@
 			<li>More Animation and Visual Settings</li>
 		</ul>
 		<a class="gopro"
-		   href="https://ajaxsearchpro.com/?utm_source=ajax-search-lite&amp;utm_content=advanced"
+		   href="https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&amp;utm_content=advanced"
 		   target="_blank">Get the pro version!</a>
 	</div>
 </fieldset>

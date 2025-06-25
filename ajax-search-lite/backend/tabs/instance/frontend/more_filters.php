@@ -7,10 +7,10 @@
 		<li>Post type filters like <i>post, page, product etc..</i></li>
 		<li>Search and Reset buttons</li>
 	</ul>
-	<a href="https://ajaxsearchpro.com/?utm_source=ajax-search-lite&amp;utm_content=frontend-image">
+	<a href="https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&amp;utm_content=frontend-image">
 		<img title="Only available in Pro version"  src="<?php echo ASL_URL_NP . "/img/backend/frontend-options.png"; ?>">
 	</a>
 	<a class="gopro"
-	   href="https://ajaxsearchpro.com/?utm_source=ajax-search-lite&amp;utm_content=frontend"
+	   href="https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&amp;utm_content=frontend"
 	   target="_blank">Get the pro version!</a>
 </div>

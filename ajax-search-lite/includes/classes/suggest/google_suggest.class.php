@@ -39,6 +39,10 @@ if (!class_exists('wpd_googleKeywordSuggest')) {
 
 
         function getKeywords($q) {
+	        $q = trim($q);
+	        if ( $q === '' ) {
+		        return array();
+	        }
             $qf = str_replace(' ', '+', $q);
             $method = $this->can_get_file();
             if ($method == false) {

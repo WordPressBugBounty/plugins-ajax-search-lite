@@ -5,7 +5,7 @@
     if ( isset($style['_fo']) && !isset($style['_fo']['categoryset']) )
         $style['_fo']['categoryset'] = array();
 ?>
-<div class="asl_w_container asl_w_container_<?php echo $real_id; ?>">
+<div class="asl_w_container asl_w_container_<?php echo $real_id; ?>" data-id="<?php echo $real_id; ?>" data-instance="1">
 	<div id='ajaxsearchlite<?php echo self::$instanceCount; ?>'
 		 data-id="<?php echo $real_id; ?>"
 		 data-instance="1"

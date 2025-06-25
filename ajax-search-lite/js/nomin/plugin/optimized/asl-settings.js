@@ -1,261 +1,254 @@
-(function($){
-    "use strict";
-    let functions = {
-        showSettings: function () {
-            let $this = this;
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
 
-            $this.initSettings?.();
+;// external "global"
+var external_global_namespaceObject = Object(window.WPD)["global"];
+;// ./src/client/plugin/core/actions/settings.ts
 
-            $this.n('searchsettings').css($this.settAnim.showCSS);
-            $this.n('searchsettings').removeClass($this.settAnim.hideClass).addClass($this.settAnim.showClass);
 
-            $this.n('prosettings').data('opened', 1);
-            $this.fixSettingsPosition(true);
-        },
-        hideSettings: function () {
-            let $this = this;
+external_global_namespaceObject.AslPlugin.prototype.showSettings = function() {
+  let $this = this;
+  $this.initSettings?.();
+  $this.n("searchsettings").css($this.settAnim.showCSS);
+  $this.n("searchsettings").removeClass($this.settAnim.hideClass).addClass($this.settAnim.showClass);
+  $this.n("prosettings").data("opened", 1);
+  $this.fixSettingsPosition(true);
+};
+external_global_namespaceObject.AslPlugin.prototype.hideSettings = function() {
+  let $this = this;
+  $this.initSettings?.();
+  $this.n("searchsettings").removeClass($this.settAnim.showClass).addClass($this.settAnim.hideClass);
+  setTimeout(function() {
+    $this.n("searchsettings").css($this.settAnim.hideCSS);
+  }, $this.settAnim.duration);
+  $this.n("prosettings").data("opened", 0);
+};
+/* harmony default export */ var settings = ((/* unused pure expression or super */ null && (AslPlugin)));
 
-            $this.initSettings?.();
+;// external "DoMini"
+var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
+var external_DoMini_default = /*#__PURE__*/__webpack_require__.n(external_DoMini_namespaceObject);
+;// ./src/client/plugin/core/events/facet.ts
 
-            $this.n('searchsettings').removeClass($this.settAnim.showClass).addClass($this.settAnim.hideClass);
-            setTimeout(function(){
-                $this.n('searchsettings').css($this.settAnim.hideCSS);
-            }, $this.settAnim.duration);
 
-            $this.n('prosettings').data('opened', 0);
-        }
+
+external_global_namespaceObject.AslPlugin.prototype.initFacetEvents = function() {
+  let $this = this;
+  $this.n("searchsettings").find("input[type=checkbox]").on("asl_chbx_change", function(e) {
+    $this.ktype = e.type;
+    $this.n("searchsettings").find("input[name=filters_changed]").val(1);
+    $this.gaEvent?.("facet_change", {
+      "option_label": external_DoMini_default()(this).closest("fieldset").find("legend").text(),
+      "option_value": external_DoMini_default()(this).closest(".asl_option").find(".asl_option_label").text() + (external_DoMini_default()(this).prop("checked") ? "(checked)" : "(unchecked)")
+    });
+    $this.setFilterStateInput(65);
+    $this.searchWithCheck(80);
+  });
+};
+
+;// external "utils"
+var external_utils_namespaceObject = Object(window.WPD)["utils"];
+;// ./src/client/plugin/core/events/settings.ts
+
+
+
+
+external_global_namespaceObject.AslPlugin.prototype.initSettingsSwitchEvents = function() {
+  let $this = this;
+  $this.n("prosettings").on("click", function() {
+    if ($this.n("prosettings").data("opened") === "0") {
+      $this.showSettings();
+    } else {
+      $this.hideSettings();
     }
-    $.fn.extend(window.WPD.ajaxsearchlite.plugin, functions);
-})(WPD.dom);(function($){
-    "use strict";
-    let functions = {
-        initFacetEvents: function() {
-            let $this = this;
-            $('input[type=checkbox]', $this.n('searchsettings')).on('asl_chbx_change', function(e){
-                $this.ktype = e.type;
-                $this.n('searchsettings').find('input[name=filters_changed]').val(1);
-                $this.gaEvent?.('facet_change', {
-                    'option_label': $(this).closest('fieldset').find('legend').text(),
-                    'option_value': $(this).closest('.asl_option').find('.asl_option_label').text() + ($(this).prop('checked') ? '(checked)' : '(unchecked)')
-                });
-                $this.setFilterStateInput(65);
-                $this.searchWithCheck(80);
-            });
-        }
+  });
+  if ($this.o.settingsVisible == 1) {
+    $this.showSettings();
+  }
+};
+external_global_namespaceObject.AslPlugin.prototype.initSettingsEvents = function() {
+  let $this = this, t;
+  let formDataHandler = function() {
+    if (typeof $this.originalFormData === "undefined") {
+      $this.originalFormData = (0,external_utils_namespaceObject.formData)($this.n("searchsettings").find("form"));
     }
-    $.fn.extend(window.WPD.ajaxsearchlite.plugin, functions);
-})(WPD.dom);(function($){
-    "use strict";
-    let helpers = window.WPD.ajaxsearchlite.helpers;
-    let functions = {
-        initSettingsSwitchEvents: function() {
-            let $this = this;
-            $this.n('prosettings').on("click", function () {
-                if ($this.n('prosettings').data('opened') == 0) {
-                    $this.showSettings();
-                } else {
-                    $this.hideSettings();
-                }
-            });
-
-            if ($this.o.settingsVisible == 1) {
-                $this.showSettings(false);
-            }
-        },
-
-        initSettingsEvents: function() {
-            let $this = this, t;
-
-            let formDataHandler = function(){
-                // Let everything initialize (datepicker etc..), then get the form data
-                if ( typeof $this.originalFormData === 'undefined' ) {
-                    $this.originalFormData = helpers.formData($('form', $this.n('searchsettings')));
-                }
-                $this.n('searchsettings').off('mousedown touchstart mouseover', formDataHandler);
-            };
-            $this.n('searchsettings').on('mousedown touchstart mouseover', formDataHandler);
-
-            let handler = function (e) {
-                if ( $(e.target).closest('.asl_w').length == 0 ) {
-                    if ( !$this.dragging ) {
-                        $this.hideSettings?.();
-                    }
-                }
-            };
-            $this.documentEventHandlers.push({
-                'node': document,
-                'event': $this.clickTouchend,
-                'handler': handler
-            });
-            $(document).on($this.clickTouchend, handler);
-
-            // Note if the settings have changed
-            $this.n('searchsettings').on('click', function(){
-                $this.settingsChanged = true;
-            });
-
-            $this.n('searchsettings').on($this.clickTouchend, function (e) {
-                $this.updateHref();
-
-                /**
-                 * Stop propagation on settings clicks, except the noUiSlider handler event.
-                 * If noUiSlider event propagation is stopped, then the: set, end, change events does not fire properly.
-                 */
-                if ( typeof e.target != 'undefined' && !$(e.target).hasClass('noUi-handle') ) {
-                    e.stopImmediatePropagation();
-                } else {
-                    // For noUI case, still cancel if this is a click (desktop device)
-                    if ( e.type == 'click' )
-                        e.stopImmediatePropagation();
-                }
-            });
-
-            // Category level automatic checking and hiding
-            $('.asl_option_cat input[type="checkbox"]', $this.n('searchsettings')).on('asl_chbx_change', function(){
-                $this.settingsCheckboxToggle( $(this).closest('.asl_option_cat') );
-            });
-            // Init the hide settings
-            $('.asl_option_cat', $this.n('searchsettings')).forEach(function(el){
-                $this.settingsCheckboxToggle( $(el), false );
-            });
-
-            // Emulate click on checkbox on the whole option
-            //$('div.asl_option', $this.n('searchsettings')).on('mouseup touchend', function(e){
-            $('div.asl_option', $this.n('searchsettings')).on($this.mouseupTouchend, function(e){
-                e.preventDefault(); // Stop firing twice on mouseup and touchend on mobile devices
-                e.stopImmediatePropagation();
-
-                if ( $this.dragging ) {
-                    return false;
-                }
-                $(this).find('input[type="checkbox"]').prop("checked", !$(this).find('input[type="checkbox"]').prop("checked"));
-                // Trigger a custom change event, for max compatibility
-                // .. the original change is buggy for some installations.
-                clearTimeout(t);
-                let _this = this;
-                t = setTimeout(function() {
-                    $(_this).find('input[type="checkbox"]').trigger('asl_chbx_change');
-                }, 50);
-
-            });
-
-            $('div.asl_option label', $this.n('searchsettings')).on('click', function(e){
-                e.preventDefault(); // Let the previous handler handle the events, disable this
-            });
-
-            // Change the state of the choose any option if all of them are de-selected
-            $('fieldset.asl_checkboxes_filter_box', $this.n('searchsettings')).forEach(function(){
-                let all_unchecked = true;
-                $(this).find('.asl_option:not(.asl_option_selectall) input[type="checkbox"]').forEach(function(){
-                    if ($(this).prop('checked') == true) {
-                        all_unchecked = false;
-                        return false;
-                    }
-                });
-                if ( all_unchecked ) {
-                    $(this).find('.asl_option_selectall input[type="checkbox"]').prop('checked', false).removeAttr('data-origvalue');
-                }
-            });
-
-            // Mark last visible options
-            $('fieldset' ,$this.n('searchsettings')).forEach(function(){
-                $(this).find('.asl_option:not(.hiddend)').last().addClass("asl-o-last");
-            });
-
-            // Select all checkboxes
-            $('.asl_option_cat input[type="checkbox"], .asl_option_cff input[type="checkbox"]', $this.n('searchsettings')).on('asl_chbx_change', function(){
-                let className = $(this).data("targetclass");
-                if ( typeof className == 'string' && className != '')
-                    $("input." + className, $this.n('searchsettings')).prop("checked", $(this).prop("checked"));
-            });
-        }
+    $this.n("searchsettings").off("mousedown touchstart mouseover", formDataHandler);
+  };
+  $this.n("searchsettings").on("mousedown touchstart mouseover", formDataHandler);
+  let handler = function(e) {
+    if (external_DoMini_default()(e.target).closest(".asl_w").length == 0) {
+      if (!$this.dragging) {
+        $this.hideSettings?.();
+      }
     }
-    $.fn.extend(window.WPD.ajaxsearchlite.plugin, functions);
-})(WPD.dom);(function($){
-    "use strict";
-    let helpers = window.WPD.ajaxsearchlite.helpers;
-    let functions = {
-        /**
-         * This function should be called on-demand to init the settings. Do not call on init, only when needed.
-         */
-        initSettings: function() {
-            if ( !this.settingsInitialized ) {
-                this.loadASLFonts?.();
-                this.initSettingsBox?.();
-                this.initSettingsEvents?.();
-                this.initFacetEvents?.();
-            }
-        },
-
-        initSettingsBox: function() {
-            let $this = this;
-            let appendSettingsTo = function($el) {
-                let old = $this.n('searchsettings').get(0);
-                $this.nodes.searchsettings = $this.n('searchsettings').clone();
-                $el.append($this.n('searchsettings'));
-
-
-                $(old).find('*[id]').forEach(function(el){
-                    if ( el.id.indexOf('__original__') < 0 ) {
-                        el.id = '__original__' + el.id;
-                    }
-                });
-                $this.n('searchsettings').find('*[id]').forEach(function(el){
-                    if ( el.id.indexOf('__original__') > -1 ) {
-                        el.id =  el.id.replace('__original__', '');
-                    }
-                });
-            }
-
-            // Calculates the settings animation attributes
-            $this.initSettingsAnimations?.();
-
-            appendSettingsTo($('body'));
-            $this.n('searchsettings').get(0).id = $this.n('searchsettings').get(0).id.replace('__original__', '');
-            $this.detectAndFixFixedPositioning();
-
-            $this.settingsInitialized = true;
-        },
-        initSettingsAnimations: function() {
-            let $this = this;
-            $this.settAnim = {
-                "showClass": "",
-                "showCSS": {
-                    "visibility": "visible",
-                    "display": "block",
-                    "opacity": 1,
-                    "animation-duration": $this.animOptions.settings.dur + 'ms'
-                },
-                "hideClass": "",
-                "hideCSS": {
-                    "visibility": "hidden",
-                    "opacity": 0,
-                    "display": "none"
-                },
-                "duration": $this.animOptions.settings.dur + 'ms'
-            };
-
-            if ($this.animOptions.settings.anim == "fade") {
-                $this.settAnim.showClass = "asl_an_fadeIn";
-                $this.settAnim.hideClass = "asl_an_fadeOut";
-            }
-
-            if ($this.animOptions.settings.anim == "fadedrop" &&
-                !$this.o.blocking ) {
-                $this.settAnim.showClass = "asl_an_fadeInDrop";
-                $this.settAnim.hideClass = "asl_an_fadeOutDrop";
-            } else if ( $this.animOptions.settings.anim == "fadedrop" ) {
-                // If does not support transitio, or it is blocking layout
-                // .. fall back to fade
-                $this.settAnim.showClass = "asl_an_fadeIn";
-                $this.settAnim.hideClass = "asl_an_fadeOut";
-            }
-
-            $this.n('searchsettings').css({
-                "-webkit-animation-duration": $this.settAnim.duration + "ms",
-                "animation-duration": $this.settAnim.duration + "ms"
-            });
-        }
+  };
+  $this.documentEventHandlers.push({
+    "node": document,
+    "event": $this.clickTouchend,
+    "handler": handler
+  });
+  external_DoMini_default()(document).on($this.clickTouchend, handler);
+  $this.n("searchsettings").on("click", function() {
+    $this.settingsChanged = true;
+  });
+  $this.n("searchsettings").on($this.clickTouchend, function(e) {
+    $this.updateHref();
+    if (typeof e.target != "undefined" && !external_DoMini_default()(e.target).hasClass("noUi-handle")) {
+      e.stopImmediatePropagation();
+    } else {
+      if (e.type == "click")
+        e.stopImmediatePropagation();
     }
-    $.fn.extend(window.WPD.ajaxsearchlite.plugin, functions);
-})(WPD.dom);
+  });
+  $this.n("searchsettings").find("div.asl_option").on($this.mouseupTouchend, function(e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+    if ($this.dragging) {
+      return false;
+    }
+    external_DoMini_default()(this).find('input[type="checkbox"]').prop("checked", !external_DoMini_default()(this).find('input[type="checkbox"]').prop("checked"));
+    clearTimeout(t);
+    let _this = this;
+    t = setTimeout(function() {
+      external_DoMini_default()(_this).find('input[type="checkbox"]').trigger("asl_chbx_change", []);
+    }, 50);
+  });
+  $this.n("searchsettings").find("div.asl_option label").on("click", function(e) {
+    e.preventDefault();
+  });
+  $this.n("searchsettings").find("fieldset.asl_checkboxes_filter_box").forEach(function() {
+    let all_unchecked = true;
+    external_DoMini_default()(this).find('.asl_option:not(.asl_option_selectall) input[type="checkbox"]').forEach(function() {
+      if (external_DoMini_default()(this).prop("checked") == true) {
+        all_unchecked = false;
+        return false;
+      }
+    });
+    if (all_unchecked) {
+      external_DoMini_default()(this).find('.asl_option_selectall input[type="checkbox"]').prop("checked", false).removeAttr("data-origvalue");
+    }
+  });
+  $this.n("searchsettings").find("fieldset").forEach(function() {
+    external_DoMini_default()(this).find(".asl_option:not(.hiddend)").last().addClass("asl-o-last");
+  });
+  $this.n("searchsettings").find('.asl_option_cat input[type="checkbox"], .asl_option_cff input[type="checkbox"]').on(
+    "asl_chbx_change",
+    function() {
+      let className = external_DoMini_default()(this).data("targetclass");
+      if (typeof className == "string" && className != "")
+        $this.n("searchsettings").find("input." + className).prop("checked", external_DoMini_default()(this).prop("checked"));
+    }
+  );
+};
+/* harmony default export */ var events_settings = ((/* unused pure expression or super */ null && (AslPlugin)));
+
+;// ./src/client/plugin/core/init/settings.ts
+
+
+
+
+external_global_namespaceObject.AslPlugin.prototype.initSettings = function() {
+  if (!this.settingsInitialized) {
+    this.loadASLFonts?.();
+    this.initSettingsBox?.();
+    this.initSettingsEvents?.();
+    this.initFacetEvents?.();
+  }
+};
+external_global_namespaceObject.AslPlugin.prototype.initSettingsBox = function() {
+  let $this = this;
+  let appendSettingsTo = function($el) {
+    let old = $this.n("searchsettings").get(0);
+    $this.nodes.searchsettings = $this.n("searchsettings").clone();
+    $el.append($this.n("searchsettings"));
+    external_DoMini_default()(old).find("*[id]").forEach(function(el) {
+      if (el === void 0) {
+        return;
+      }
+      if (el.id.indexOf("__original__") < 0) {
+        el.id = "__original__" + el.id;
+      }
+    });
+    $this.n("searchsettings").find("*[id]").forEach(function(el) {
+      if (el === void 0) {
+        return;
+      }
+      if (el.id.indexOf("__original__") > -1) {
+        el.id = el.id.replace("__original__", "");
+      }
+    });
+  };
+  $this.initSettingsAnimations?.();
+  appendSettingsTo(external_DoMini_default()("body"));
+  $this.n("searchsettings").get(0).id = $this.n("searchsettings").get(0).id.replace("__original__", "");
+  $this.detectAndFixFixedPositioning();
+  $this.settingsInitialized = true;
+};
+external_global_namespaceObject.AslPlugin.prototype.initSettingsAnimations = function() {
+  let $this = this;
+  const animOptions = (0,external_utils_namespaceObject.isMobile)() ? $this.o.animations.mob : $this.o.animations.pc;
+  $this.settAnim.duration = animOptions.settings.dur;
+  $this.settAnim.showCSS["animation-duration"] = animOptions.settings.dur + "ms";
+  if (animOptions.settings.anim === "fade") {
+    $this.settAnim.showClass = "asl_an_fadeIn";
+    $this.settAnim.hideClass = "asl_an_fadeOut";
+  }
+  if (animOptions.settings.anim === "fadedrop" && !$this.o.blocking) {
+    $this.settAnim.showClass = "asl_an_fadeInDrop";
+    $this.settAnim.hideClass = "asl_an_fadeOutDrop";
+  } else if (animOptions.settings.anim === "fadedrop") {
+    $this.settAnim.showClass = "asl_an_fadeIn";
+    $this.settAnim.hideClass = "asl_an_fadeOut";
+  }
+  $this.n("searchsettings").css({
+    "-webkit-animation-duration": $this.settAnim.duration + "ms",
+    "animation-duration": $this.settAnim.duration + "ms"
+  });
+};
+/* harmony default export */ var init_settings = ((/* unused pure expression or super */ null && (AslPlugin)));
+
+;// ./src/client/bundle/optimized/settings.ts
+
+
+
+
+
+
+Object(window.WPD).AjaxSearchLite = __webpack_exports__["default"];
+/******/ })()
+;

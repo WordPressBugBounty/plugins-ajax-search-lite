@@ -10,14 +10,14 @@ $scope = "asljQuery";
 	"homeurl": "<?php echo function_exists("pll_home_url") ? PLL()->links->get_home_url( '', true ) : home_url("/"); ?>",
 <?php endif; ?>
 	"resultstype": "vertical",
-	"resultsposition": "hover",
-	"itemscount": <?php echo ((isset($style['itemscount']) && $style['itemscount']!="")?$style['itemscount']:"10"); ?>,
-	"charcount":  <?php echo ((isset($style['charcount']) && $style['charcount']!="")?$style['charcount']:"0"); ?>,
+	"resultsposition": "<?php echo $style['resultsposition'] === 'hover' ? 'hover' : 'block'; ?>",
+	"itemscount": <?php echo intval(((isset($style['itemscount']) && $style['itemscount']!="")?$style['itemscount']:10)); ?>,
+	"charcount":  <?php echo intval(((isset($style['charcount']) && $style['charcount']!="")?$style['charcount']:0)); ?>,
 	"highlight": <?php echo $style['kw_highlight']; ?>,
-	"highlightwholewords": <?php echo $style['kw_highlight_whole_words']; ?>,
-	"singleHighlight": <?php echo $style['single_highlight']; ?>,
+	"highlightwholewords": <?php echo intval($style['kw_highlight_whole_words']); ?>,
+	"singleHighlight": <?php echo intval($style['single_highlight']); ?>,
 	"scrollToResults": {
-		"enabled": <?php echo $style['scroll_to_results']; ?>,
+		"enabled": <?php echo intval($style['scroll_to_results']); ?>,
 		"offset": 0
 	},
 	"resultareaclickable": <?php echo ((isset($style['resultareaclickable']) && $style['resultareaclickable']!="")?$style['resultareaclickable']:0); ?>,

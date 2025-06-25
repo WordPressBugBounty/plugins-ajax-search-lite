@@ -1,327 +1,227 @@
-window._ASL_load = function () {
-    "use strict";
-    let $ = WPD.dom;
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	// The require scope
+/******/ 	var __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
 
-    window.ASL.instances = {
-        instances: [],
-        get: function(id, instance) {
-            this.clean();
-            if ( typeof id === 'undefined' || id == 0) {
-                return this.instances;
-            } else {
-                if ( typeof instance === 'undefined' ) {
-                    let ret = [];
-                    for ( let i=0; i<this.instances.length; i++ ) {
-                        if ( this.instances[i].o.id == id ) {
-                            ret.push(this.instances[i]);
-                        }
-                    }
-                    return ret.length > 0 ? ret : false;
-                } else {
-                    for ( let i=0; i<this.instances.length; i++ ) {
-                        if ( this.instances[i].o.id == id && this.instances[i].o.iid == instance ) {
-                            return this.instances[i];
-                        }
-                    }
-                }
-            }
-            return false;
-        },
-        set: function(obj) {
-            if ( !this.exist(obj.o.id, obj.o.iid) ) {
-                this.instances.push(obj);
-                return true;
-            } else {
-                return false;
-            }
-        },
-        exist: function(id, instance) {
-            this.clean();
-            for ( let i=0; i<this.instances.length; i++ ) {
-                if ( this.instances[i].o.id == id ) {
-                    if (typeof instance === 'undefined') {
-                        return true;
-                    } else if (this.instances[i].o.iid == instance) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        },
-        clean: function() {
-            let unset = [], _this = this;
-            this.instances.forEach(function(v, k){
-                if ( $('.asl_m_' + v.o.rid).length == 0 ) {
-                    unset.push(k);
-                }
-            });
-            unset.forEach(function(k){
-                if ( typeof _this.instances[k] !== 'undefined' ) {
-                    _this.instances[k].destroy();
-                    _this.instances.splice(k, 1);
-                }
-            });
-        },
-        destroy: function(id, instance) {
-            let i = this.get(id, instance);
-            if ( i !== false ) {
-                if ( Array.isArray(i) ) {
-                    i.forEach(function (s) {
-                        s.destroy();
-                    });
-                    this.instances = [];
-                } else {
-                    let u = 0;
-                    this.instances.forEach(function(v, k){
-                        if ( v.o.id == id && v.o.iid == instance) {
-                            u = k;
-                        }
-                    });
-                    i.destroy();
-                    this.instances.splice(u, 1);
-                }
-            }
-        }
-    };
+;// external "DoMini"
+var external_DoMini_namespaceObject = Object(window.WPD)["DoMini"];
+var external_DoMini_default = /*#__PURE__*/__webpack_require__.n(external_DoMini_namespaceObject);
+;// external "global"
+var external_global_namespaceObject = Object(window.WPD)["global"];
+;// ./src/client/plugin/core/AjaxSearchLite.ts
 
-    window.ASL.initialized = false;
-    window.ASL.initializeSearchByID = function (id) {
-        let instances = ASL.getInstances();
-        if (typeof id !== 'undefined' && typeof id != 'object' ) {
-            if ( typeof instances[id] !== 'undefined' ) {
-                let ni = [];
-                ni[id] = instances[id];
-                instances = ni;
-            } else {
-                return false;
-            }
+
+const AjaxSearchLite_AjaxSearchLite = {
+  plugin: new external_global_namespaceObject.AslPlugin(),
+  addons: {
+    addons: [],
+    add(addon) {
+      if (this.addons.indexOf(addon) === -1) {
+        const k = this.addons.push(addon);
+        this.addons[k - 1].init();
+      }
+    },
+    remove(name) {
+      this.addons = this.addons.filter((addon) => {
+        if (addon.name === name) {
+          if (typeof addon.destroy !== "undefined") {
+            addon.destroy();
+          }
+          return false;
         }
-        let initialized = 0;
-        instances.forEach(function (data, i) {
-            // Menu or invalid node detection and replacement
-            $('.asl_w_container_' + i).forEach(function(el){
-                let $p = $(el).parent();
-                if ( $p.is('a') ) {
-                    let div = document.createElement('div'),
-                        p = $p.get(0);
-                    div.innerHTML = p.innerHTML;
-                    p.replaceWith(div);
-                }
-            });
-            // noinspection JSUnusedAssignment
-            $('.asl_m_' + i).forEach(function(el){
-                let $el = $(el);
-                if ( typeof $el.get(0).hasAsl != 'undefined') {
-                    ++initialized;
-                    return true;
-                }
-                el.hasAsl = true;
-                ++initialized;
-                return $el.ajaxsearchlite(data);
-            });
-        });
+        return true;
+      });
     }
-
-    window.ASL.getInstances = function() {
-        // noinspection JSUnresolvedVariable
-        if ( typeof window.ASL_INSTANCES !== 'undefined' ) {
-            // noinspection JSUnresolvedVariable
-            return window.ASL_INSTANCES;
-        } else {
-            let instances = [];
-            $('.asl_init_data').forEach(function (el) {
-                if (typeof el.dataset['asldata'] === "undefined") return true;   // Do not return false, it breaks the loop!
-                let data = WPD.Base64.decode(el.dataset['asldata']);
-                if (typeof data === "undefined" || data == "") return true;
-
-                instances[el.dataset['aslId']] = JSON.parse(data);
-            });
-            return instances;
-        }
-    }
-
-    window.ASL.initialize = function (id) {
-        // Some weird ajax loader problem prevention
-        if (typeof ASL.version == 'undefined')
-            return false;
-
-        if( !!window.IntersectionObserver ){
-            if ( ASL.script_async_load || ASL.init_only_in_viewport ) {
-                let searches = document.querySelectorAll('.asl_w_container');
-                if ( searches.length ) {
-                    let observer = new IntersectionObserver(function(entries){
-                        entries.forEach(function(entry){
-                            if ( entry.isIntersecting ) {
-                                ASL.initializeSearchByID(entry.target.dataset.id);
-                                observer.unobserve(entry.target);
-                            }
-                        });
-                    });
-                    searches.forEach(function(search){
-                        observer.observe(search);
-                    });
-                }
-            } else {
-                ASL.initializeSearchByID(id);
-            }
-        } else {
-            ASL.initializeSearchByID(id);
-        }
-
-        ASL.initializeMutateDetector();
-        ASL.initializeHighlight();
-        ASL.initializeOtherEvents();
-
-        ASL.initialized = true;
-    };
-
-
-
-    window.ASL.initializeHighlight = function() {
-        let _this = this;
-        if (_this.highlight.enabled) {
-            _this.highlight.data.forEach(function (data) {
-                let selector = data.selector != '' && $(data.selector).length > 0 ? data.selector : 'article',
-                    $highlighted, phrase, s;
-                selector = $(selector).length > 0 ? selector : 'body';
-
-                s = new URLSearchParams(location.search);
-                phrase = s.get('s') || s.get('asl_highlight');
-                $(selector).unhighlight({className: 'asl_single_highlighted'});
-                if (phrase !== null && phrase.trim() != '') {
-                    // noinspection JSUnresolvedVariable
-                    selector = $(selector).length > 0 ? selector : 'body';
-                    $(selector).highlight(phrase.trim().split(' '), {
-                        element: 'span',
-                        className: 'asl_single_highlighted',
-                        wordsOnly: data.whole,
-                        excludeParents: '.asl_w, .asl-try'
-                    });
-                    $highlighted = $('.asl_single_highlighted');
-                    if (data.scroll && $highlighted.length > 0) {
-                        let stop = $highlighted.offset().top - 120;
-                        let $adminbar = $("#wpadminbar");
-                        if ($adminbar.length > 0)
-                            stop -= $adminbar.height();
-                        // noinspection JSUnresolvedVariable
-                        stop = stop + data.scroll_offset;
-                        stop = stop < 0 ? 0 : stop;
-                        $('html').animate({
-                            "scrollTop": stop
-                        }, 500);
-                    }
-                }
-            });
-            return false;
-        }
-    };
-
-    window.ASL.initializeOtherEvents = function() {
-        let ttt, ts, $body = $('body'), _this = this;
-        // Known slide-out and other type of menus to initialize on click
-        ts = '#menu-item-search, .fa-search, .fa, .fas';
-        // Avada theme
-        ts = ts + ', .fusion-flyout-menu-toggle, .fusion-main-menu-search-open';
-        // Be theme
-        ts = ts + ', #search_button';
-        // The 7 theme
-        ts = ts + ', .mini-search.popup-search';
-        // Flatsome theme
-        ts = ts + ', .icon-search';
-        // Enfold theme
-        ts = ts + ', .menu-item-search-dropdown';
-        // Uncode theme
-        ts = ts + ', .mobile-menu-button';
-        // Newspaper theme
-        ts = ts + ', .td-icon-search, .tdb-search-icon';
-        // Bridge theme
-        ts = ts + ', .side_menu_button, .search_button';
-        // Jupiter theme
-        ts = ts + ', .raven-search-form-toggle';
-        // Elementor trigger lightbox & other elementor stuff
-        ts = ts + ', [data-elementor-open-lightbox], .elementor-button-link, .elementor-button';
-        ts = ts + ', i[class*=-search], a[class*=-search]';
-
-        // Attach this to the document ready, as it may not attach if this is loaded early
-        $body.on('click touchend', ts, function () {
-            clearTimeout(ttt);
-            ttt = setTimeout(function () {
-                _this.initializeSearchByID();
-            }, 300);
-        });
-
-        // Elementor popup events (only works with jQuery)
-        if ( typeof jQuery != 'undefined' ) {
-            jQuery(document).on('elementor/popup/show', function(){
-                setTimeout(function () {
-                    _this.initializeSearchByID();
-                }, 10);
-            });
-        }
-    };
-
-    window.ASL.initializeMutateDetector = function() {
-        let t;
-        if ( typeof ASL.detect_ajax != "undefined" && ASL.detect_ajax == 1 ) {
-            let o = new MutationObserver(function() {
-                clearTimeout(t);
-                t = setTimeout(function () {
-                    ASL.initializeSearchByID();
-                }, 500);
-            });
-            o.observe(document.querySelector("body"), {subtree: true, childList: true});
-        }
-    };
-
-    window.ASL.ready = function () {
-        let _this = this;
-
-        if (document.readyState === "complete" || document.readyState === "loaded"  || document.readyState === "interactive") {
-            // document is already ready to go
-            _this.initialize();
-        } else {
-            $(document).on('DOMContentLoaded', _this.initialize);
-        }
-    };
-
-    window.ASL.loadScriptStack = function (stack) {
-        let scriptTag;
-        if ( stack.length > 0 ) {
-            scriptTag = document.createElement('script');
-            scriptTag.src = stack.shift()['src'];
-            scriptTag.onload = function () {
-                if ( stack.length > 0 ) {
-                    window.ASL.loadScriptStack(stack)
-                } else {
-                    window.ASL.ready();
-                }
-            }
-            document.body.appendChild(scriptTag);
-        }
-    }
-
-    window.ASL.init = function () {
-        // noinspection JSUnresolvedVariable
-        if (ASL.script_async_load) {   // Opimized Normal
-            // noinspection JSUnresolvedVariable
-            window.ASL.loadScriptStack(ASL.additional_scripts);
-        } else {
-            if (typeof WPD.ajaxsearchlite !== 'undefined') {   // Classic normal
-                window.ASL.ready();
-            }
-        }
-    };
-
-    window.WPD.intervalUntilExecute(window.ASL.init, function() {
-        return typeof window.ASL.version != 'undefined' && $.fn.ajaxsearchlite != 'undefined'
-    });
+  }
 };
-// Run on document ready
-(function() {
-    // Preload script executed?
-    if ( typeof WPD != 'undefined' && typeof WPD.dom != 'undefined' ) {
-        window._ASL_load();
-    } else {
-        document.addEventListener('wpd-dom-core-loaded', window._ASL_load);
+/* harmony default export */ var core_AjaxSearchLite = (AjaxSearchLite_AjaxSearchLite);
+
+;// external "utils"
+var external_utils_namespaceObject = Object(window.WPD)["utils"];
+;// ./src/client/addons/woocommerce.ts
+
+
+
+class WooCommerceAddToCartAddon {
+  name = "WooCommerce Add To Cart";
+  requests = [];
+  $liveRegion = void 0;
+  init() {
+    external_utils_namespaceObject.Hooks.addFilter("asl/search/end", this.finished.bind(this), 10, this);
+  }
+  finished($this) {
+    if (typeof window.wc_add_to_cart_params === "undefined" || typeof jQuery === "undefined") {
+      return;
     }
-})();
+    this.addRequest = this.addRequest.bind(this);
+    this.run = this.run.bind(this);
+    this.$liveRegion = this.createLiveRegion();
+    jQuery($this.n("resdrg").get(0)).find(".add-to-cart-button:not(.wc-interactive)").off().on("click", { addToCartHandler: this }, this.onAddToCart);
+  }
+  /**
+   * Add add-to-cart event to the queue.
+   */
+  addRequest(request) {
+    this.requests.push(request);
+    if (this.requests.length === 1) {
+      this.run();
+    }
+  }
+  /**
+   * Run add-to-cart events in sequence.
+   */
+  run() {
+    const requestManager = this;
+    const originalCallback = requestManager.requests[0].complete;
+    requestManager.requests[0].complete = function() {
+      if (typeof originalCallback === "function") {
+        originalCallback();
+      }
+      requestManager.requests.shift();
+      if (requestManager.requests.length > 0) {
+        requestManager.run();
+      }
+    };
+    jQuery.ajax(this.requests[0]);
+  }
+  /**
+   * Handle the add to cart event.
+   */
+  onAddToCart(e) {
+    if (typeof window.wc_add_to_cart_params === "undefined" || typeof jQuery === "undefined") {
+      return;
+    }
+    const $thisbutton = jQuery(this);
+    if ($thisbutton.is(".ajax-add-to-cart")) {
+      if (!$thisbutton.attr("data-product_id")) {
+        return true;
+      }
+      e.data.addToCartHandler.$liveRegion.text("").removeAttr("aria-relevant");
+      e.preventDefault();
+      $thisbutton.removeClass("added");
+      $thisbutton.addClass("loading");
+      if (false === jQuery(document.body).triggerHandler("should_send_ajax_request.adding_to_cart", [$thisbutton])) {
+        jQuery(document.body).trigger("ajax_request_not_sent.adding_to_cart", [false, false, $thisbutton]);
+        return true;
+      }
+      const data = {};
+      jQuery.each($thisbutton.data(), function(key, value) {
+        data[key] = value;
+      });
+      jQuery.each($thisbutton[0].dataset, function(key, value) {
+        data[key] = value;
+      });
+      const $quantityButton = $thisbutton.closest(".add-to-cart-container").find(".add-to-cart-quantity");
+      if ($quantityButton.length > 0) {
+        data.quantity = $quantityButton.get(0).value;
+      }
+      jQuery(document.body).trigger("adding_to_cart", [$thisbutton, data]);
+      e.data.addToCartHandler.addRequest({
+        type: "POST",
+        url: window.wc_add_to_cart_params.wc_ajax_url.toString().replace("%%endpoint%%", "add_to_cart"),
+        data,
+        success: function(response) {
+          if (!response) {
+            return;
+          }
+          if (response.error && response.product_url) {
+            window.location = response.product_url;
+            return;
+          }
+          if (typeof window.wc_add_to_cart_params === "undefined" || typeof jQuery === "undefined") {
+            return;
+          }
+          if (window.wc_add_to_cart_params.cart_redirect_after_add === "yes") {
+            window.location = window.wc_add_to_cart_params.cart_url;
+            return;
+          }
+          jQuery(document.body).trigger("added_to_cart", [response.fragments, response.cart_hash, $thisbutton]);
+        },
+        dataType: "json"
+      });
+    }
+  }
+  /**
+   * Add live region into the body element.
+   */
+  createLiveRegion() {
+    const existingLiveRegion = jQuery(".widget_shopping_cart_live_region");
+    if (existingLiveRegion.length) {
+      return existingLiveRegion;
+    }
+    return jQuery('<div class="widget_shopping_cart_live_region screen-reader-text" role="status"></div>').appendTo("body");
+  }
+}
+core_AjaxSearchLite.addons.add(new WooCommerceAddToCartAddon());
+/* harmony default export */ var woocommerce = ((/* unused pure expression or super */ null && (AjaxSearchLite)));
+
+;// ./src/client/addons/divi.ts
+
+
+class DiviAddon {
+  name = "Divi Addon";
+  init() {
+    if (window.DiviArea !== void 0) {
+      window.DiviArea.addAction("click_overlay", () => window.ASL.api(0, "closeResults"));
+    }
+  }
+}
+core_AjaxSearchLite.addons.add(new DiviAddon());
+/* harmony default export */ var divi = ((/* unused pure expression or super */ null && (AjaxSearchLite)));
+
+;// ./src/client/plugin/wrapper/loader.ts
+
+
+function loader() {
+  (0,external_utils_namespaceObject.intervalUntilExecute)(() => window.ASL.init(), function() {
+    return typeof window.ASL.version != "undefined";
+  });
+}
+
+;// ./src/client/bundle/optimized/load.ts
+
+
+
+
+
+
+window.WPD.AjaxSearchLite = core_AjaxSearchLite;
+external_DoMini_default()._fn.plugin("ajaxsearchlite", core_AjaxSearchLite.plugin);
+loader();
+
+Object(window.WPD).AjaxSearchLiteLoad = __webpack_exports__["default"];
+/******/ })()
+;

@@ -1,10 +1,18 @@
-<div class="item">
+<div class="item item-flex-nogrow item-conditional" style="flex-wrap: wrap;">
 	<?php
-	$o = new wpdreamsCustomSelect("results_snap_to", __('Snap the live results box to the ', 'ajax-search-lite'), array(
+	$o = new wpdreamsCustomSelect("resultsposition", __('Results layout position', 'ajax-search-lite'), array(
 		'selects'=>array(
-			array('option' => 'left side of the search', 'value' => 'left'),
-			array('option' => 'right side of the search', 'value' => 'right'),
-			array('option' => 'the center', 'value' => 'center')
+			array('option' => __('Hover (float over content)', 'ajax-search-lite'), 'value' => 'hover'),
+			array('option' => __('Block (pushes content)', 'ajax-search-lite'), 'value' => 'block')
+		),
+		'value'=>$sd['resultsposition']
+	));
+	$params[$o->getName()] = $o->getData();
+	$o = new wpdreamsCustomSelect("results_snap_to", __('and snap the box to the ', 'ajax-search-lite'), array(
+		'selects'=>array(
+			array('option' => __('left side of the search', 'ajax-search-lite'), 'value' => 'left'),
+			array('option' => __('right side of the search', 'ajax-search-lite'), 'value' => 'right'),
+			array('option' => __('the center', 'ajax-search-lite'), 'value' => 'center')
 		),
 		'value'=>$sd['results_snap_to']
 	));

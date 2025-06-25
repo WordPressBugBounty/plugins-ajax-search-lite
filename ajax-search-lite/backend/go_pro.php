@@ -14,7 +14,7 @@
 			<li>..and many other features, check the <a href="https://ajaxsearchpro.com/features/?utm_source=ajax-search-lite&utm_content=gopro" target="_blank">full features list</a>.</li>
 		</ul>
 		<a class="gopro"
-		   href="https://ajaxsearchpro.com/?utm_source=ajax-search-lite&amp;utm_content=frontend"
+		   href="https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&amp;utm_content=frontend"
 		   target="_blank">Discover the pro version!</a>
 		<p>The Lite and the Pro version are two separate plugins, thus you can switch from Pro to Lite and vice-versa at any time, without loosing your settings.</p>
 	</div>

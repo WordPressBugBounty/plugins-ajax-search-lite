@@ -81,6 +81,11 @@
 			</a>
 		</span>
 	</legend>
+	<?php if ( version_compare(asl_wp_get_wp_version(), '6.5', '>=') ): ?>
+		<div id="wdo" class="wdo">
+			<div id="asl-search-post-advanced-fields"></div>
+		</div>
+	<?php else: ?>
 	<div class="item">
 		<?php
 		$o = new wd_TextareaExpandable("advtitlefield", __('Advanced Title Field (default: {titlefield})', 'ajax-search-lite'),  $sd['advtitlefield']);
@@ -105,4 +110,5 @@
 			</a>
 		</p>
 	</div>
+	<?php endif; ?>
 </fieldset>

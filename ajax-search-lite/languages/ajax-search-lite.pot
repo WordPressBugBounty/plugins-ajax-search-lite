@@ -2,20 +2,21 @@
 # This file is distributed under the same license as the Ajax Search Lite plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Lite 4.12.7\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/ajax-search-lite\n"
+"Project-Id-Version: Ajax Search Lite 4.13\n"
+"Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-lite\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-04-15T12:51:10+00:00\n"
+"POT-Creation-Date: 2025-06-25T14:17:12+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: ajax-search-lite\n"
 
 #. Plugin Name of the plugin
 #: ajax-search-lite.php
+#: build/js/block-editor.js:947
 msgid "Ajax Search Lite"
 msgstr ""
 
@@ -431,6 +432,30 @@ msgstr ""
 msgid "Will try to force utf8 conversion on all LIKE operations in the WHERE and HAVING clauses."
 msgstr ""
 
+#: backend/tabs/instance/advanced/accessibility.php:2
+msgid "Aria Labels"
+msgstr ""
+
+#: backend/tabs/instance/advanced/accessibility.php:6
+msgid "Search form aria-label"
+msgstr ""
+
+#: backend/tabs/instance/advanced/accessibility.php:14
+msgid "Search Settings form aria-label"
+msgstr ""
+
+#: backend/tabs/instance/advanced/accessibility.php:22
+msgid "Search input aria-label"
+msgstr ""
+
+#: backend/tabs/instance/advanced/accessibility.php:30
+msgid "Search autocomplete input aria-label"
+msgstr ""
+
+#: backend/tabs/instance/advanced/accessibility.php:38
+msgid "Search magnifier button aria-label"
+msgstr ""
+
 #: backend/tabs/instance/advanced/advanced_premium_more.php:2
 msgid "Grouping results"
 msgstr ""
@@ -459,21 +484,21 @@ msgstr ""
 msgid "Advanced Title and Content fields"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:86
+#: backend/tabs/instance/advanced/content.php:91
 msgid "Advanced Title Field (default: {titlefield})"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:90
-#: backend/tabs/instance/advanced/content.php:102
+#: backend/tabs/instance/advanced/content.php:95
+#: backend/tabs/instance/advanced/content.php:107
 msgid "HTML is supported! Use {custom_field_name} format to have custom field values."
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:92
-#: backend/tabs/instance/advanced/content.php:104
+#: backend/tabs/instance/advanced/content.php:97
+#: backend/tabs/instance/advanced/content.php:109
 msgid "More possibilities explained here!"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:98
+#: backend/tabs/instance/advanced/content.php:103
 msgid "Advanced Description Field (default: {descriptionfield})"
 msgstr ""
 
@@ -1098,8 +1123,8 @@ msgid "Search box width"
 msgstr ""
 
 #: backend/tabs/instance/layout/box_layout.php:58
-#: backend/tabs/instance/layout/results_layout.php:34
-#: backend/tabs/instance/layout/results_layout.php:74
+#: backend/tabs/instance/layout/results_layout.php:42
+#: backend/tabs/instance/layout/results_layout.php:82
 msgid "Use with <a href=\"%s\" target=\"_blank\">CSS units</a> (like %s or %s or %s ..) Default: <strong>%s</strong>"
 msgstr ""
 
@@ -1281,82 +1306,106 @@ msgid "Did you mean text"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:3
-msgid "Snap the live results box to the "
+msgid "Results layout position"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:16
+#: backend/tabs/instance/layout/results_layout.php:5
+msgid "Hover (float over content)"
+msgstr ""
+
+#: backend/tabs/instance/layout/results_layout.php:6
+msgid "Block (pushes content)"
+msgstr ""
+
+#: backend/tabs/instance/layout/results_layout.php:11
+msgid "and snap the box to the "
+msgstr ""
+
+#: backend/tabs/instance/layout/results_layout.php:13
+msgid "left side of the search"
+msgstr ""
+
+#: backend/tabs/instance/layout/results_layout.php:14
+msgid "right side of the search"
+msgstr ""
+
+#: backend/tabs/instance/layout/results_layout.php:15
+msgid "the center"
+msgstr ""
+
+#: backend/tabs/instance/layout/results_layout.php:24
 msgid "Results box width"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:41
+#: backend/tabs/instance/layout/results_layout.php:49
 msgid "Number of result columns"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:56
+#: backend/tabs/instance/layout/results_layout.php:64
 msgid "Column minimum width (px)"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:80
+#: backend/tabs/instance/layout/results_layout.php:88
 msgid "Result box maximum height"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:83
+#: backend/tabs/instance/layout/results_layout.php:91
 msgid "If this value is reached, the scrollbar will definitely trigger. none or pixel units, like 800px. Default: none"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:86
+#: backend/tabs/instance/layout/results_layout.php:94
 msgid "Results box viewport (in item numbers)"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:89
+#: backend/tabs/instance/layout/results_layout.php:97
 msgid "Used to calculate the box height. Result box height = (this option) x (average item height)"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:93
+#: backend/tabs/instance/layout/results_layout.php:101
 msgid "Show 'More results..' text in the bottom of the search box?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:99
+#: backend/tabs/instance/layout/results_layout.php:107
 msgid "' Show more results..' text"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:105
+#: backend/tabs/instance/layout/results_layout.php:113
 msgid "Show author in results?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:111
+#: backend/tabs/instance/layout/results_layout.php:119
 msgid "Show date in results?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:116
+#: backend/tabs/instance/layout/results_layout.php:124
 msgid "Use custom date format?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:123
+#: backend/tabs/instance/layout/results_layout.php:131
 msgid " format"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:133
+#: backend/tabs/instance/layout/results_layout.php:141
 msgid "If turned OFF, it will use WordPress defaults. Default custom value: <b>Y-m-d H:i:s</b>"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:138
+#: backend/tabs/instance/layout/results_layout.php:146
 msgid "Show description in results?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:144
+#: backend/tabs/instance/layout/results_layout.php:152
 msgid "Display the description context?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:147
+#: backend/tabs/instance/layout/results_layout.php:155
 msgid " ..depth"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:155
+#: backend/tabs/instance/layout/results_layout.php:163
 msgid "Will display the description from around the search phrase, not from the beginning."
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:160
+#: backend/tabs/instance/layout/results_layout.php:168
 msgid "Description length"
 msgstr ""
 
@@ -1376,4 +1425,475 @@ msgstr ""
 
 #: backend/tabs/instance/layout_options.php:5
 msgid "Keyword Highlighting"
+msgstr ""
+
+#: build/js/block-editor.js:960
+msgid "search"
+msgstr ""
+
+#: build/js/block-editor.js:960
+msgid "ajax"
+msgstr ""
+
+#: build/js/search-instance.js:24329
+msgid "Do you want to delete this tag?"
+msgstr ""
+
+#: build/js/search-instance.js:24383
+msgid "Insert Field"
+msgstr ""
+
+#: build/js/search-instance.js:24387
+msgid "Switch to Text Editor"
+msgstr ""
+
+#: build/js/search-instance.js:24387
+msgid "Switch to Visual Editor"
+msgstr ""
+
+#: build/js/search-instance.js:24389
+msgid "Non-webkit browsers may not work correctly for the visual editor! Recommended browser: Chrome"
+msgstr ""
+
+#: build/js/search-instance.js:24483
+msgid "Result:"
+msgstr ""
+
+#: build/js/search-instance.js:24602
+msgid "Select a taxonomy first"
+msgstr ""
+
+#: build/js/search-instance.js:24837
+msgid "Field editor"
+msgstr ""
+
+#: build/js/search-instance.js:24901
+msgid "Custom field (post metadata) content. Supports ACF."
+msgstr ""
+
+#: build/js/search-instance.js:24902
+msgid "Field name"
+msgstr ""
+
+#: build/js/search-instance.js:24902
+msgid "Enter field name"
+msgstr ""
+
+#: build/js/search-instance.js:24903
+msgid "Type"
+msgstr ""
+
+#: build/js/search-instance.js:24906
+msgid "Source"
+msgstr ""
+
+#: build/js/search-instance.js:24909
+msgid "Post Meta or ACF"
+msgstr ""
+
+#: build/js/search-instance.js:24910
+msgid "User (author) Meta or ACF"
+msgstr ""
+
+#: build/js/search-instance.js:24911
+msgid "Relationship to Post Type"
+msgstr ""
+
+#: build/js/search-instance.js:24912
+msgid "Relationship to Users"
+msgstr ""
+
+#: build/js/search-instance.js:24913
+msgid "Relationship to Taxonomy Terms"
+msgstr ""
+
+#: build/js/search-instance.js:24914
+msgid "PODs field"
+msgstr ""
+
+#: build/js/search-instance.js:24917
+msgid "Max. length"
+msgstr ""
+
+#: build/js/search-instance.js:24917
+#: build/js/search-instance.js:25009
+#: build/js/search-instance.js:25010
+#: build/js/search-instance.js:25013
+#: build/js/search-instance.js:25099
+#: build/js/search-instance.js:25100
+#: build/js/search-instance.js:25110
+#: build/js/search-instance.js:25111
+#: build/js/search-instance.js:25117
+msgid "Default"
+msgstr ""
+
+#: build/js/search-instance.js:24920
+#: build/js/search-instance.js:24988
+msgid "Separation"
+msgstr ""
+
+#: build/js/search-instance.js:24922
+msgid "How to separate items if the field contains an array of values"
+msgstr ""
+
+#: build/js/search-instance.js:24924
+#: build/js/search-instance.js:24992
+msgid "Text with separator"
+msgstr ""
+
+#: build/js/search-instance.js:24925
+#: build/js/search-instance.js:24993
+msgid "HTML List (ul>li)"
+msgstr ""
+
+#: build/js/search-instance.js:24935
+#: build/js/search-instance.js:25003
+msgid "Separator"
+msgstr ""
+
+#: build/js/search-instance.js:24936
+#: build/js/search-instance.js:25004
+msgid " ,"
+msgstr ""
+
+#: build/js/search-instance.js:24939
+msgid "Separator between the items when the value is an array"
+msgstr ""
+
+#: build/js/search-instance.js:24941
+msgid "Allow HTML in field output?"
+msgstr ""
+
+#: build/js/search-instance.js:24950
+#: build/js/search-instance.js:25071
+msgid "Date Format"
+msgstr ""
+
+#: build/js/search-instance.js:24953
+#: build/js/search-instance.js:25074
+msgid "WordPress Default"
+msgstr ""
+
+#: build/js/search-instance.js:24954
+#: build/js/search-instance.js:25075
+msgid "DateTime format, ex.: \"F j, Y, g:i a\" -> \"March 10, 2001, 5:16 pm\""
+msgstr ""
+
+#: build/js/search-instance.js:24959
+msgid "Thousand separator"
+msgstr ""
+
+#: build/js/search-instance.js:24964
+msgid "Decimals"
+msgstr ""
+
+#: build/js/search-instance.js:24967
+msgid "Decimal separator"
+msgstr ""
+
+#: build/js/search-instance.js:24978
+msgid "List of taxonomy terms (categories, tags etc..)."
+msgstr ""
+
+#: build/js/search-instance.js:24979
+msgid "Taxonomy"
+msgstr ""
+
+#: build/js/search-instance.js:24979
+msgid "Select taxonomy"
+msgstr ""
+
+#: build/js/search-instance.js:24980
+msgid "Count"
+msgstr ""
+
+#: build/js/search-instance.js:24980
+msgid "5"
+msgstr ""
+
+#: build/js/search-instance.js:24981
+msgid "Order by"
+msgstr ""
+
+#: build/js/search-instance.js:24982
+msgid "Order"
+msgstr ""
+
+#: build/js/search-instance.js:24983
+msgid "Exclude terms"
+msgstr ""
+
+#: build/js/search-instance.js:24983
+msgid "Select terms to exclude"
+msgstr ""
+
+#: build/js/search-instance.js:24985
+msgid "Make terms clickable links"
+msgstr ""
+
+#: build/js/search-instance.js:24990
+msgid "How to separate the terms?"
+msgstr ""
+
+#: build/js/search-instance.js:25007
+msgid "Separator between the items if the value is an array"
+msgstr ""
+
+#: build/js/search-instance.js:25009
+#: build/js/search-instance.js:25013
+msgid "Term color"
+msgstr ""
+
+#: build/js/search-instance.js:25010
+msgid "Separator color"
+msgstr ""
+
+#: build/js/search-instance.js:25018
+msgid "Open links in new tab?"
+msgstr ""
+
+#: build/js/search-instance.js:25027
+msgid "Field"
+msgstr ""
+
+#: build/js/search-instance.js:25030
+#: build/js/search-instance.js:25151
+msgid "Result ID"
+msgstr ""
+
+#: build/js/search-instance.js:25031
+#: build/js/search-instance.js:25152
+msgid "Result Title"
+msgstr ""
+
+#: build/js/search-instance.js:25032
+#: build/js/search-instance.js:25153
+msgid "Result Content"
+msgstr ""
+
+#: build/js/search-instance.js:25033
+#: build/js/search-instance.js:25154
+msgid "Result Post Type"
+msgstr ""
+
+#: build/js/search-instance.js:25034
+#: build/js/search-instance.js:25155
+msgid "Result URL"
+msgstr ""
+
+#: build/js/search-instance.js:25035
+#: build/js/search-instance.js:25156
+msgid "Result image URL"
+msgstr ""
+
+#: build/js/search-instance.js:25036
+#: build/js/search-instance.js:25157
+msgid "Result date"
+msgstr ""
+
+#: build/js/search-instance.js:25037
+#: build/js/search-instance.js:25158
+msgid "Result author (Display name)"
+msgstr ""
+
+#: build/js/search-instance.js:25046
+msgid "The default Result Title Field as set in the primary or secondary source."
+msgstr ""
+
+#: build/js/search-instance.js:25052
+msgid "The default Result Content Field as set in the primary or secondary source."
+msgstr ""
+
+#: build/js/search-instance.js:25058
+msgid "The result URL parsed by Ajax Search Pro."
+msgstr ""
+
+#: build/js/search-instance.js:25064
+msgid "The image URL parsed by Ajax Search Pro."
+msgstr ""
+
+#: build/js/search-instance.js:25085
+msgid "Price field"
+msgstr ""
+
+#: build/js/search-instance.js:25089
+msgid "Default Price HTML"
+msgstr ""
+
+#: build/js/search-instance.js:25090
+msgid "Price without tax"
+msgstr ""
+
+#: build/js/search-instance.js:25091
+msgid "Price with tax"
+msgstr ""
+
+#: build/js/search-instance.js:25092
+msgid "Sale Price"
+msgstr ""
+
+#: build/js/search-instance.js:25099
+msgid "Regular Price Color"
+msgstr ""
+
+#: build/js/search-instance.js:25100
+msgid "Sale Price Color"
+msgstr ""
+
+#: build/js/search-instance.js:25107
+msgid "Display Quantity Input"
+msgstr ""
+
+#: build/js/search-instance.js:25108
+msgid "Display only when product is in-stock"
+msgstr ""
+
+#: build/js/search-instance.js:25109
+msgid "Default quantity"
+msgstr ""
+
+#: build/js/search-instance.js:25109
+msgid "Default: 1"
+msgstr ""
+
+#: build/js/search-instance.js:25110
+msgid "Button Color"
+msgstr ""
+
+#: build/js/search-instance.js:25111
+msgid "Button Text Color"
+msgstr ""
+
+#: build/js/search-instance.js:25114
+msgid "Justification"
+msgstr ""
+
+#: build/js/search-instance.js:25147
+msgid "Custom field"
+msgstr ""
+
+#: build/js/search-instance.js:25148
+msgid "Categories or other Taxonomy Terms"
+msgstr ""
+
+#: build/js/search-instance.js:25149
+msgid "Title Field (default)"
+msgstr ""
+
+#: build/js/search-instance.js:25150
+msgid "Description Field (default)"
+msgstr ""
+
+#: build/js/search-instance.js:25159
+msgid "WooCommerce: Price"
+msgstr ""
+
+#: build/js/search-instance.js:25160
+msgid "WooCommerce: Add to Cart"
+msgstr ""
+
+#: build/js/search-instance.js:25161
+msgid "Result Field"
+msgstr ""
+
+#: build/js/search-instance.js:25162
+msgid "WooCommerce: Star rating"
+msgstr ""
+
+#: build/js/search-instance.js:25163
+msgid "WooCommerce: Stock Status"
+msgstr ""
+
+#: build/js/search-instance.js:25164
+msgid "Star rating field"
+msgstr ""
+
+#: build/js/search-instance.js:25168
+msgid "Terms"
+msgstr ""
+
+#: build/js/search-instance.js:25169
+msgid "Price"
+msgstr ""
+
+#: build/js/search-instance.js:25170
+msgid "Woo Star Rating"
+msgstr ""
+
+#: build/js/search-instance.js:25171
+msgid "Woo Add to Cart"
+msgstr ""
+
+#: build/js/search-instance.js:25172
+msgid "Woo Stock Status"
+msgstr ""
+
+#: build/js/search-instance.js:25173
+msgid "Star Rating"
+msgstr ""
+
+#: build/js/search-instance.js:25855
+msgid "Conditional: If field values wrapped in this tag are empty, it returns an empty string."
+msgstr ""
+
+#: build/js/search-instance.js:25855
+msgid "Shortcode escape: To insert a shortcode into the field, wrap with this tag."
+msgstr ""
+
+#: build/js/search-instance.js:25855
+msgid "See documentation"
+msgstr ""
+
+#: build/js/search-instance.js:25931
+msgid "Paragraph HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:25937
+msgid "Div HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:25943
+msgid "Span HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:25949
+msgid "Strong (bold) HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:25955
+msgid "Italic HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:25961
+msgid "Emphasis HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:25967
+msgid "Line break HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:27054
+msgid "Loading..."
+msgstr ""
+
+#: build/js/search-instance.js:27057
+msgid "There was an issue loading the data, please reload the page."
+msgstr ""
+
+#: build/js/search-instance.js:27065
+msgid "Advanced Title Field for Post Type Results"
+msgstr ""
+
+#: build/js/search-instance.js:27073
+#: build/js/search-instance.js:27090
+msgid "For more information and tutorial check the"
+msgstr ""
+
+#: build/js/search-instance.js:27074
+#: build/js/search-instance.js:27091
+msgid "documentation."
+msgstr ""
+
+#: build/js/search-instance.js:27082
+msgid "Advanced Description Field for Post Type Results"
 msgstr ""

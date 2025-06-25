@@ -3,7 +3,7 @@
 Plugin Name: Ajax Search Lite
 Plugin URI: http://wp-dreams.com
 Description: The lite version of the most powerful ajax powered search engine for WordPress.
-Version: 4.12.7
+Version: 4.13
 Author: Ernest Marcinko
 Author URI: http://wp-dreams.com
 Text Domain: ajax-search-lite
@@ -17,6 +17,7 @@ define('ASL_PATH', plugin_dir_path(__FILE__));
 define('ASL_FILE', __FILE__);
 define('ASL_INCLUDES_PATH', plugin_dir_path(__FILE__)."/includes/");
 define('ASL_CLASSES_PATH', plugin_dir_path(__FILE__)."/includes/classes/");
+define('ASL_AUTOLOAD_PATH', plugin_dir_path(__FILE__)."/src/server/");
 define('ASL_FUNCTIONS_PATH', plugin_dir_path(__FILE__)."/includes/functions/");
 define('ASL_DIR', 'ajax-search-lite');
 define('ASL_SITE_IS_PROBABLY_SSL', strpos(home_url('/'), 'https://') !== false || strpos(plugin_dir_url(__FILE__), 'https://') !== false);
@@ -26,14 +27,15 @@ define(
 		str_replace('http://', 'https://', plugin_dir_url(__FILE__)) : plugin_dir_url(__FILE__)
 );
 define('ASL_URL_NP',  str_replace(array("http://", "https://"), "//", plugin_dir_url(__FILE__)));
-define('ASL_CURRENT_VERSION', 4769);
-define('ASL_CURR_VER_STRING', "4.12.7");
+define('ASL_CURRENT_VERSION', 4773);
+define('ASL_CURR_VER_STRING', "4.13");
 define('ASL_DEBUG', 0);
 define('ASL_DEMO', get_option('wd_asl_demo', 0) );
 
 // The one and most important global
 global $wd_asl;
 
+require_once ASL_AUTOLOAD_PATH . 'Autoloader.php';
 require_once(ASL_CLASSES_PATH . "core/core.inc.php");
 /**
  *  wd_asl()->_prefix   => correct DB prefix for ASP databases
