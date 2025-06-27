@@ -92,12 +92,12 @@ class Post {
 						if ( $args['apply_the_content'] ) {
 							$content = apply_filters('the_content', $content);
 						}
-						$im = asp_get_image_from_content( $content, $args['image_number'], $args['exclude_filenames'] );
+						$im = asl_get_image_from_content( $content, $args['image_number'], $args['exclude_filenames'] );
 						break;
 					case 'excerpt':
 						$excerpt = $args['get_excerpt'] ? get_post_field('post_excerpt', $id) : $excerpt;
 
-						$im = asp_get_image_from_content( $excerpt, $args['image_number'], $args['exclude_filenames'] );
+						$im = asl_get_image_from_content( $excerpt, $args['image_number'], $args['exclude_filenames'] );
 						break;
 					case 'screenshot':
 						$im = 'https://s.wordpress.com/mshots/v1/' . urlencode( get_permalink( $post->id ) ) .
@@ -108,25 +108,25 @@ class Post {
 
 						switch ( $format ) {
 							case 'audio':
-								$im = ASP_URL_NP . 'img/post_format/audio.png';
+								$im = ASL_URL_NP . 'img/post_format/audio.png';
 								break;
 							case 'video':
-								$im = ASP_URL_NP . 'img/post_format/video.png';
+								$im = ASL_URL_NP . 'img/post_format/video.png';
 								break;
 							case 'quote':
-								$im = ASP_URL_NP . 'img/post_format/quote.png';
+								$im = ASL_URL_NP . 'img/post_format/quote.png';
 								break;
 							case 'image':
-								$im = ASP_URL_NP . 'img/post_format/image.png';
+								$im = ASL_URL_NP . 'img/post_format/image.png';
 								break;
 							case 'gallery':
-								$im = ASP_URL_NP . 'img/post_format/gallery.png';
+								$im = ASL_URL_NP . 'img/post_format/gallery.png';
 								break;
 							case 'link':
-								$im = ASP_URL_NP . 'img/post_format/link.png';
+								$im = ASL_URL_NP . 'img/post_format/link.png';
 								break;
 							default:
-								$im = ASP_URL_NP . 'img/post_format/default.png';
+								$im = ASL_URL_NP . 'img/post_format/default.png';
 								break;
 						}
 						break;
@@ -166,9 +166,6 @@ class Post {
 							'height' => $args['image_height'],
 							'crop'   => true,
 						);
-						if ( !$args['image_transparency'] ) {
-							$bfi_params['color'] = wpdreams_rgb2hex($args['image_bg_color']);
-						}
 
 						$im = bfi_thumb( $im, $bfi_params );
 					}

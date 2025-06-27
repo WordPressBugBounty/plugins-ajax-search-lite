@@ -16,9 +16,9 @@ class WooCommercePrice extends AbstractWooCommerceBase implements AdvancedFieldT
 		$this->price_field         = $field_args['price_field'] ?? 'price_html';
 		$this->currency            = function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : '';
 		$this->regular_price_color =
-			$field_args['regular_price_color'] ? "--regular-price-color:{$field_args['regular_price_color']};" : '';
+			isset($field_args['regular_price_color']) ? "--regular-price-color:{$field_args['regular_price_color']};" : '';
 		$this->sale_price_color    =
-			$field_args['sale_price_color'] ? "--sale_price_color:{$field_args['sale_price_color']};" : '';
+			isset($field_args['sale_price_color']) ? "--sale_price_color:{$field_args['sale_price_color']};" : '';
 	}
 
 	/**

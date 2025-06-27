@@ -133,6 +133,24 @@ if ( !function_exists('wpdreams_in_array_r') ) {
 	}
 }
 
+if ( !function_exists('wd_flatten_array') ) {
+	/**
+	 * Flattens array without preserving the keys
+	 *
+	 * @param mixed $array
+	 * @return array<int, mixed>
+	 */
+	function wd_flatten_array( array $array ): array {
+		$recursiveArrayIterator = new RecursiveArrayIterator(
+			$array,
+			RecursiveArrayIterator::CHILD_ARRAYS_ONLY
+		);
+		$iterator               = new RecursiveIteratorIterator($recursiveArrayIterator);
+
+		return iterator_to_array($iterator, false);
+	}
+}
+
 if ( !function_exists('asl_gen_rnd_str') ) {
 	function asl_gen_rnd_str( $length = 6 ) {
 		$characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

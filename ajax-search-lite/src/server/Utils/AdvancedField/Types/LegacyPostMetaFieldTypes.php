@@ -22,7 +22,7 @@ class LegacyPostMetaFieldTypes implements AdvancedFieldTypeInterface {
 	protected ?stdClass $result;
 
 	public function __construct( string $field, array $field_args, ?stdClass $result ) {
-		$this->use_acf    = wd_asp()->o['asl_compatibility']['use_acf_getfield'];
+		$this->use_acf    = wd_asl()->o['asl_compatibility']['use_acf_getfield'];
 		$this->field      = $field;
 		$this->result     = $result;
 		$this->field_args = $field_args;

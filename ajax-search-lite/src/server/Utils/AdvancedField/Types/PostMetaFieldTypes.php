@@ -56,7 +56,7 @@ class PostMetaFieldTypes implements AdvancedFieldTypeInterface {
 	protected ?stdClass $result;
 
 	public function __construct( string $field, array $field_args, ?stdClass $result ) {
-		$this->use_acf            = wd_asp()->o['asl_compatibility']['use_acf_getfield'];
+		$this->use_acf            = wd_asl()->o['asl_compatibility']['use_acf_getfield'];
 		$this->field              = $field_args['field'] ?? '';
 		$this->result             = $result;
 		$this->type               = $field_args['type'] ?? 'text';
