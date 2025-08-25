@@ -51,7 +51,7 @@ class TaxonomyFieldTypes extends AbstractWooCommerceBase implements AdvancedFiel
 			'orderby'    => $this->orderby,
 			'order'      => $this->order,
 			'object_ids' => $this->result->id,
-			'exclude'    => $this->exclude,
+			'exclude'    => $this->exclude, // phpcs:ignore
 			'number'     => $this->count,
 		);
 

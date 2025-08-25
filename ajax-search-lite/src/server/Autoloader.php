@@ -1,6 +1,10 @@
 <?php
 namespace WPDRMS\ASL;
 
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+
 class Autoloader {
 	protected static $_instance;
 

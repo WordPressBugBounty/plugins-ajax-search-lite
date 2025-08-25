@@ -1,13 +1,18 @@
 <?php
-/* Prevent direct access */
+/**
+ * @noinspection RegExpRedundantEscape
+ * @noinspection RegExpUnnecessaryNonCapturingGroup
+ */
+
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
 
 use WPDRMS\ASL\Utils\AdvancedField\AdvancedFieldParser;
 use WPDRMS\ASL\Utils\Html;
 use WPDRMS\ASL\Utils\MB;
 use WPDRMS\ASL\Utils\Post;
 use WPDRMS\ASL\Utils\Str;
-
-defined( 'ABSPATH' ) or die( "You can't access this file directly." );
 
 if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 	/**
@@ -62,12 +67,12 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 
 			$wcl = '%'; // Wildcard Left
 			$wcr = '%'; // Wildcard right
-			if ( $args['_exact_matches'] == 1 ) {
-				if ( $args['_exact_match_location'] == 'start' ) {
+			if ( $args['_exact_matches'] ) {
+				if ( $args['_exact_match_location'] === 'start' ) {
 					$wcl = '';
-				} elseif ( $args['_exact_match_location'] == 'end' ) {
+				} elseif ( $args['_exact_match_location'] === 'end' ) {
 					$wcr = '';
-				} elseif ( $args['_exact_match_location'] == 'full' ) {
+				} elseif ( $args['_exact_match_location'] === 'full' ) {
 					$wcr = '';
 					$wcl = '';
 				}
@@ -110,7 +115,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 
 			/*----------------------- Gather Types --------------------------*/
 			$page_q = '';
-			if ( $args['_exclude_page_parent_child'] != '' ) {
+			if ( $args['_exclude_page_parent_child'] !== '' ) {
 				$page_q = " AND (
                     $wpdb->posts.post_parent NOT IN (" . str_replace( '|', ',', $args['_exclude_page_parent_child'] ) . ") AND
                     $wpdb->posts.ID NOT IN (" . str_replace( '|', ',', $args['_exclude_page_parent_child'] ) . ')
@@ -118,11 +123,11 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 			}
 
 			// If no post types selected, well then return
-			if ( count( $args['post_type'] ) < 1 && $page_q == '' ) {
+			if ( count( $args['post_type'] ) < 1 && $page_q === '' ) {
 				return '';
 			} else {
 				$words = implode( "','", $args['post_type'] );
-				if ( in_array('product_variation', $args['post_type']) ) {
+				if ( in_array('product_variation', $args['post_type'], true) ) {
 					$_post_types = $args['post_type'];
 					$_post_types = array_diff($_post_types, array( 'product_variation' ));
 					if ( count($_post_types) > 0 ) {
@@ -154,13 +159,13 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 			/*----------------------- Exclude USER id -----------------------*/
 			$user_query = '';
 			if ( isset($args['post_user_filter']['include']) ) {
-				if ( !in_array(-1, $args['post_user_filter']['include']) ) {
+				if ( !in_array(-1, $args['post_user_filter']['include']) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					$user_query = "AND $wpdb->posts.post_author IN (" . implode(', ', $args['post_user_filter']['include']) . ')
                     ';
 				}
 			}
 			if ( isset($args['post_user_filter']['exclude']) ) {
-				if ( !in_array(-1, $args['post_user_filter']['exclude']) ) {
+				if ( !in_array(-1, $args['post_user_filter']['exclude']) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					$user_query = "AND $wpdb->posts.post_author NOT IN (" . implode(', ', $args['post_user_filter']['exclude']) . ') ';
 				} else {
 					return array();
@@ -187,11 +192,11 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 			}
 			/*---------------------------------------------------------------*/
 
-			/*
-			------------------------ Term JOIN -------------------------*/
+			/*------------------------ Term JOIN -------------------------*/
+
 			// If the search in terms is not active, we don't need this unnecessary big join
 			$term_join = '';
-			if ( in_array('terms', $args['post_fields']) ) {
+			if ( in_array('terms', $args['post_fields'], true) ) {
 				$term_join = "
                 LEFT JOIN $wpdb->term_relationships ON $wpdb->posts.ID = $wpdb->term_relationships.object_id
                 LEFT JOIN $wpdb->term_taxonomy ON $wpdb->term_taxonomy.term_taxonomy_id = $wpdb->term_relationships.term_taxonomy_id
@@ -201,7 +206,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 
 			/*------------------------- WPML filter -------------------------*/
 			$wpml_query = '(1)';
-			if ( $args['_wpml_lang'] != '' ) {
+			if ( $args['_wpml_lang'] !== '' ) {
 				global $sitepress;
 				$site_lang_selected  = false;
 				$wpml_post_types_arr = array();
@@ -213,12 +218,12 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 
 				// Let us get the default site language if possible
 				if ( is_object($sitepress) && method_exists($sitepress, 'get_default_language') ) {
-					$site_lang_selected = $sitepress->get_default_language() == $args['_wpml_lang'] ? true : false;
+					$site_lang_selected = $sitepress->get_default_language() === $args['_wpml_lang'] ? true : false;
 				}
 
 				$_wpml_query_id_field = "$wpdb->posts.ID";
 				// Product variations are not translated, so we need to use the parent ID (product) field to compare
-				if ( in_array('product_variation', $args['post_type']) ) {
+				if ( in_array('product_variation', $args['post_type'], true) ) {
 					$_wpml_query_id_field = "(IF($wpdb->posts.post_type='product_variation', $wpdb->posts.post_parent, $wpdb->posts.ID))";
 				}
 
@@ -252,24 +257,24 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 
 			/*----------------------- POLYLANG filter -----------------------*/
 			$polylang_query = '';
-			if ( $args['_polylang_lang'] != '' ) {
+			if ( $args['_polylang_lang'] !== '' ) {
 				$languages = get_terms(
-					'language',
 					array(
+						'taxonomy'   => 'language',
 						'hide_empty' => false,
 						'fields'     => 'ids',
 						'orderby'    => 'term_group',
 						'slug'       => $args['_polylang_lang'],
 					)
 				);
-				if ( !empty($languages) && !is_wp_error($languages) && isset($languages[0]) ) {
-					if ( in_array('product_variation', $args['post_type']) && class_exists('WooCommerce') ) {
+				if ( !empty($languages) && !is_wp_error($languages) && isset($languages[0]) && function_exists('pll_default_language') ) {
+					if ( in_array('product_variation', $args['post_type'], true) && class_exists('WooCommerce') ) {
 						$poly_field = "IF($wpdb->posts.post_type = 'product_variation', $wpdb->posts.post_parent, $wpdb->posts.ID)";
 					} else {
 						$poly_field = "$wpdb->posts.ID";
 					}
 					$polylang_empty_query = '';
-					if ( $args['_polylang_lang'] == pll_default_language() ) {
+					if ( $args['_polylang_lang'] === pll_default_language() ) {
 						$polylang_empty_query = "
 							NOT EXISTS (
 								SELECT *
@@ -305,8 +310,8 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 			}
 			/*---------------------------------------------------------------*/
 
-			/*
-			--------------------- Other Query stuff -----------------------*/
+			/*--------------------- Other Query stuff -----------------------*/
+
 			// Do not select the content field, if it is not used at all
 			$select_content = $args['_post_get_content'] ? $wpdb->posts . '.post_content' : "''";
 
@@ -385,14 +390,14 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 
 			if (
 				$args['post_primary_order_metatype'] !== false &&
-				$args['post_primary_order_metatype'] == 'numeric'
+				$args['post_primary_order_metatype'] === 'numeric'
 			) {
 				$orderby_primary = str_replace('customfp', 'CAST(customfp as SIGNED)', $orderby_primary);
 			}
 
 			if (
 				$args['post_secondary_order_metatype'] !== false &&
-				$args['post_secondary_order_metatype'] == 'numeric'
+				$args['post_secondary_order_metatype'] === 'numeric'
 			) {
 				$orderby_secondary = str_replace('customfs', 'CAST(customfs as SIGNED)', $orderby_secondary);
 			}
@@ -462,37 +467,37 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 					$this->query
 				);
 			}
-			if ( isset($args['cpt_query'], $args['cpt_query']['groupby']) && $args['cpt_query']['groupby'] != '' ) {
+			if ( isset($args['cpt_query'], $args['cpt_query']['groupby']) && $args['cpt_query']['groupby'] !== '' ) {
 				$this->query = str_replace('{args_groupby}', $args['cpt_query']['groupby'], $this->query);
 			} else {
 				$this->query = str_replace('{args_groupby}', "$wpdb->posts.ID", $this->query);
 			}
 
-			$words = $args['_exact_matches'] == 1 && $s != '' ? array( $s ) : $_s;
+			$words = $args['_exact_matches'] && $s !== '' ? array( $s ) : $_s;
 			/**
 			 * Ex.: When the minimum word count is 2, and the user enters 'a' then $_s is empty.
 			 *      But $s is not actually empty, thus the wrong query will be executed.
 			 */
-			if ( count($words) == 0 && $s != '' ) {
+			if ( count($words) === 0 && $s !== '' ) {
 				$words = array( $s );
 				// Allow only beginnings
-				if ( $args['_exact_matches'] == 0 ) {
+				if ( !$args['_exact_matches'] ) {
 					$wcl = '';
 				}
 			}
-			if ( $s != '' ) {
-				$words = !in_array($s, $words) ? array_merge(array( $s ), $words) : $words;
+			if ( $s !== '' ) {
+				$words = !in_array($s, $words, true) ? array_merge(array( $s ), $words) : $words;
 			}
 
 			$relevance_added = false;
 			foreach ( $words as $k => $word ) {
 				$parts           = array();
 				$relevance_parts = array();
-				$is_exact        = $args['_exact_matches'] == 1 || ( count($words) > 1 && $k == 0 && ( $kw_logic == 'or' || $kw_logic == 'and' ) );
+				$is_exact        = $args['_exact_matches'] || ( count($words) > 1 && $k === 0 && ( $kw_logic === 'or' || $kw_logic === 'and' ) );
 
 				/*----------------------- Title query ---------------------------*/
-				if ( in_array('title', $args['post_fields']) ) {
-					if ( $kw_logic == 'or' || $kw_logic == 'and' || $is_exact ) {
+				if ( in_array('title', $args['post_fields'], true) ) {
+					if ( $kw_logic === 'or' || $kw_logic === 'and' || $is_exact ) {
 						$parts[] = '( ' . $pre_field . $wpdb->posts . '.post_title' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
 					} else {
 						$parts[] = '
@@ -525,8 +530,8 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				/*---------------------------------------------------------------*/
 
 				/*---------------------- Content query --------------------------*/
-				if ( in_array('content', $args['post_fields']) ) {
-					if ( $kw_logic == 'or' || $kw_logic == 'and' || $is_exact ) {
+				if ( in_array('content', $args['post_fields'], true) ) {
+					if ( $kw_logic === 'or' || $kw_logic === 'and' || $is_exact ) {
 						$parts[] = '( ' . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
 						/**
 						 * Exact matching multi line + word boundary with REGEXP
@@ -555,14 +560,14 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				/*---------------------------------------------------------------*/
 
 				/*----------------- Permalink/Post name query -------------------*/
-				if ( in_array('permalink', $args['post_fields']) ) {
+				if ( in_array('permalink', $args['post_fields'], true) ) {
 					$parts[] = '( ' . $pre_field . $wpdb->posts . '.post_name' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
 				}
 				/*---------------------------------------------------------------*/
 
 				/*---------------------- Excerpt query --------------------------*/
-				if ( in_array('excerpt', $args['post_fields']) ) {
-					if ( $kw_logic == 'or' || $kw_logic == 'and' || $is_exact ) {
+				if ( in_array('excerpt', $args['post_fields'], true) ) {
+					if ( $kw_logic === 'or' || $kw_logic === 'and' || $is_exact ) {
 						$parts[] = '( ' . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
 					} else {
 						$parts[] = '
@@ -586,8 +591,8 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				/*---------------------------------------------------------------*/
 
 				/*------------------------ Term query ---------------------------*/
-				if ( in_array('terms', $args['post_fields']) ) {
-					if ( $kw_logic == 'or' || $kw_logic == 'and' || $is_exact ) {
+				if ( in_array('terms', $args['post_fields'], true) ) {
+					if ( $kw_logic === 'or' || $kw_logic === 'and' || $is_exact ) {
 						$parts[] = '( ' . $pre_field . $wpdb->terms . '.name' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
 					} else {
 						$parts[] = '
@@ -606,16 +611,16 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				/*---------------------------------------------------------------*/
 
 				/*---------------------- Custom Fields --------------------------*/
-				if ( $args['post_custom_fields_all'] == 1 ) {
+				if ( $args['post_custom_fields_all'] ) {
 					$args['post_custom_fields'] = array( 'all' );
 				}
 
 				if ( count($args['post_custom_fields']) > 0 ) {
 					$cf_parts = array();
 					foreach ( $args['post_custom_fields'] as $cfield ) {
-						$key_part = $args['post_custom_fields_all'] == 1 ? '' : "$wpdb->postmeta.meta_key='$cfield' AND ";
+						$key_part = $args['post_custom_fields_all'] ? '' : "$wpdb->postmeta.meta_key='$cfield' AND ";
 
-						if ( $kw_logic == 'or' || $kw_logic == 'and' || $is_exact ) {
+						if ( $kw_logic === 'or' || $kw_logic === 'and' || $is_exact ) {
 							$cf_parts[] = "( $key_part " . $pre_field . $wpdb->postmeta . '.meta_value' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
 						} else {
 							$cf_parts[] = "( $key_part 
@@ -630,7 +635,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				/*---------------------------------------------------------------*/
 
 				/*---------------------- Post CPT IDs ---------------------------*/
-				if ( in_array('ids', $args['post_fields']) ) {
+				if ( in_array('ids', $args['post_fields'], true) ) {
 					$parts[] = "($wpdb->posts.ID LIKE '$word')";
 				}
 				/*---------------------------------------------------------------*/
@@ -639,15 +644,20 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				$relevance_added = true;
 			}
 
-			$querystr      = $this->build_query( $this->parts );
-			$querystr      = apply_filters('asl_query_cpt', $querystr, $args, $args['_id'], $args['_ajax_search']);
-			$all_pageposts = $wpdb->get_results( $querystr, OBJECT );
+			$querystr = $this->build_query( $this->parts );
+			$querystr = apply_filters('asl_query_cpt', $querystr, $args, $args['_id'], $args['_ajax_search']);
+
+			/**
+			 * At this point the query is safe, all inputs are escaped.
+			 * Object query cache is redundant, there is a separate caching mechanism for the user to enable
+			 */
+			$all_pageposts = $wpdb->get_results( $querystr, OBJECT ); // phpcs:ignore
 
 			// Get the real count, up to 500
 			$this->results_count = count($all_pageposts);
 			// For non-ajax search, results count needs to be limited to the maximum limit,
 			// ..as nothing is parsed beyond that
-			if ( $args['_ajax_search'] == false && $this->results_count > $this->remaining_limit ) {
+			if ( !$args['_ajax_search'] && $this->results_count > $this->remaining_limit ) {
 				$this->results_count = $this->remaining_limit;
 			}
 			/**
@@ -666,7 +676,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				 * Let us save some time. There is going to be a user selecting the same sorting
 				 * for both primary and secondary. Only do secondary if it is different from the primary.
 				 */
-				if ( $this->ordering['primary'] != $this->ordering['secondary'] ) {
+				if ( $this->ordering['primary'] !== $this->ordering['secondary'] ) {
 					$i = 0;
 					foreach ( $all_pageposts as $pk => $pp ) {
 						$all_pageposts[ $pk ]->primary_order = $i;
@@ -685,141 +695,11 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 			return $all_pageposts;
 		}
 
-		protected function build_pgp_query( $post_id_field ) {
-			global $wpdb;
-			$query = '1';
-			$s     = $this->s;
-			$args  = $this->args;
-
-			$group_query_arr = array();
-			foreach ( wd_asl()->priority_groups->getSorted() as $group ) {
-				// Rule affects this instance?
-				if ( $group['instance'] != 0 && $group['instance'] != $args['_sid'] ) {
-					continue;
-				}
-				// Rule affects this phrase?
-				if ( ASL_mb::strlen($group['phrase']) > 0 ) {
-					switch ( $group['phrase_logic'] ) {
-						case 'any':
-							if ( ASL_mb::strpos($s, $group['phrase']) === false ) {
-								continue 2;
-							}
-							break;
-						case 'exact':
-							if ( $s !== $group['phrase'] ) {
-								continue 2;
-							}
-							break;
-						case 'start':
-							if ( ASL_mb::strpos($s, $group['phrase']) !== 0 ) {
-								continue 2;
-							}
-							break;
-						case 'end':
-							if ( !( ASL_mb::substr($s, -ASL_mb::strlen($group['phrase'])) === $group['phrase'] ) ) {
-								continue 2;
-							}
-							break;
-					}
-				}
-				$rule_query_arr = array();
-				foreach ( $group['rules'] as $rule ) {
-					switch ( $rule['field'] ) {
-						case 'tax':
-							$tax_term_query_arr = array();
-							foreach ( $rule['values'] as $taxonomy => $terms ) {
-								if ( count($terms) < 1 ) {
-									continue;
-								}
-								$term_ids = implode(',', $terms);
-								if ( $rule['operator'] == 'in' ) {
-									$operator = 'EXISTS';
-								} else {
-									$operator = 'NOT EXISTS';
-								}
-								$tax_term_query_arr[] = "(
-                                $operator ( SELECT 1
-                                        FROM $wpdb->term_relationships AS gptr
-                                        LEFT JOIN $wpdb->term_taxonomy as gptt ON (gptr.term_taxonomy_id = gptt.term_taxonomy_id AND gptt.taxonomy = '$taxonomy')
-                                        WHERE gptt.term_id IN ($term_ids) AND gptr.object_id = $post_id_field
-                                 ) )";
-							}
-							if ( count($tax_term_query_arr) ) {
-								$tax_term_query   = '( ' . implode(' AND ', $tax_term_query_arr) . ' )';
-								$rule_query_arr[] = $tax_term_query;
-							}
-							break;
-						case 'cf':
-							// Get the field and the values
-							foreach ( $rule['values'] as $field => $values ) {
-								break;
-							}
-							$field = ASL_Helpers::escape($field);
-
-							$numeric_operators = array( '=', '<>', '>', '>=', '<', '<=' );
-							if ( false !== $nkey = array_search($rule['operator'], $numeric_operators) ) {
-								$operator = $numeric_operators[ $nkey ];
-								$values   = ASL_Helpers::force_numeric($values);
-								$qry      = ' gp_pm.meta_value' . $operator . $values[0];
-							} elseif (
-								$rule['operator'] == 'between' &&
-								isset($values[0], $values[1])
-							) {
-								$qry = ' gp_pm.meta_value BETWEEN ' . $values[0] . ' AND ' . $values[1];
-							} elseif ( $rule['operator'] == 'like' ) {
-								$qry = " gp_pm.meta_value LIKE '%" . $values[0] . "%'";
-							} elseif ( $rule['operator'] == 'not like' ) {
-								$qry = " gp_pm.meta_value NOT LIKE '%" . $values[0] . "%'";
-							} elseif ( $rule['operator'] == 'elike' ) {
-								$qry = " gp_pm.meta_value LIKE '" . $values[0] . "'";
-							} else {
-								// None of the operators above?
-								continue 2;
-							}
-
-							$cf_query         = "
-                            (EXISTS(
-                                SELECT 1
-                                FROM $wpdb->postmeta as gp_pm
-                                WHERE gp_pm.post_id = $post_id_field AND gp_pm.meta_key='$field' AND $qry
-                                GROUP BY gp_pm.meta_id
-                                ORDER BY gp_pm.meta_id
-                                LIMIT 1
-                            ))";
-							$rule_query_arr[] = $cf_query;
-							break;
-					}
-				}
-
-				// Construct the WHEN-THEN for this case
-				if ( count($rule_query_arr) > 0 ) {
-					$priority = $group['priority'] + 0;
-					if ( $group['logic'] == 'and' ) {
-						$rule_logic = ' AND ';
-					} else {
-						$rule_logic = ' OR ';
-					}
-					$condition         = implode($rule_logic, $rule_query_arr);
-					$group_query_arr[] = "WHEN $condition THEN $priority";
-				}           
-			}
-
-			if ( count($group_query_arr) > 0 ) {
-				$query = implode(' ', $group_query_arr);
-				$query = "(CASE
-                    $query
-                    ELSE 1
-                END)";
-			}
-
-			return $query;
-		}
-
 		protected function build_term_query( $post_id_field, $post_type_field ) {
 			global $wpdb;
 			$args = $this->args;
 
-			if ( isset($_GET['ignore_op']) ) {
+			if ( isset($_GET['ignore_op']) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				return '';
 			}
 
@@ -834,10 +714,10 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				if ( isset($item['allow_empty']) ) {
 					$allow_empty_tax_term = $item['allow_empty'];
 				} else {
-					$allow_empty_tax_term = $taxonomy == 'post_tag' ? $args['_post_tags_empty'] : $args['_post_allow_empty_tax_term'];
+					$allow_empty_tax_term = $taxonomy === 'post_tag' ? $args['_post_tags_empty'] : $args['_post_allow_empty_tax_term'];
 				}
 
-				if ( $allow_empty_tax_term == 1 ) {
+				if ( $allow_empty_tax_term ) {
 					$empty_terms_query = "
                     NOT EXISTS (
                         SELECT *
@@ -879,7 +759,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 					if ( !empty($tax_term_query) ) {
 						$tax_term_query .= ' AND ';
 					}
-					if ( isset($item['logic']) && $item['logic'] == 'andex' ) {
+					if ( isset($item['logic']) && $item['logic'] === 'andex' ) {
 						$tax_term_query .= "(
                             $empty_terms_query
     
@@ -909,10 +789,10 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				 * are associated with the post.
 				 */
 				if (
-					$taxonomy == 'post_tag' &&
-					$args['_post_tags_active'] == 1 &&
-					$tax_term_query == '' &&
-					$args['_post_tags_empty'] == 0
+					$taxonomy === 'post_tag' &&
+					$args['_post_tags_active'] &&
+					$tax_term_query === '' &&
+					!$args['_post_tags_empty']
 				) {
 					$tax_term_query = "
                     (
@@ -1016,14 +896,14 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 					// Is there a logic sent?
 					$logic        = isset($data['logic']) ? $data['logic'] : 'OR';
 					$values_count = count($posted);
-					if ( $logic_and_separate_custom_fields && $logic == 'AND' ) {
+					if ( $logic_and_separate_custom_fields && $logic === 'AND' ) {
 						$logic = 'OR';
 					}
 					$values = '';
 					if ( $operator === 'IN' ) {
 						$val = implode("','", $posted);
 						if ( !empty($val) ) {
-							if ( $values != '' ) {
+							if ( $values !== '' ) {
 								$values .= " $logic $wpdb->postmeta.meta_value $operator ('" . $val . "')";
 							} else {
 								$values .= "$wpdb->postmeta.meta_value $operator ('" . $val . "')";
@@ -1033,18 +913,18 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 						foreach ( $posted as $v ) {
 							if ( $operator === 'ELIKE' || $operator === 'NOT ELIKE' ) {
 								$_op = $operator === 'ELIKE' ? 'LIKE' : 'NOT LIKE';
-								if ( $values != '' ) {
+								if ( $values !== '' ) {
 									$values .= " $logic $wpdb->postmeta.meta_value $_op '" . $v . "'";
 								} else {
 									$values .= "$wpdb->postmeta.meta_value $_op '" . $v . "'";
 								}
 							} elseif ( $operator === 'NOT LIKE' || $operator === 'LIKE' ) {
-								if ( $values != '' ) {
+								if ( $values !== '' ) {
 									$values .= " $logic $wpdb->postmeta.meta_value $operator '%" . $v . "%'";
 								} else {
 									$values .= "$wpdb->postmeta.meta_value $operator '%" . $v . "%'";
 								}
-							} elseif ( $values != '' ) {
+							} elseif ( $values !== '' ) {
 									$values .= " $logic $wpdb->postmeta.meta_value $operator " . $v;
 							} else {
 								$values .= "$wpdb->postmeta.meta_value $operator " . $v;
@@ -1052,7 +932,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 						}
 					}
 
-					$values       = $values == '' ? '0' : $values;
+					$values       = $values === '' ? '0' : $values;
 					$current_part = "($values)";
 					// String operations
 				} elseif ( $operator === 'NOT LIKE' || $operator === 'LIKE' ) {
@@ -1066,7 +946,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				}
 
 				// Finally add the current part to the parts array
-				if ( $current_part != '' ) {
+				if ( $current_part !== '' ) {
 					if ( isset($data['allow_missing']) ) {
 						$allowance = $data['allow_missing'];
 					} else {
@@ -1145,11 +1025,11 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 					$date = $date_filter['year'] . '-' . sprintf('%02d', $date_filter['month']) . '-' . sprintf('%02d', $date_filter['day']);
 				}
 
-				if ( $date_filter['interval'] == 'before' ) {
-					$op                 = $date_filter['operator'] == 'exclude' ? '>' : '<=';
+				if ( $date_filter['interval'] === 'before' ) {
+					$op                 = $date_filter['operator'] === 'exclude' ? '>' : '<=';
 					$date_query_parts[] = "$table_alias.$date_field $op '" . $date . " 23:59:59'";
 				} else {
-					$op                 = $date_filter['operator'] == 'exclude' ? '<' : '>=';
+					$op                 = $date_filter['operator'] === 'exclude' ? '<' : '>=';
 					$date_query_parts[] = "$table_alias.$date_field $op '" . $date . " 00:00:00'";
 				}
 			}
@@ -1157,14 +1037,6 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 		}
 
 
-		/**
-		 * usort() custom function, sort by primary
-		 *
-		 * @param $a
-		 * @param $b
-		 *
-		 * @return int
-		 */
 		protected function compare_by_primary( $a, $b ) {
 
 			switch ( $this->ordering['primary'] ) {
@@ -1175,14 +1047,14 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 					return $b->relevance - $a->relevance;
 				case 'post_date DESC':
 					$date_diff = strtotime($b->date) - strtotime($a->date);
-					if ( $date_diff == 0 ) {
+					if ( $date_diff === 0 ) {
 						return $b->id - $a->id;
 					}
 
 					return $date_diff;
 				case 'post_date ASC':
 					$date_diff = strtotime($a->date) - strtotime($b->date);
-					if ( $date_diff == 0 ) {
+					if ( $date_diff === 0 ) {
 						return $a->id - $b->id;
 					}
 
@@ -1196,50 +1068,42 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				case 'menu_order ASC':
 					return isset($b->menu_order) ? $a->menu_order - $b->menu_order : 0;
 				case 'customfp DESC':
-					if ( $this->args['post_primary_order_metatype'] == 'numeric' ) {
+					if ( $this->args['post_primary_order_metatype'] === 'numeric' ) {
 						return floatval($b->customfp) - floatval($a->customfp);
 					} else {
 						return strcasecmp($b->customfp, $a->customfp);
 					}
 				case 'customfp ASC':
-					if ( $this->args['post_primary_order_metatype'] == 'numeric' ) {
+					if ( $this->args['post_primary_order_metatype'] === 'numeric' ) {
 						return floatval($a->customfp) - floatval($b->customfp);
 					} else {
 						return strcasecmp($a->customfp, $b->customfp);
 					}
 				case 'RAND()':
-					return rand(-1, 1);
+					return wp_rand(-1, 1);
 				default:
 					return $b->relevance - $a->relevance;
 			}
 		}
 
-		/**
-		 * usort() custom function, sort by secondary
-		 *
-		 * @param $a
-		 * @param $b
-		 *
-		 * @return int
-		 */
 		protected function compare_by_secondary( $a, $b ) {
 
 			$field = $this->ordering['primary_field'];
 
-			if ( $a->$field == $b->$field ) {
+			if ( $a->$field === $b->$field ) {
 
 				switch ( $this->ordering['secondary'] ) {
 					case 'relevance DESC':
 						return $b->relevance - $a->relevance;
 					case 'post_date DESC':
 						$date_diff = strtotime($b->date) - strtotime($a->date);
-						if ( $date_diff == 0 ) {
+						if ( $date_diff === 0 ) {
 							return $b->id - $a->id;
 						}
 						return $date_diff;
 					case 'post_date ASC':
 						$date_diff = strtotime($a->date) - strtotime($b->date);
-						if ( $date_diff == 0 ) {
+						if ( $date_diff === 0 ) {
 							return $a->id - $b->id;
 						}
 						return $date_diff;
@@ -1252,19 +1116,19 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 					case 'menu_order ASC':
 						return isset($b->menu_order) ? $a->menu_order - $b->menu_order : 0;
 					case 'customfs DESC':
-						if ( $this->args['post_secondary_order_metatype'] == 'numeric' ) {
+						if ( $this->args['post_secondary_order_metatype'] === 'numeric' ) {
 							return $b->customfs - $a->customfs;
 						} else {
 							return strcasecmp($b->customfs, $a->customfs);
 						}
 					case 'customfs ASC':
-						if ( $this->args['post_secondary_order_metatype'] == 'numeric' ) {
+						if ( $this->args['post_secondary_order_metatype'] === 'numeric' ) {
 							return $a->customfs - $b->customfs;
 						} else {
 							return strcasecmp($a->customfs, $b->customfs);
 						}
 					case 'RAND()':
-						return rand(-1, 1);
+						return wp_rand(-1, 1);
 					default:
 						return $b->relevance - $a->relevance;
 				}           
@@ -1278,109 +1142,16 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 		}
 
 		/**
-		 * usort() custom function, sort by ID
-		 *
-		 * @param $obj_a
-		 * @param $obj_b
-		 *
-		 * @return mixed
-		 */
-		protected function compare_posts( $obj_a, $obj_b ) {
-			return $obj_a->id - $obj_b->id;
-		}
-
-		/**
-		 * usort() custom function, sort by priority > relevance > date > title
-		 *
-		 * @param $a
-		 * @param $b
-		 *
-		 * @return int
-		 */
-		protected function compare_by_rp( $a, $b ) {
-			if ( $a->priority === $b->priority ) {
-				if ( $a->relevance === $b->relevance ) {
-					if ( $a->date != null && $a->date != '' ) {
-						return strtotime( $b->date ) - strtotime( $a->date );
-					} else {
-						return strcasecmp( $a->title, $b->title );
-					}
-				} else {
-					return $b->relevance - $a->relevance;
-				}
-			}
-
-			return $b->priority - $a->priority;
-		}
-
-		/**
-		 * usort() custom function, sort by priority > date ascending
-		 *
-		 * @param $a
-		 * @param $b
-		 *
-		 * @return int
-		 */
-		protected function compare_by_rd_asc( $a, $b ) {
-			if ( $a->priority === $b->priority ) {
-				return strtotime( $a->date ) - strtotime( $b->date );
-			}
-
-			return $b->priority - $a->priority;
-		}
-
-		/**
-		 * usort() custom function, sort by priority > date descending
-		 *
-		 * @param $a
-		 * @param $b
-		 *
-		 * @return int
-		 */
-		protected function compare_by_rd_desc( $a, $b ) {
-			if ( $a->priority === $b->priority ) {
-				return strtotime( $b->date ) - strtotime( $a->date );
-			}
-
-			return $b->priority - $a->priority;
-		}
-
-		/**
-		 * usort() custom function, sort by title descending
-		 *
-		 * @param $a
-		 * @param $b
-		 *
-		 * @return int
-		 */
-		protected function compare_by_title_desc( $a, $b ) {
-			return strcasecmp( $b->title, $a->title );
-		}
-
-		/**
-		 * usort() custom function, sort by title ascending
-		 *
-		 * @param $a
-		 * @param $b
-		 *
-		 * @return int
-		 */
-		protected function compare_by_title_asc( $a, $b ) {
-			return strcasecmp( $a->title, $b->title );
-		}
-
-
-		/**
 		 * Builds the query from the parts
 		 *
-		 * @param $parts
+		 * @param mixed $parts
 		 *
 		 * @return string query
 		 */
 		protected function build_query( $parts ) {
 			$args     = &$this->args;
 			$kw_logic = str_replace('EX', '', strtoupper( $args['keyword_logic'] ) );
-			$kw_logic = $kw_logic != 'AND' && $kw_logic != 'OR' ? 'AND' : $kw_logic;
+			$kw_logic = $kw_logic !== 'AND' && $kw_logic !== 'OR' ? 'AND' : $kw_logic;
 
 			$r_parts = array(); // relevance parts
 
@@ -1389,7 +1160,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 			$like_query_arr = array();
 			foreach ( $parts as $k =>$part ) {
 				if ( isset($part[0]) && count($part[0]) > 0 ) {
-					if ( $k == 0 ) {
+					if ( $k === 0 ) {
 						$exact_query = '(' . implode(' OR ', $part[0]) . ')';
 					} else {
 						$like_query_arr[] = '(' . implode(' OR ', $part[0]) . ')';
@@ -1399,11 +1170,11 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 			$like_query = implode(' ' . $kw_logic . ' ', $like_query_arr);
 
 			// When $exact query is empty, then surely $like_query must be empty too, see above
-			if ( $exact_query == '' ) {
+			if ( $exact_query === '' ) {
 				$like_query = '(1)';
 			} else {
 				// Both $like_query and $exact_query set
-				if ( $like_query != '' ) {
+				if ( $like_query !== '' ) {
 					$like_query = "( $exact_query OR $like_query )";
 				} else {
 					$like_query = "( $exact_query )";
@@ -1418,7 +1189,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				}
 			}
 			$relevance = implode( ' + ', $r_parts );
-			if ( $args['_post_use_relevance'] != 1 || $relevance == '' ) {
+			if ( !$args['_post_use_relevance'] || $relevance === '' ) {
 				$relevance = '(1)';
 			} else {
 				$relevance = "($relevance)";
@@ -1426,7 +1197,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 			/*---------------------------------------------------------------*/
 
 			if ( isset($this->remaining_limit) ) {
-				if ( $this->limit_start != 0 ) {
+				if ( $this->limit_start !== 0 ) {
 					$limit = $this->limit_start . ', ' . $this->remaining_limit;
 				} else {
 					$limit = $this->remaining_limit;
@@ -1463,26 +1234,26 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 			}
 
 			$sd          = $args['_sd'];
-			$searchId    = $args['_sid'];
+			$search_id   = $args['_sid'];
 			$com_options = wd_asl()->o['asl_compatibility'];
 
-			/*
-			--------------------- For Image Parser -----------------------*/
+			/*--------------------- For Image Parser -----------------------*/
+
 			// Do not select the content field, if it is not used at all
-			$get_content = $sd['showdescription'] != 1;
+			$get_content = $sd['showdescription'];
 
 			// Do not select excerpt if its not used at all
 			$get_excerpt = !(
-				$sd['primary_titlefield'] == 1 ||
-				$sd['secondary_titlefield'] == 1 ||
-				$sd['primary_descriptionfield'] == 1 ||
-				$sd['secondary_descriptionfield'] == 1
+				$sd['primary_titlefield'] ||
+				$sd['secondary_titlefield'] ||
+				$sd['primary_descriptionfield'] ||
+				$sd['secondary_descriptionfield']
 			);
 
 			$image_settings = $sd['image_options'];
 			foreach ( $pageposts as $k => &$r ) {
 				// Attachment post-process uses this section, but it has a separate image parser, so skip that
-				if ( $r->post_type == 'attachment' ) {
+				if ( $r->post_type === 'attachment' ) {
 					continue;
 				}
 
@@ -1490,20 +1261,21 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 					switch_to_blog( $r->blogid );
 				}
 
-				if ( $image_settings['show_images'] != 0 &&
-					'' !== ( $im = $this->getBFIimage( $r, $get_content, $get_excerpt ) )
-				) {
-					if ( $image_settings['image_cropping'] == 0 ) {
-						$r->image = $im;
-					} elseif ( strpos( $im, 'mshots/v1' ) === false && strpos( $im, '.gif' ) === false ) {
+				if ( $image_settings['show_images'] ) {
+					$im = $this->getBFIimage( $r, $get_content, $get_excerpt );
+					if ( $im !== '' ) {
+						if ( !$image_settings['image_cropping'] ) {
+							$r->image = $im;
+						} elseif ( strpos( $im, 'mshots/v1' ) === false && strpos( $im, '.gif' ) === false ) {
 							$bfi_params = array(
 								'width'  => $image_settings['image_width'],
 								'height' => $image_settings['image_height'],
 								'crop'   => true,
 							);
 							$r->image   = bfi_thumb( $im, $bfi_params );
-					} else {
-						$r->image = $im;
+						} else {
+							$r->image = $im;
+						}
 					}
 				}
 			}
@@ -1537,33 +1309,35 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 
 				// ---- URL FIX for WooCommerce product variations
 				$wc_prod_var_o = null; // Reset for each loop
-				if ( $r->post_type == 'product_variation' && class_exists( 'WC_Product_Variation' ) ) {
+				if ( $r->post_type === 'product_variation' && class_exists( 'WC_Product_Variation' ) && function_exists('wc_get_product') ) {
 					$wc_prod_var_o = wc_get_product( $r->id );
 					$r->link       = $wc_prod_var_o->get_permalink();
 				} else {
 					$r->link = get_permalink( $r->id );
 				}
 				// Filter it though WPML
-				if ( $args['_wpml_lang'] != '' ) {
-					if ( ICL_LANGUAGE_CODE != $args['_wpml_lang'] ) {
-						$r->link = apply_filters('wpml_permalink', $r->link, $args['_wpml_lang'], true);
-					}
-				} elseif ( is_object($sitepress) && method_exists($sitepress, 'get_default_language') ) {
-					$l = apply_filters( 'wpml_post_language_details', null, $r->id );
-					if ( is_array($l) && isset($l['language_code']) ) {
-						$_lang = ICL_LANGUAGE_CODE;
-						do_action( 'wpml_switch_language', $l['language_code'] );
+				if ( defined('ICL_LANGUAGE_CODE') ) {
+					if ( $args['_wpml_lang'] !== '' ) {
+						if ( ICL_LANGUAGE_CODE !== $args['_wpml_lang'] ) {
+							$r->link = apply_filters('wpml_permalink', $r->link, $args['_wpml_lang'], true);
+						}
+					} elseif ( is_object($sitepress) && method_exists($sitepress, 'get_default_language') ) {
+						$l = apply_filters( 'wpml_post_language_details', null, $r->id );
+						if ( is_array($l) && isset($l['language_code']) ) {
+							$_lang = ICL_LANGUAGE_CODE;
+							do_action( 'wpml_switch_language', $l['language_code'] );
 
-						$r->link = get_permalink($r->id);
-						$r->link = apply_filters('wpml_permalink', $r->link, $l['language_code'], true);
-						do_action( 'wpml_switch_language', $_lang );
+							$r->link = get_permalink($r->id);
+							$r->link = apply_filters('wpml_permalink', $r->link, $l['language_code'], true);
+							do_action( 'wpml_switch_language', $_lang );
+						}
 					}
 				}
 
 				$_t_keys = array( 'primary_titlefield', 'secondary_titlefield' );
 				foreach ( $_t_keys as $tk ) {
 					$sd[ $tk ] = $sd[ $tk ] . ''; // Convert for the switch statement
-					if ( $sd[ $tk ] == '-1' ) {
+					if ( $sd[ $tk ] == '-1' ) { // phpcs:ignore  Universal.Operators.StrictComparisons.LooseEqual
 						continue;
 					}
 
@@ -1579,11 +1353,11 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 							}
 							break;
 						case 'c__f':
-							if ( $sd[ $tk . '_cf' ] == '' ) {
+							if ( $sd[ $tk . '_cf' ] === '' ) {
 								$r->title = get_the_title( $r->id );
 							} else {
 								$field_val = ASL_Helpers::getCFValue($sd[ $tk . '_cf' ], $r, $com_options['use_acf_getfield'], $args);
-								if ( $field_val != '' ) {
+								if ( $field_val !== '' ) {
 									$r->title = wd_strip_tags_ws( $field_val, $sd['striptagsexclude'] );
 								} else {
 									$r->title = get_the_title($r->id);
@@ -1594,7 +1368,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 							$r->title = get_the_title($r->id);
 					}
 
-					if ( $r->title != '' ) {
+					if ( $r->title !== '' ) {
 						break;
 					}
 				}
@@ -1611,13 +1385,13 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				$_content = '';
 				foreach ( $_t_keys as $tk ) {
 					$sd[ $tk ] = $sd[ $tk ] . ''; // Convert for the switch statement
-					if ( $sd[ $tk ] == '-1' ) {
+					if ( $sd[ $tk ] == '-1' ) { // phpcs:ignore  Universal.Operators.StrictComparisons.LooseEqual
 						continue;
 					}
 
 					switch ( $sd[ $tk ] ) {
 						case '1':
-							if ( function_exists( 'qtranxf_use' ) && $args['_qtranslate_lang'] != '' ) {
+							if ( function_exists( 'qtranxf_use' ) && $args['_qtranslate_lang'] !== '' ) {
 								$r->excerpt = qtranxf_use($args['_qtranslate_lang'], $r->excerpt, false);
 							}
 							$_content = $r->excerpt;
@@ -1626,11 +1400,11 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 							$_content = strip_tags( get_the_title( $r->id ), $sd['striptagsexclude'] );
 							break;
 						case 'c__f':
-							if ( $sd[ $tk . '_cf' ] == '' ) {
+							if ( $sd[ $tk . '_cf' ] === '' ) {
 								$_content = '';
 							} else {
 								$field_val = ASL_Helpers::getCFValue($sd[ $tk . '_cf' ], $r, $com_options['use_acf_getfield'], $args);
-								if ( $field_val != '' ) {
+								if ( $field_val !== '' ) {
 									$_content = $field_val;
 								} else {
 									$_content = '';
@@ -1638,13 +1412,13 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 							}
 							break;
 						default: // including option '0', alias content
-							if ( function_exists( 'qtranxf_use' ) && $args['_qtranslate_lang'] != '' ) {
+							if ( function_exists( 'qtranxf_use' ) && $args['_qtranslate_lang'] !== '' ) {
 								$r->content = qtranxf_use($args['_qtranslate_lang'], $r->content, false);
 							}
 							// For product variations, do something special
-							if ( isset($wc_prod_var_o) ) {
+							if ( isset($wc_prod_var_o) && function_exists('wc_get_product') ) {
 								$r->content = $wc_prod_var_o->get_description();
-								if ( $r->content == '' ) {
+								if ( $r->content === '' ) {
 									$_pprod     = wc_get_product($wc_prod_var_o->get_parent_id());
 									$r->content = $_pprod->get_description();
 								}
@@ -1657,16 +1431,16 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 					$_content = ASL_Helpers::removeGutenbergBlocks($_content, array( 'core-embed/*' ));
 
 					// Deal with the shortcodes here, for more accuracy
-					if ( $sd['shortcode_op'] == 'remove' ) {
-						if ( $_content != '' ) {
+					if ( $sd['shortcode_op'] === 'remove' ) {
+						if ( $_content !== '' ) {
 							// Remove shortcodes, keep the content, really fast and effective method
 							$_content = preg_replace('~(?:\[/?)[^\]]+/?\]~su', '', $_content);
 						}
-					} elseif ( $_content != '' ) {
-							$_content = apply_filters( 'the_content', $_content, $searchId );
+					} elseif ( $_content !== '' ) {
+							$_content = apply_filters( 'the_content', $_content, $search_id );
 					}
 
-					if ( $_content != '' ) {
+					if ( $_content !== '' ) {
 						break;
 					}
 				}
@@ -1707,7 +1481,6 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 
 				$r->content = wd_closetags( $r->content );
 
-
 				// --------------------------------- DATE -----------------------------------
 				if ( $sd['showdate'] ) {
 					$post_time = strtotime($r->date);
@@ -1718,7 +1491,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 						$date_format = get_option('date_format', 'Y-m-d') . ' ' . get_option('time_format', 'H:i:s');
 					}
 
-					$r->date = @date_i18n($date_format, $post_time);
+					$r->date = date_i18n($date_format, $post_time);
 				}
 				// --------------------------------------------------------------------------
 			}
@@ -1732,23 +1505,15 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 			return $pageposts;
 		}
 
-		/**
-		 * Fetches an image for BFI class
-		 *
-		 * @param $post StdClass post object
-		 * @param $get_content bool to request the post content
-		 * @param $get_excerpt bool to request the post excerpt
-		 * @return string image URL
-		 */
 		protected function getBFIimage( $post, $get_content = false, $get_excerpt = false ) {
-			if ( ! isset( $post->image ) || $post->image == null ) {
+			if ( !isset( $post->image ) || $post->image === null ) {
 				$args = $this->args;
 				if ( !isset($args['_sd']['image_options']) ) {
 					return '';
 				}
 				$sd             = $args['_sd'];
 				$image_settings = $args['_sd']['image_options'];
-				$size           = $image_settings['image_source_featured'] == 'original' ? 'full' : $image_settings['image_source_featured'];
+				$size           = $image_settings['image_source_featured'] === 'original' ? 'full' : $image_settings['image_source_featured'];
 
 				if ( ! isset( $post->id ) ) {
 					return '';
@@ -1757,7 +1522,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				for ( $i = 1; $i < 6; $i++ ) {
 					switch ( $image_settings[ 'image_source' . $i ] ) {
 						case 'featured':
-							if ( $post->post_type == 'attachment' ) {
+							if ( $post->post_type === 'attachment' ) {
 								$imx = wp_get_attachment_image_src($post->id, $size, false);
 							} else {
 								$imx = wp_get_attachment_image_src(
@@ -1773,7 +1538,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 						case 'content':
 							$content = $get_content ? get_post_field('post_content', $post->id) : $post->content;
 
-							if ( $image_settings['apply_content_filter'] == 1 ) {
+							if ( $image_settings['apply_content_filter'] ) {
 								$content = apply_filters('the_content', $content);
 							}
 
@@ -1785,7 +1550,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 							$im = asl_get_image_from_content( $excerpt, $sd['image_parser_image_number'], $sd['image_parser_exclude_filenames'] );
 							break;
 						case 'screenshot':
-							$im = 'https://s.wordpress.com/mshots/v1/' . urlencode( get_permalink( $post->id ) ) .
+							$im = 'https://s.wordpress.com/mshots/v1/' . rawurlencode( get_permalink( $post->id ) ) .
 								'?w=' . $image_settings['image_width'] . '&h=' . $image_settings['image_height'];
 							break;
 						case 'post_format':
@@ -1816,12 +1581,12 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 							}
 							break;
 						case 'custom':
-							if ( $image_settings['image_custom_field'] != '' ) {
+							if ( $image_settings['image_custom_field'] !== '' ) {
 								$val = get_post_meta( $post->id, $image_settings['image_custom_field'], true );
 								if ( is_array($val) && !empty($val) ) {
 									$val = reset($val);
 								}
-								if ( $val != null && $val != '' ) {
+								if ( $val !== null && $val !== '' ) {
 									if ( is_numeric($val) ) {
 										$im = wp_get_attachment_image_url( $val, $size );
 									} else {
@@ -1831,7 +1596,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 							}
 							break;
 						case 'default':
-							if ( $image_settings['image_default'] != '' ) {
+							if ( $image_settings['image_default'] !== '' ) {
 								$im = $image_settings['image_default'];
 							}
 							break;
@@ -1839,179 +1604,17 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 							$im = '';
 							break;
 					}
-					if ( $im != null && $im != '' ) {
+					if ( $im !== null && $im !== '' ) {
 						break;
 					}
 				}
 				if ( !is_wp_error($im) ) {
-					return ASL_Helpers::fixSSLURLs($im);
+					return Str::fixSSLURLs($im);
 				}
 				return '';
 			} else {
-				return ASL_Helpers::fixSSLURLs($post->image);
+				return Str::fixSSLURLs($post->image);
 			}
-		}
-
-
-		/**
-		 * Generates the final field, based on the advanced field pattern
-		 *
-		 * @uses ASL_Helpers::getCFValue()
-		 * @uses ASL_Helpers::fixSSLURLs()
-		 * @uses shortcode_parse_atts()
-		 *
-		 * @param array   $f_args             Field related arguments
-		 * @param boolean $use_acf            If true, uses ACF get_field() function to get the meta
-		 * @param boolean $empty_on_missing   If true, returns an empty string if any of the fields is empty.
-		 *
-		 * @return string Final post title
-		 */
-		protected function adv_field( $f_args, $use_acf = false, $empty_on_missing = false ) {
-			$args = &$this->args;
-
-			$specials = array( '__id', '__title', '__content', '__link', '__url', '__image', '__date', '__author' );
-
-			$f_args  = wp_parse_args(
-				$f_args,
-				array(
-					'main_field_slug'  => 'titlefield',  // The 'slug', aka the original field name
-					'main_field_value' => '',            // The default field value
-					'r'                => null,                        // Result object
-					'field_pattern'    => '{titlefield}',   // The field pattern
-				)
-			);
-			$_f_args = $f_args;
-
-			if ( $f_args['field_pattern'] == '' ) {
-				return $f_args['field_value'];
-			}
-			$field_pattern = $f_args['field_pattern']; // Lets not make changes to arguments, shall we.
-
-			// Find conditional patterns, like [prefix {field} suffix}
-			preg_match_all( '/(\[.*?\])/', $field_pattern, $matches );
-			if ( isset( $matches[0] ) && isset( $matches[1] ) && is_array( $matches[1] ) ) {
-				foreach ( $matches[1] as $fieldset ) {
-					// Pass on each section to this function again, the code will never get here
-					$_f_args['field_pattern'] = str_replace(array( '[', ']' ), '', $fieldset);
-					$processed_fieldset       = $this->adv_field(
-						$_f_args,
-						$use_acf,
-						true
-					);
-					// Replace the original with the processed version, first occurrence, in case of duplicates
-					$field_pattern = ASL_Helpers::replaceFirst($fieldset, $processed_fieldset, $field_pattern);
-				}
-			}
-
-			preg_match_all( '/{(.*?)}/', $field_pattern, $matches );
-			if ( isset( $matches[0] ) && isset( $matches[1] ) && is_array( $matches[1] ) ) {
-				foreach ( $matches[1] as $complete_field ) {
-					$field_args = shortcode_parse_atts($complete_field);
-					if ( is_array($field_args) && isset($field_args[0]) ) {
-						$field = array_shift($field_args);
-					} else {
-						continue;
-					}
-					if ( $field == $f_args['main_field_slug'] ) {
-						$val = $f_args['main_field_value'];
-						if ( isset($field_args['maxlength']) ) {
-							$val = wd_substr_at_word($val, $field_args['maxlength']);
-						}
-						// value, field name, post object, field arguments
-						$val           = apply_filters('asl_cpt_advanced_field_value', $val, $field, $f_args['r'], $f_args);
-						$field_pattern = str_replace( '{' . $complete_field . '}', $val, $field_pattern );
-					} else {
-						if ( in_array($field, $specials) ) {
-							$r   = $f_args['r'];
-							$val = '';
-							switch ( $field ) {
-								case '__id':
-									$val = isset($r->id) ? $r->id : '';
-									break;
-								case '__title':
-									$val = isset($r->title) ? $r->title : '';
-									break;
-								case '__content':
-									$val = isset($r->content) ? $r->content : '';
-									break;
-								case '__link':
-								case '__url':
-									$val = isset($r->link) ? $r->link : '';
-									break;
-								case '__image':
-									$val = isset($r->image) ? $r->image : '';
-									break;
-								case '__date':
-									if ( isset($r->date) ) {
-										if ( isset($field_args['date_format']) ) {
-											$val = date_i18n($field_args['date_format'], strtotime($r->date));
-										} else {
-											$val = $r->date;
-										}
-									}
-									break;
-								case '__author':
-									$val = isset($r->author) && $r->author != '' ? $r->author : get_the_author_meta( 'display_name', get_post_field('post_author', $r->id));
-									break;
-							}
-						} elseif ( strpos($field, '_taxonomy_') === 0 || strpos($field, '__tax_') === 0 ) {
-							$taxonomy = str_replace(array( '_taxonomy_', '__tax_' ), '', $field);
-							if ( $taxonomy == '' ) {
-								continue;
-							}
-							$count        = isset($field_args['count']) ? $field_args['count'] + 0 : 5;
-							$count        = $count == 0 ? 5 : $count;
-							$separator    = isset($field_args['separator']) ? $field_args['separator'] : ', ';
-							$orderby      = isset($field_args['orderby']) ? $field_args['orderby'] : 'name';
-							$order        = isset($field_args['order']) ? $field_args['order'] : 'ASC';
-							$exclude      = isset($field_args['exclude']) ? '1, ' . $field_args['exclude'] : '1';
-							$hide_empty   = isset($field_args['hide_empty']) ? $field_args['hide_empty'] == 1 : true;
-							$hierarchical = isset($field_args['hierarchical']) ? $field_args['hierarchical'] == 1 : true;
-							$childless    = isset($field_args['childless']) ? $field_args['childless'] == 1 : false;
-							$val          = ASL_Helpers::getTermsList(
-								$taxonomy,
-								$count,
-								$separator,
-								array(
-									'orderby'      => $orderby,
-									'order'        => $order,
-									'object_ids'   => $f_args['r']->id,
-									'exclude'      => $exclude,
-									'hide_empty'   => $hide_empty,
-									'hierarchical' => $hierarchical,
-									'childless'    => $childless,
-								)
-							);
-						} elseif ( strpos($field, '_pods_') === 0 || strpos($field, '_pod_') === 0 ) {
-							// PODs field
-							$val = ASL_Helpers::getPODsValue($field, $f_args['r']);
-						} elseif ( strpos($field, '__um_') === 0 ) {
-							// User Meta Field
-							$um_field = str_replace('__um_', '', $field);
-							$author   = get_post_field( 'post_author', $f_args['r']->id );
-							$val      = ASL_Helpers::getUserCFValue($um_field, $author, $use_acf);
-						} else {
-							// Probably a custom field?
-							$val = ASL_Helpers::getCFValue($field, $f_args['r'], $use_acf, $args, $field_args);
-						}
-						// For the recursive call to break, if any of the fields is empty
-						if ( $empty_on_missing && trim($val) == '' ) {
-							return '';
-						}
-						$val = ASL_Helpers::fixSSLURLs($val);
-
-						if ( isset($field_args['maxlength']) ) {
-							$val = wd_substr_at_word($val, $field_args['maxlength']);
-						}
-
-						// value, field name, post object, field arguments
-						$val           = apply_filters('asl_cpt_advanced_field_value', $val, $field, $f_args['r'], $f_args);
-						$field_pattern = str_replace( '{' . $complete_field . '}', $val, $field_pattern );
-					}
-				}
-			}
-
-			return $field_pattern;
 		}
 
 		public function deregisterShortcodes() {
@@ -2034,7 +1637,7 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 		 *
 		 * @return string
 		 */
-		public function return_empty_string() {
+		public function return_empty_string(): string {
 			return '';
 		}
 	}

@@ -1,23 +1,26 @@
 <?php
-$params = array();
-$action_msg = "";
+/**
+ * @noinspection HtmlUnknownAttribute
+ */
 
-if (isset($_POST['submit_asl'])) {
-	if ( isset($_POST['asl_sett_nonce']) && wp_verify_nonce( $_POST['asl_sett_nonce'], 'asl_sett_nonce' ) ) {
-		$params = wpdreams_parse_params($_POST);
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+
+$params     = array();
+$action_msg = '';
+
+if ( isset($_POST['submit_asl']) ) {
+	if ( isset($_POST['asl_sett_nonce']) && wp_verify_nonce( sanitize_text_field(wp_unslash($_POST['asl_sett_nonce'])), 'asl_sett_nonce' ) ) {
+		$params       = wpdreams_parse_params($_POST);
 		$_asl_options = array_merge(wd_asl()->instances->get(0)['data'], $params);
 
 		wd_asl()->instances->update(0, $_asl_options);
-		// Force instance data to the debug storage
-		wd_asl()->debug->pushData(
-			$_asl_options,
-			'asl_options', true
-		);
 
-		$action_msg = "<div class='infoMsg'><strong>" . __('Search settings saved!', 'ajax-search-lite') . '</strong> (' . date("Y-m-d H:i:s") . ")</div>";
+		$action_msg = "<div class='infoMsg'><strong>" . esc_html__('Search settings saved!', 'ajax-search-lite') . '</strong> (' . gmdate('Y-m-d H:i:s') . ')</div>';
 	} else {
-		$action_msg = "<div class='errorMsg'><strong>".  __('<strong>ERROR Saving:</strong> Invalid NONCE, please try again!', 'ajax-search-lite') . '</strong> (' . date("Y-m-d H:i:s") . ")</div>";
-		$_POST = array();
+		$action_msg = "<div class='errorMsg'><strong>" . esc_html__('Error Saving: Invalid NONCE, please try again!', 'ajax-search-lite') . '</strong> (' . gmdate('Y-m-d H:i:s') . ')</div>';
+		$_POST      = array();
 	}
 }
 
@@ -26,14 +29,12 @@ $sd = wd_asl()->instances->get(0)['data'];
 
 <div id="wpdreams" class='wpdreams wrap<?php echo isset($_COOKIE['asl-accessibility']) ? ' wd-accessible' : ''; ?>'>
 	<h2 display="none"></h2>
-    <?php if (ASL_DEBUG == 1): ?>
-        <p class='infoMsg'>Debug mode is on!</p>
-    <?php endif; ?>
 
-    <?php if (wd_asl()->o['asl_performance']['use_custom_ajax_handler'] == 1): ?>
-        <p class='noticeMsgBox'>AJAX SEARCH LITE NOTICE: The custom ajax handler is enabled. In case you experience issues, please
-            <a href='<?php echo get_admin_url() . "admin.php?page=ajax-search-lite/backend/performance_options.php"; ?>'>turn it off.</a></p>
-    <?php endif; ?>
+	<?php if ( wd_asl()->o['asl_performance']['use_custom_ajax_handler'] ) : ?>
+		<p class='noticeMsgBox'>
+			<?php echo esc_html__('AJAX SEARCH LITE NOTICE: The custom ajax handler is enabled. In case you experience issues, please ', 'ajax-search-lite'); ?>
+			<a href='<?php echo esc_attr( get_admin_url() . 'admin.php?page=ajax-search-lite/backend/performance_options.php' ); ?>'><?php echo esc_html__('turn it off.', 'ajax-search-lite'); ?></a></p>
+	<?php endif; ?>
 
 	<style>
 	.socials a {
@@ -41,8 +42,7 @@ $sd = wd_asl()->instances->get(0)['data'];
 		border-radius: 4px;
 		padding: 8px 12px;
 		margin-left: 12px;
-		font-size: 14px;
-    	text-decoration: none;
+		text-decoration: none;
 		font: normal 13px/100% 'PT Sans', Verdana,Tahoma,sans-serif;
 	}
 
@@ -60,9 +60,9 @@ $sd = wd_asl()->instances->get(0)['data'];
 		background: #55ACEE;
 	}
 	</style>
-    <div class="wpdreams-box" style='vertical-align: middle;'>
-        <a class='gopro' href='https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&utm_content=instancetop' target='_blank'>Get the pro version!</a>
-        <a class="whypro" href="#">Why Pro?</a>
+	<div class="wpdreams-box" style='vertical-align: middle;'>
+		<a class='gopro' href='https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&utm_content=instancetop' target='_blank'>Get the pro version!</a>
+		<a class="whypro" href="#">Why Pro?</a>
 		<span class="socials">
 			<a class="facebook" target="_blank" href="https://www.facebook.com/wpdreams">
 				<svg width="18" height="18" aria-hidden="true" role="img" focusable="false">
@@ -77,94 +77,99 @@ $sd = wd_asl()->instances->get(0)['data'];
 				Ernest Marcinko
 			</a>
 		</span>
-        <div class="hiddend">
-            <div id="whypro_content">
-                <?php include(ASL_PATH . "backend/whypro.php"); ?>
-            </div>
-        </div>
-    </div>
+		<div class="hiddend">
+			<div id="whypro_content">
+				<?php require ASL_PATH . 'backend/whypro.php'; ?>
+			</div>
+		</div>
+	</div>
 
-    <div class="wpdreams-box">
+	<div class="wpdreams-box">
 
-            <label class="shortcode"><?php _e("Search shortcode:", "ajax-search-lite"); ?></label>
-            <input type="text" class="shortcode" value="[wpdreams_ajaxsearchlite]"
-                   readonly="readonly"/>
-            <label class="shortcode"><?php _e("Search shortcode for templates:", "ajax-search-lite"); ?></label>
-            <input type="text" class="shortcode"
-                   value="&lt;?php echo do_shortcode('[wpdreams_ajaxsearchlite]'); ?&gt;"
-                   readonly="readonly"/>
-    </div>
-    <div class="wpdreams-box" style="float:left;">
-		<?php echo $action_msg; ?>
+			<label class="shortcode"><?php esc_html_e('Search shortcode:', 'ajax-search-lite'); ?></label>
+			<input type="text" class="shortcode" value="[wpdreams_ajaxsearchlite]"
+					aria-label="<?php esc_attr_e('Ajax Search Lite Shortcode', 'ajax-search-lite'); ?>"
+					readonly="readonly"/>
+			<label class="shortcode"><?php esc_html_e('Search shortcode for templates:', 'ajax-search-lite'); ?></label>
+			<input type="text" class="shortcode"
+					aria-label="<?php esc_attr_e('Ajax Search Lite PHP Shortcode', 'ajax-search-lite'); ?>"
+					value="&lt;?php echo do_shortcode('[wpdreams_ajaxsearchlite]'); ?&gt;"
+					readonly="readonly"/>
+	</div>
+	<div class="wpdreams-box" style="float:left;">
+		<?php
+		// Constructed HTML, all user input escaped above
+		echo $action_msg; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		?>
 
 		<form action='' method='POST' name='asl_data'>
-            <ul id="tabs" class='tabs'>
-                <li><a tabid="1" class='current general'><?php _e("General Options", "ajax-search-lite"); ?></a></li>
-                <li><a tabid="2" class='multisite'><?php _e("Image Options", "ajax-search-lite"); ?></a></li>
-                <li><a tabid="3" class='frontend'><?php _e("Frontend Filters", "ajax-search-lite"); ?></a></li>
-                <li><a tabid="4" class='layout'><?php _e("Layout options", "ajax-search-lite"); ?></a></li>
-                <li><a tabid="7" class='advanced'><?php _e("Advanced", "ajax-search-lite"); ?></a></li>
-            </ul>
-            <div id="content" class='tabscontent'>
-                <div tabid="1">
-                    <fieldset>
-                        <legend><?php _e("Genearal Options", "ajax-search-lite"); ?></legend>
+			<ul id="tabs" class='tabs'>
+				<li><a tabid="1" class='current general'><?php esc_html_e('General Options', 'ajax-search-lite'); ?></a></li>
+				<li><a tabid="2" class='multisite'><?php esc_html_e('Image Options', 'ajax-search-lite'); ?></a></li>
+				<li><a tabid="3" class='frontend'><?php esc_html_e('Frontend Filters', 'ajax-search-lite'); ?></a></li>
+				<li><a tabid="4" class='layout'><?php esc_html_e('Layout options', 'ajax-search-lite'); ?></a></li>
+				<li><a tabid="7" class='advanced'><?php esc_html_e('Advanced', 'ajax-search-lite'); ?></a></li>
+			</ul>
+			<div id="content" class='tabscontent'>
+				<div tabid="1">
+					<fieldset>
+						<legend><?php esc_html_e('Genearal Options', 'ajax-search-lite'); ?></legend>
 
-                        <?php include(ASL_PATH . "backend/tabs/instance/general_options.php"); ?>
+						<?php require ASL_PATH . 'backend/tabs/instance/general_options.php'; ?>
 
-                    </fieldset>
-                </div>
-                <div tabid="2">
-                    <fieldset>
-                        <legend><?php _e("Image Options", "ajax-search-lite"); ?>
+					</fieldset>
+				</div>
+				<div tabid="2">
+					<fieldset>
+						<legend><?php esc_html_e('Image Options', 'ajax-search-lite'); ?>
 							<span class="asl_legend_docs">
 								<a target="_blank" href="https://documentation.ajaxsearchlite.com/image-settings"><span class="fa fa-book"></span>
-									<?php echo __('Documentation', 'ajax-search-lite'); ?>
+									<?php esc_html_e('Documentation', 'ajax-search-lite'); ?>
 								</a>
 							</span>
 						</legend>
 
-                        <?php include(ASL_PATH . "backend/tabs/instance/image_options.php"); ?>
+						<?php require ASL_PATH . 'backend/tabs/instance/image_options.php'; ?>
 
-                    </fieldset>
-                </div>
-                <div tabid="3">
-                    <fieldset>
-                        <legend><?php _e("Frontend Search Filters", "ajax-search-lite"); ?>
+					</fieldset>
+				</div>
+				<div tabid="3">
+					<fieldset>
+						<legend><?php esc_html_e('Frontend Search Filters', 'ajax-search-lite'); ?>
 							<span class="asl_legend_docs">
 								<a target="_blank" href="https://documentation.ajaxsearchlite.com/frontend-search-filters"><span class="fa fa-book"></span>
-									<?php echo __('Documentation', 'ajax-search-lite'); ?>
+									<?php esc_html_e('Documentation', 'ajax-search-lite'); ?>
 								</a>
 							</span>
 						</legend>
 
-                        <?php include(ASL_PATH . "backend/tabs/instance/frontend_options.php"); ?>
+						<?php require ASL_PATH . 'backend/tabs/instance/frontend_options.php'; ?>
 
-                    </fieldset>
-                </div>
-                <div tabid="4">
-                    <fieldset>
-                        <legend><?php _e("Layout Options", "ajax-search-lite"); ?></legend>
+					</fieldset>
+				</div>
+				<div tabid="4">
+					<fieldset>
+						<legend><?php esc_html_e('Layout Options', 'ajax-search-lite'); ?></legend>
 
-                        <?php include(ASL_PATH . "backend/tabs/instance/layout_options.php"); ?>
+						<?php require ASL_PATH . 'backend/tabs/instance/layout_options.php'; ?>
 
-                    </fieldset>
-                </div>
-                <div tabid="7">
-                    <fieldset>
-                        <legend><?php _e("Advanced Options", "ajax-search-lite"); ?></legend>
+					</fieldset>
+				</div>
+				<div tabid="7">
+					<fieldset>
+						<legend><?php esc_html_e('Advanced Options', 'ajax-search-lite'); ?></legend>
 
-                        <?php include(ASL_PATH . "backend/tabs/instance/advanced_options.php"); ?>
+						<?php require ASL_PATH . 'backend/tabs/instance/advanced_options.php'; ?>
 
-                    </fieldset>
-                </div>
-            </div>
-            <input type="hidden" name="sett_tabid" id="sett_tabid" value="1" />
-			<input type="hidden" name="asl_sett_nonce" id="asl_sett_nonce" value="<?php echo wp_create_nonce( "asl_sett_nonce" ); ?>">
-        </form>
-    </div>
-	<?php include(ASL_PATH . "backend/sidebar.php"); ?>
-    <div class="clear"></div>
+					</fieldset>
+				</div>
+			</div>
+			<input type="hidden" name="sett_tabid" id="sett_tabid" value="1" />
+			<input type="hidden" name="asl_sett_nonce" id="asl_sett_nonce" value="<?php echo esc_attr(wp_create_nonce( 'asl_sett_nonce' )); ?>">
+		</form>
+	</div>
+	<?php require ASL_PATH . 'backend/sidebar.php'; ?>
+	<div class="clear"></div>
 </div>
 <?php
 $metadata = require_once ASL_PATH . 'build/js/search-instance.asset.php';
@@ -175,6 +180,6 @@ wp_enqueue_script(
 	$metadata['version'],
 	array( 'in_footer' =>true ),
 );
-wp_enqueue_script('wd_asl_helpers_jquery_conditionals', plugin_dir_url(__FILE__) . 'settings/assets/js/jquery.conditionals.js', array('jquery'), ASL_CURR_VER_STRING, true);
+wp_enqueue_script('wd_asl_helpers_jquery_conditionals', plugin_dir_url(__FILE__) . 'settings/assets/js/jquery.conditionals.js', array( 'jquery' ), ASL_CURR_VER_STRING, true);
 ?>
-<?php wp_enqueue_script('wd_asl_search_instance', plugin_dir_url(__FILE__) . 'settings/assets/search_instance.js', array('jquery'), ASL_CURR_VER_STRING, true); ?>
+<?php wp_enqueue_script('wd_asl_search_instance', plugin_dir_url(__FILE__) . 'settings/assets/search_instance.js', array( 'jquery' ), ASL_CURR_VER_STRING, true); ?>

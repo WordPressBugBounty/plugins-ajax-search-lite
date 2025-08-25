@@ -1,4 +1,7 @@
 <?php
+if ( !defined('ABSPATH') ) {
+	die('-1');
+}
 
 function asl_do_init_options() {
 	global $wd_asl;
@@ -99,7 +102,7 @@ function asl_do_init_options() {
 		'override_search_form'           => 0,
 		'override_woo_search_form'       => 0,
 		'keyword_logic'                  => 'and',
-		'mob_auto_focus_menu_selector'   => '#menu-toggle',
+		'mob_auto_focus_menu_selector'   => '#menu-toggle, .menu-toggle',
 		'trigger_on_facet_change'        => 1,
 		'click_action'                   => 'results_page',
 		'return_action'                  => 'results_page',
@@ -114,7 +117,7 @@ function asl_do_init_options() {
 		'searchincontent'                => 1,
 		'searchinexcerpt'                => 1,
 		'search_in_permalinks'           => 0,
-		'post_password_protected'        => 1,
+		'show_password_protected_posts'  => 0,
 		'search_in_ids'                  => 0,
 		'search_all_cf'                  => 0,
 		'customfields'                   => '',
@@ -330,7 +333,7 @@ function asl_do_init_options() {
 		'single_highlight_offset'        => 0,
 		'single_highlight_selector'      => '#content',
 
-		'custom_css'                     => '',
+		'custom_css_code'                => '',
 
 		// General/Autocomplete/KW suggestions
 		'autocomplete'                   => 1,

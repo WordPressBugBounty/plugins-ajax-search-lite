@@ -2,6 +2,10 @@
 
 namespace WPDRMS\ASL\Patterns;
 
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+
 use stdClass;
 
 /**

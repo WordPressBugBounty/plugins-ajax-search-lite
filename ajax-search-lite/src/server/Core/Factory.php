@@ -2,6 +2,10 @@
 
 namespace WPDRMS\ASL\Core;
 
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+
 use WPDRMS\ASL\BlockEditor\ASLBlock;
 use WPDRMS\ASL\Patterns\SingletonTrait;
 use WPDRMS\ASL\Options\Routes\SearchOptionsRoute;

@@ -48,7 +48,7 @@ class ASLBlock implements BlockInterface {
 	 */
 	public function render( array $atts ): string {
 		// Editor render
-		if ( isset($_GET['context']) && $_GET['context'] === 'edit' ) {
+		if ( isset($_GET['context']) && $_GET['context'] === 'edit' ) { // phpcs:ignore: WordPress.Security.NonceVerification.Recommended
 			return do_shortcode('[wd_asl include_styles=1]');
 
 		}

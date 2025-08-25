@@ -95,6 +95,19 @@ class WD_ASL_Init {
 		foreach ( wd_asl()->instances->get() as $si ) {
 			$sd = $si['data'];
 
+			// ------------------------- 4.13.2 -----------------------------
+			if ( isset($sd['custom_css']) && $sd['custom_css'] !== '' ) {
+				/**
+				 * Old custom CSS field was stored as base64 encoded string.
+				 * Here it's migrated to a non-encoded field.
+				 */
+				$decoded = base64_decode($sd['custom_css']); // phpcs:ignore
+				if ( $decoded !== false ) {
+					$sd['custom_css_code'] = $decoded;
+				}
+				unset($sd['custom_css']);
+			}
+
 			// ------------------------- 4.7.3 -----------------------------
 			// Primary and secondary fields
 			$values     = array( '-1', '0', '1', '2', 'c__f' );
@@ -289,12 +302,6 @@ class WD_ASL_Init {
 			$ajax_url = ASL_URL . 'ajax_search.php';
 		}
 
-		if ( ASL_DEBUG < 1 && strpos($comp_settings['js_source'], 'scoped') !== false ) {
-			$scope = 'asljQuery';
-		} else {
-			$scope = 'jQuery';
-		}
-
 		$handle = 'wd-asl-ajaxsearchlite';
 		if ( !$js_async_load ) {
 			wd_asl()->scripts->enqueue(
@@ -342,7 +349,6 @@ class WD_ASL_Init {
 				'wp_rocket_exception'   => 'DOMContentLoaded',    // WP Rocket hack to prevent the wrapping of the inline script: https://docs.wp-rocket.me/article/1265-load-javascript-deferred
 				'ajaxurl'               => $ajax_url,
 				'backend_ajaxurl'       => admin_url('admin-ajax.php'),
-				'js_scope'              => $scope,
 				'asl_url'               => ASL_URL,
 				'detect_ajax'           => w_isset_def($comp_settings['detect_ajax'], 0),
 				'media_query'           => ASL_CURRENT_VERSION,

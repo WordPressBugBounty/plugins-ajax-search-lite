@@ -1,158 +1,92 @@
 <?php
-if (!class_exists("wpdreamsType")) {
-    /**
-     * (abstract) Class wpdreamsType
-     *
-     * Parent of each type defined in this directory. This class should not be used to make an instance.
-     * Each new child type should follow this general interpretation.
-     *
-     * @package  WPDreams/OptionsFramework/Classes
-     * @category Class
-     * @author Ernest Marcinko <ernest.marcinko@wp-dreams.com>
-     * @link http://wp-dreams.com, http://codecanyon.net/user/anago/portfolio
-     * @copyright Copyright (c) 2012, Ernest Marcinko
-     */
-    abstract class wpdreamsType {
-        protected static $_instancenumber = 0;
-        protected static $_errors = 0;
-        protected static $_globalerrormsg = "Only integer values are accepted!";
+if ( !defined('ABSPATH') ) {
+	die('-1');
+}
+if ( !class_exists('wpdreamsType') ) {
+	/**
+	 * (abstract) Class wpdreamsType
+	 *
+	 * Parent of each type defined in this directory. This class should not be used to make an instance.
+	 * Each new child type should follow this general interpretation.
+	 *
+	 * @package  WPDreams/OptionsFramework/Classes
+	 * @category Class
+	 * @author Ernest Marcinko <ernest.marcinko@wp-dreams.com>
+	 * @link http://wp-dreams.com, http://codecanyon.net/user/anago/portfolio
+	 * @copyright Copyright (c) 2012, Ernest Marcinko
+	 */
+	abstract class wpdreamsType {
+		protected static int $_instancenumber = 0;
+		protected static int $_errors         = 0;
 
-        protected $name, $label, $constraints, $errormsg, $defaultData, $newData, $isError;
-        protected $value;       // Contains only the value
-        protected $data;        // Contains everything passed (arguments and value), array or string
+		protected string $name;
+		protected string $label;
+		protected $default_data;
+		protected $value;
+		protected $data;
 
-        function __construct($name, $label, $data, $constraints = null, $errormsg = "") {
-            $this->name = $name;
-            $this->label = $label;
-            $this->constraints = $constraints;
-            $this->errormsg = $errormsg;
-            $this->defaultData = $data; // Preserving constructor default data after posting
-            $this->data = $data;
-            $this->value = is_array($this->data) && isset($this->data['value']) ? $this->data['value'] : $this->data;
-            $this->isError = false;
-            self::$_instancenumber++;
-            $this->getType();
-        }
+		public function __construct( string $name, string $label, $data ) {
+			$this->name         = $name;
+			$this->label        = $label;
+			$this->default_data = $data; // Preserving constructor default data after posting
+			$this->data         = $data;
+			$this->value        = is_array($this->data) && isset($this->data['value']) ? $this->data['value'] : $this->data;
+			++self::$_instancenumber;
+			$this->getType();
+		}
 
-        /**
-         * Returns the raw data passed to the class
-         *
-         * @return mixed
-         */
-        function getData() {
-            return $this->data;
-        }
+		/**
+		 * Returns the raw data passed to the class
+		 *
+		 * @return mixed
+		 */
+		public function getData() {
+			return $this->data;
+		}
 
-        /**
-         * Returns the name passed in the constructor
-         *
-         * @return string
-         */
-        final function getName() {
-            return $this->name;
-        }
+		/**
+		 * Returns the name passed in the constructor
+		 *
+		 * @return string
+		 */
+		final public function getName(): string {
+			return $this->name;
+		}
 
-        /**
-         * Checks if there was an error within any child
-         *
-         * @return bool
-         */
-        final function getError() {
-            return $this->isError;
-        }
 
-        /**
-         * Gets the current error message or the global error if not defined
-         *
-         * @return string
-         */
-        final function getErrorMsg() {
-            return $this->errormsg;
-        }
+		/**
+		 * Called in the constructor by default.
+		 *
+		 * Checks for errors when a new value was posted.
+		 */
+		protected function getType() {}
 
-        /**
-         * Triggers or sets an error message.
-         *
-         * @param $error
-         * @param string $errormsg
-         */
-        final function setError($error, $errormsg = "") {
-            if ($errormsg != "")
-                $this->errormsg = $errormsg;
-            if ($error) {
-                self::$_errors++;
-                $this->isError = true;
-            }
-        }
+		protected function decode_param( $v ) {
+			if ( gettype($v) === 'string' && substr($v, 0, strlen('_decode_')) === '_decode_' ) {
+				$v = substr($v, strlen('_decode_'));
+				// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+				$v = json_decode(base64_decode($v), true);
+			}
+			return $v;
+		}
 
-        /**
-         * Cheks the newly posted data against possible constraints
-         *
-         * @return bool
-         */
-        protected final function checkData() {
-            $this->newData = $_POST[$this->name];
-            if (is_array($this->constraints)) {
-                foreach ($this->constraints as $key => $val) {
-                    if ($this->constraints[$key]['op'] == "eq") {
-                        if ($val['func']($this->newData) == $this->constraints[$key]['val']) {
-                            ;
-                        } else {
-                            $this->setError(true);
-                            return false;
-                        }
-                    } else if ($this->constraints[$key]['op'] == "ge") {
-                        if ($val['func']($this->newData) >= $this->constraints[$key]['val']) {
-                            ;
-                        } else {
-                            $this->setError(true);
-                            return false;
-                        }
-                    } else {
-                        if ($val['func']($this->newData) < $this->constraints[$key]['val']) {
-                            ;
-                        } else {
-                            $this->setError(true);
-                            return false;
-                        }
-                    }
-                }
-            }
+		protected function encode_param( $v ) {
+			// No need to decode
+			if ( gettype($v) === 'string' && substr($v, 0, strlen('_decode_')) === '_decode_' ) {
+				return $v;
+			} else {
+				// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+				return '_decode_' . base64_encode(wp_json_encode($v));
+			}
+		}
 
-            return true;
-        }
-
-        /**
-         * Called in the constructor by default.
-         *
-         * Checks for errors when a new value was posted.
-         */
-        protected function getType() {}
-
-        protected function decode_param($v) {
-            if (gettype($v) === 'string' && substr($v, 0, strlen('_decode_')) === '_decode_') {
-                $v = substr($v, strlen('_decode_'));
-                $v = json_decode(base64_decode($v), true);
-            }
-            return $v;
-        }
-
-        protected function encode_param($v) {
-            // No need to decode
-            if (gettype($v) === 'string' && substr($v, 0, strlen('_decode_')) === '_decode_') {
-                return $v;
-            } else {
-                return '_decode_' . base64_encode(json_encode($v));
-            }
-        }
-
-        /**
-         * Returns the error count
-         *
-         * @return int
-         */
-        public static function getErrorNum() {
-            return self::$_errors;
-        }
-    }
+		/**
+		 * Returns the error count
+		 *
+		 * @return int
+		 */
+		public static function getErrorNum(): int {
+			return self::$_errors;
+		}
+	}
 }

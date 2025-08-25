@@ -28,6 +28,16 @@ class Html {
 		return $s;
 	}
 
+	/**
+	 * Escapes the a CSS code to be safely used in inline CSS blocks
+	 *
+	 * @param string $css
+	 * @return string
+	 */
+	public static function escCSS( string $css ): string {
+		return preg_replace('/<\s*\/?\s*style\s*>/i', '', $css);
+	}
+
 	public static function toTxt( string $document ) {
 		$search = array(
 			'@<script[^>]*?>.*?</script>@si', // Strip out javascript

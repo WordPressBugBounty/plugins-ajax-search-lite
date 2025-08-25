@@ -1,3 +1,9 @@
+<?php
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+?>
+
 <div class="asl_pro_only">
 	<h2>Get more powerful filters with PRO</h2>
 	<p style="text-align:left;">The PRO version offers more filtering options, such as:</p>
@@ -8,9 +14,9 @@
 		<li>Search and Reset buttons</li>
 	</ul>
 	<a href="https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&amp;utm_content=frontend-image">
-		<img title="Only available in Pro version"  src="<?php echo ASL_URL_NP . "/img/backend/frontend-options.png"; ?>">
+		<img title="Only available in Pro version"  src="<?php echo esc_attr(ASL_URL_NP . '/img/backend/frontend-options.png'); ?>">
 	</a>
 	<a class="gopro"
-	   href="https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&amp;utm_content=frontend"
-	   target="_blank">Get the pro version!</a>
+		href="https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&amp;utm_content=frontend"
+		target="_blank">Get the pro version!</a>
 </div>

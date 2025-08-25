@@ -2,6 +2,10 @@
 
 namespace WPDRMS\ASL\Options\Routes;
 
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;

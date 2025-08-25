@@ -34,12 +34,14 @@
  *          'crop_y' bool string
  *          'crop_width' bool string
  *          'crop_height' bool string
- *			'quality' int 1-100
+ *          'quality' int 1-100
  * @param $single boolean, if false then an array of data will be returned
  * @return string|array containing the url of the resized modified image
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly
+}
 
 if ( ! function_exists( 'bfi_thumb' ) ) {
 
@@ -60,7 +62,7 @@ if ( ! class_exists( 'BFI_Class_Factory' ) ) {
 
 	class BFI_Class_Factory {
 
-		public static $versions = array();
+		public static $versions    = array();
 		public static $latestClass = array();
 
 
@@ -69,15 +71,15 @@ if ( ! class_exists( 'BFI_Class_Factory' ) ) {
 				self::$versions[ $baseClassName ] = array();
 			}
 			self::$versions[ $baseClassName ][] = array(
-				'class' => $className,
-				'version' => $version
+				'class'   => $className,
+				'version' => $version,
 			);
 		}
 
 
 		public static function getNewestVersion( $baseClassName ) {
 			if ( empty( self::$latestClass[ $baseClassName ] ) ) {
-				usort( self::$versions[ $baseClassName ], array( __CLASS__, "versionCompare" ) );
+				usort( self::$versions[ $baseClassName ], array( __CLASS__, 'versionCompare' ) );
 				self::$latestClass[ $baseClassName ] = self::$versions[ $baseClassName ][0]['class'];
 				unset( self::$versions[ $baseClassName ] );
 			}
@@ -128,7 +130,7 @@ if ( ! class_exists( 'BFI_Image_Editor_Imagick_1_3' ) ) {
 			try {
 				// From: http://stackoverflow.com/questions/3538851/php-imagick-setimageopacity-destroys-transparency-and-does-nothing
 				// preserves transparency
-				//$this->image->setImageOpacity($opacity);
+				// $this->image->setImageOpacity($opacity);
 				return $this->image->evaluateImage( Imagick::EVALUATE_MULTIPLY, $opacity, Imagick::CHANNEL_ALPHA );
 
 			} catch ( Exception $e ) {
@@ -225,7 +227,7 @@ if ( ! class_exists( 'BFI_Image_Editor_GD_1_3' ) ) {
 				}
 			}
 
-			return new WP_Error( 'image_rotate_error', __( 'Image rotate failed.', 'default' ), $this->file );
+			return new WP_Error( 'image_rotate_error', __( 'Image rotate failed.', 'ajax-search-lite' ), $this->file );
 		}
 
 
@@ -248,7 +250,7 @@ if ( ! class_exists( 'BFI_Image_Editor_GD_1_3' ) ) {
 				return true;
 			}
 
-			return new WP_Error( 'image_opacity_error', __('Image opacity change failed.', 'default' ), $this->file );
+			return new WP_Error( 'image_opacity_error', __('Image opacity change failed.', 'ajax-search-lite' ), $this->file );
 		}
 
 
@@ -286,7 +288,7 @@ if ( ! class_exists( 'BFI_Image_Editor_GD_1_3' ) ) {
 
 					// get current alpha value (represents the TANSPARENCY!)
 					$colorxy = imagecolorat( $image, $x, $y );
-					$alpha = ( $colorxy >> 24 ) & 0xFF;
+					$alpha   = ( $colorxy >> 24 ) & 0xFF;
 
 					// calculate new alpha
 					if ( $minalpha !== 127 ) {
@@ -299,7 +301,7 @@ if ( ! class_exists( 'BFI_Image_Editor_GD_1_3' ) ) {
 					$alphacolorxy = imagecolorallocatealpha( $image, ( $colorxy >> 16 ) & 0xFF, ( $colorxy >> 8 ) & 0xFF, $colorxy & 0xFF, $alpha );
 
 					// set pixel with the new color + opacity
-					if( ! imagesetpixel( $image, $x, $y, $alphacolorxy ) ) {
+					if ( ! imagesetpixel( $image, $x, $y, $alphacolorxy ) ) {
 						return false;
 					}
 				}
@@ -325,9 +327,9 @@ if ( ! class_exists( 'BFI_Image_Editor_GD_1_3' ) ) {
 				function_exists( 'imagealphablending' ) ) {
 
 				$hexColor = preg_replace( '#^\##', '', $hexColor );
-				$r = hexdec( substr( $hexColor, 0, 2 ) );
-				$g = hexdec( substr( $hexColor, 2, 2 ) );
-				$b = hexdec( substr( $hexColor, 2, 2 ) );
+				$r        = hexdec( substr( $hexColor, 0, 2 ) );
+				$g        = hexdec( substr( $hexColor, 2, 2 ) );
+				$b        = hexdec( substr( $hexColor, 2, 2 ) );
 
 				imagealphablending( $this->image, false );
 				if ( imagefilter( $this->image, IMG_FILTER_COLORIZE, $r, $g, $b, 0 ) ) {
@@ -335,7 +337,7 @@ if ( ! class_exists( 'BFI_Image_Editor_GD_1_3' ) ) {
 					return true;
 				}
 			}
-			return new WP_Error( 'image_colorize_error', __( 'Image color change failed.', 'default' ), $this->file );
+			return new WP_Error( 'image_colorize_error', __( 'Image color change failed.', 'ajax-search-lite' ), $this->file );
 		}
 
 
@@ -352,7 +354,7 @@ if ( ! class_exists( 'BFI_Image_Editor_GD_1_3' ) ) {
 					return true;
 				}
 			}
-			return new WP_Error( 'image_grayscale_error', __( 'Image grayscale failed.', 'default' ), $this->file );
+			return new WP_Error( 'image_grayscale_error', __( 'Image grayscale failed.', 'ajax-search-lite' ), $this->file );
 		}
 
 
@@ -369,7 +371,7 @@ if ( ! class_exists( 'BFI_Image_Editor_GD_1_3' ) ) {
 					return true;
 				}
 			}
-			return new WP_Error( 'image_negate_error', __( 'Image negate failed.', 'default' ), $this->file );
+			return new WP_Error( 'image_negate_error', __( 'Image negate failed.', 'ajax-search-lite' ), $this->file );
 		}
 	}
 }
@@ -401,26 +403,26 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 		 *          'crop_y' bool string
 		 *          'crop_width' bool string
 		 *          'crop_height' bool string
-		 *			'quality' int 1-100
+		 *          'quality' int 1-100
 		 * @param $single boolean, if false then an array of data will be returned
 		 * @return string|array
 		 */
 		public static function thumb( $url, $params = array(), $single = true ) {
 			extract( $params );
 
-			//validate inputs
+			// validate inputs
 			if ( ! $url ) {
 				return false;
 			}
 
 			$crop_only = isset( $crop_only ) ? $crop_only : false;
 
-			//define upload path & dir
+			// define upload path & dir
 			$upload_info = wp_upload_dir();
-			$upload_dir = $upload_info['basedir'];
-			$upload_url = $upload_info['baseurl'];
-			$theme_url = get_template_directory_uri();
-			$theme_dir = get_template_directory();
+			$upload_dir  = $upload_info['basedir'];
+			$upload_url  = $upload_info['baseurl'];
+			$theme_url   = get_template_directory_uri();
+			$theme_dir   = get_template_directory();
 
 			// find the path of the image. Perform 2 checks:
 			// #1 check if the image is in the uploads folder
@@ -429,7 +431,7 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 				$img_path = $upload_dir . $rel_path;
 
 				// #2 check if the image is in the current theme folder
-			} else if ( strpos( $url, $theme_url ) !== false ) {
+			} elseif ( strpos( $url, $theme_url ) !== false ) {
 				$rel_path = str_replace( $theme_url, '', $url );
 				$img_path = $theme_dir . $rel_path;
 			}
@@ -440,16 +442,16 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 			}
 
 			// check if img path exists, and is an image indeed
-			if( ! @file_exists( $img_path ) || ! getimagesize( $img_path ) ) {
+			if ( ! @file_exists( $img_path ) || ! getimagesize( $img_path ) ) {
 				return $url;
 			}
 
 			// This is the filename
 			$basename = basename( $img_path );
 
-			//get image info
-			$info = pathinfo( $img_path );
-			$ext = $info['extension'];
+			// get image info
+			$info                    = pathinfo( $img_path );
+			$ext                     = $info['extension'];
 			list( $orig_w, $orig_h ) = getimagesize( $img_path );
 
 			// support percentage dimensions. compute percentage based on
@@ -468,12 +470,16 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 			// without performing any actual image manipulation, which will be used
 			// to check whether a resize was previously done.
 			if ( isset( $width ) && $crop_only === false ) {
-				//get image size after cropping
+				// get image size after cropping
 				$dims = image_resize_dimensions( $orig_w, $orig_h, $width, isset( $height ) ? $height : null, isset( $crop ) ? $crop : false );
-				$dst_w = $dims[4];
-				$dst_h = $dims[5];
-
-			} else if ( $crop_only === true ) {
+				if ( is_array($dims) ) {
+					$dst_w = $dims[4];
+					$dst_h = $dims[5];
+				} else {
+					$dst_w = $orig_w;
+					$dst_h = $orig_h;
+				}
+			} elseif ( $crop_only === true ) {
 				// we don't want a resize,
 				// but only a crop in the image
 
@@ -486,7 +492,7 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 				// width of the crop
 				if ( isset( $crop_width ) ) {
 					$src_w = $crop_width;
-				} else if ( isset( $width ) ) {
+				} elseif ( isset( $width ) ) {
 					$src_w = $width;
 				} else {
 					$src_w = $orig_w;
@@ -495,7 +501,7 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 				// height of the crop
 				if ( isset( $crop_height ) ) {
 					$src_h = $crop_height;
-				} else if ( isset( $height ) ) {
+				} elseif ( isset( $height ) ) {
 					$src_h = $height;
 				} else {
 					$src_h = $orig_h;
@@ -527,7 +533,7 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 					}
 				}
 
-				$dims = image_resize_dimensions( $src_w, $src_h, $dst_w, $dst_h, false );
+				$dims  = image_resize_dimensions( $src_w, $src_h, $dst_w, $dst_h, false );
 				$dst_w = $dims[4];
 				$dst_h = $dims[5];
 
@@ -565,7 +571,7 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 				( isset( $src_h ) ? str_pad( (string) $src_h, 5, '0', STR_PAD_LEFT ) : '00000' ) .
 				( isset( $dst_w ) ? str_pad( (string) $dst_w, 5, '0', STR_PAD_LEFT ) : '00000' ) .
 				( isset( $dst_h ) ? str_pad( (string) $dst_h, 5, '0', STR_PAD_LEFT ) : '00000' ) .
-				( ( isset ( $quality ) && $quality > 0 && $quality <= 100 ) ? ( $quality ? (string) $quality : '0' ) : '0' );
+				( ( isset( $quality ) && $quality > 0 && $quality <= 100 ) ? ( $quality ? (string) $quality : '0' ) : '0' );
 			$suffix = self::base_convert_arbitrary( $suffix, 10, 36 );
 
 			// use this to check if cropped image already exists, so we can return that instead
@@ -576,26 +582,24 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 				$ext = 'png';
 			}
 
-
 			// Create the upload subdirectory, this is where
 			// we store all our generated images
 			if ( defined( 'BFITHUMB_UPLOAD_DIR' ) ) {
-				$upload_dir .= "/" . BFITHUMB_UPLOAD_DIR;
-				$upload_url .= "/" . BFITHUMB_UPLOAD_DIR;
+				$upload_dir .= '/' . BFITHUMB_UPLOAD_DIR;
+				$upload_url .= '/' . BFITHUMB_UPLOAD_DIR;
 			} else {
-				$upload_dir .= "/bfi_thumb";
-				$upload_url .= "/bfi_thumb";
+				$upload_dir .= '/bfi_thumb';
+				$upload_url .= '/bfi_thumb';
 			}
 			if ( ! is_dir( $upload_dir ) ) {
 				wp_mkdir_p( $upload_dir );
 			}
 
-
 			// desination paths and urls
 			$destfilename = "{$upload_dir}/{$dst_rel_path}-{$suffix}.{$ext}";
 
 			// The urls generated have lower case extensions regardless of the original case
-			$ext = strtolower( $ext );
+			$ext     = strtolower( $ext );
 			$img_url = "{$upload_url}/{$dst_rel_path}-{$suffix}.{$ext}";
 
 			// if file exists, just return it
@@ -604,7 +608,9 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 				// perform resizing and other filters
 				$editor = wp_get_image_editor( $img_path );
 
-				if ( is_wp_error( $editor ) ) return false;
+				if ( is_wp_error( $editor ) ) {
+					return false;
+				}
 
 				/*
 				 * Perform image manipulations
@@ -616,10 +622,8 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 							return $url;
 						}
 					}
-				} else {
-					if ( is_wp_error( $editor->crop( $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h ) ) ) {
+				} elseif ( is_wp_error( $editor->crop( $src_x, $src_y, $src_w, $src_h, $dst_w, $dst_h ) ) ) {
 						return $url;
-					}
 				}
 
 				if ( isset( $negate ) ) {
@@ -656,16 +660,16 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 				}
 
 				// save our new image
-				$mime_type = isset( $opacity ) ? 'image/png' : null;
+				$mime_type    = isset( $opacity ) ? 'image/png' : null;
 				$resized_file = $editor->save( $destfilename, $mime_type );
 			}
 
-			//return the output
+			// return the output
 			if ( $single ) {
 				$image = $img_url;
 			} else {
-				//array return
-				$image = array (
+				// array return
+				$image = array(
 					0 => $img_url,
 					1 => isset( $dst_w ) ? $dst_w : $orig_w,
 					2 => isset( $dst_h ) ? $dst_h : $orig_h,
@@ -694,7 +698,7 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 			}
 
 			do {
-				$value = 0;
+				$value  = 0;
 				$newlen = 0;
 
 				for ( $i = 0; $i < $length; ++$i ) {
@@ -703,17 +707,16 @@ if ( ! class_exists( 'BFI_Thumb_1_3' ) ) {
 
 					if ( $value >= $toBase ) {
 						$nibbles[ $newlen++ ] = (int) ( $value / $toBase );
-						$value %= $toBase;
+						$value               %= $toBase;
 
-					} else if ( $newlen > 0 ) {
+					} elseif ( $newlen > 0 ) {
 						$nibbles[ $newlen++ ] = 0;
 					}
 				}
 
 				$length = $newlen;
 				$result = $digits[ $value ] . $result;
-			}
-			while ( $newlen != 0 );
+			} while ( $newlen != 0 );
 
 			return $result;
 		}

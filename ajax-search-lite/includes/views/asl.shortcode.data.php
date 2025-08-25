@@ -1,4 +1,11 @@
-<?php if (self::$instanceCount<2): ?>
+<?php
+/** @noinspection PhpUndefinedVariableInspection */
+
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+?>
+<?php if ( self::$instance_count <2 ) : ?>
 	<div id="asl_hidden_data">
 		<svg style="position:absolute" height="0" width="0">
 			<filter id="aslblur">

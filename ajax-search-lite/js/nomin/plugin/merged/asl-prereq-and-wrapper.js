@@ -1085,8 +1085,6 @@ window.WPD.DoMini = window.WPD.dom;
 
 // EXTERNAL MODULE: ./src/client/global/utils/index.ts
 var utils = __webpack_require__(685);
-// EXTERNAL MODULE: ./src/client/global/utils/base64.ts
-var base64 = __webpack_require__(806);
 ;// ./src/client/plugin/wrapper/Instances.ts
 
 
@@ -1274,7 +1272,6 @@ const onSafeDocumentReady = (callback) => {
 
 
 
-
 window.ASL = { ...window.ASL, ...{
   instances: wrapper_Instances,
   instance_args: [],
@@ -1306,12 +1303,9 @@ window.ASL = { ...window.ASL, ...{
   getInstances: function() {
     domini_default().fn._(".asl_init_data").forEach((el) => {
       const id = parseInt(el.dataset["aslId"] || "");
-      let data;
-      if (typeof el.dataset["asldata"] != "undefined") {
-        data = base64.Base64.decode(el.dataset["asldata"]);
+      if (typeof el.dataset["settings"] !== "undefined") {
+        this.instance_args[id] = JSON.parse(el.dataset["settings"]);
       }
-      if (typeof data === "undefined" || data === "") return true;
-      this.instance_args[id] = JSON.parse(data);
     });
     return this.instance_args;
   },
@@ -1506,7 +1500,7 @@ class AslPlugin {
   lastSearchData = {};
   ktype = "";
   keycode = 0;
-  usingLiveLoader = false;
+  _usingLiveLoader = void 0;
   nodes = {};
   documentEventHandlers = [];
   resultsOpened = false;
@@ -1596,7 +1590,7 @@ class AslPlugin {
     trigger: {
       click: "ajax_search",
       click_location: "same",
-      update_href: 0,
+      update_href: false,
       "return": "ajax_search",
       return_location: "same",
       facet: 1,

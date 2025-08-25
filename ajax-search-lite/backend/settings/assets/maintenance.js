@@ -31,15 +31,11 @@ jQuery(function ($) {
         if (res != null && (typeof res[1] != 'undefined')) {
             res = JSON.parse(res[1]);
             if (typeof res.status != "undefined" && res.status == 1 ) {
-                if ( res.action == 'redirect' ) {
+                if ( res.action === 'redirect' ) {
                     asl_show_success('<strong>SUCCESS: </strong>' + res.msg);
                     setTimeout(function () {
                         location.href = ASL_MNT.admin_url + '/plugins.php';
                     }, 5000);
-                } else if ( res.action == 'refresh' ) {
-                    asl_show_success('<strong>SUCCESS! </strong>Refreshing this page, please wait..');
-                    $('form#asl_empty_redirect input[name=asl_mnt_msg]').val(res.msg);
-                    $('form#asl_empty_redirect').submit();
                 } else {
                     asl_show_success('<strong>SUCCESS: </strong>' + res.msg);
                 }

@@ -176,7 +176,7 @@ jQuery(function($){
             var hidden = $('input[name=' + name + ']', parent);
             var val = "";
             items.each(function () {
-                val += "|" + $(this).attr('bid');
+                val += "|" + $(this).attr('data-id');
             });
             val = val.substring(1);
             hidden.val(val);
@@ -982,7 +982,7 @@ jQuery(function($){
         if ( typeof r == 'object' ) {
             if ( r.length > 0 ) {
                 $.each(r, function(i, v) {
-                    html += '<li class="ui-state-default" cf_name="'+v.meta_key+'">'+v.meta_key+'<a class="deleteIcon"></a></li>';
+                    html += '<li class="ui-state-default" data-name="'+v.meta_key+'">'+v.meta_key+'<a class="deleteIcon"></a></li>';
                 });
                 $drg.html(html);
                 $("#sortable" + id + " li").draggable(drag_opts).disableSelection();
@@ -1004,7 +1004,7 @@ jQuery(function($){
         function list_update() {
             $("#sortable" + id + " li").removeClass("ui-state-disabled");
             $('ul[id*=sortable_conn] li', parent).each(function (i, v) {
-                $("#sortable" + id + " li[cf_name='"+$(this).attr('cf_name')+"']").addClass("ui-state-disabled");
+                $("#sortable" + id + " li[data-name='"+$(this).attr('data-name')+"']").addClass("ui-state-disabled");
             });
         }
 
@@ -1012,7 +1012,7 @@ jQuery(function($){
             var items = $("#sortable_conn" + id + " li")
             var val = "";
             items.each(function () {
-                val += "|" + $(this).attr('cf_name');
+                val += "|" + $(this).attr('data-name');
             });
             val = val.substring(1);
             hidden.val(val);
@@ -1147,61 +1147,6 @@ jQuery(function($){
     });
 
     /**
-     * Taxonomy term selector
-     */
-    $('div.wpdreamsCustomTaxonomyTerm').each(function(){
-        var id = $(this).attr('id').match(/^wpdreamsCustomTaxonomyTerm-(.*)/)[1];
-        var selector = "#sortable" + id +", #sortable_conn" + id;
-        var name = $('input[isparam=1]', this).attr('name');
-        $(selector).sortable({
-            connectWith: ".connectedSortable"
-        }, {
-            update: function (event, ui) {
-            }
-        }).disableSelection();
-        $("#taxonomy_selector_" + id).change(function () {
-            var taxonomy = $(this).val();
-            $("li", "#sortable" + id).css('display', 'none').addClass('hiddend');
-            $("li[taxonomy='" + taxonomy + "']", "#sortable" + id).css('display', 'block').removeClass('hiddend');
-        });
-        $("#taxonomy_selector_" + id).change();
-        $(selector).on('sortupdate', function(event, ui) {
-            if (typeof(ui)!='undefined')
-                var parent = $(ui.item).parent();
-            else
-                var parent = $(event.target);
-            while (!parent.hasClass('wpdreamsCustomTaxonomyTerm')) {
-                parent = $(parent).parent();
-            }
-            var items = $('ul[id*=sortable_conn] li', parent);
-            var hidden = $('input[name=' + name + ']', parent);
-            var val = "";
-            items.each(function () {
-                val += "|" + $(this).attr('term_id') + "-" + $(this).attr('taxonomy');
-            });
-            val = val.substring(1);
-            hidden.val(val);
-        });
-        $("#wpdreamsCustomTaxonomyTerm-" + id + " .hide-children").change(function(){
-            if ($(this).get(0).checked)
-                $("#sortablecontainer" + id + " li").filter(':not(.termlevel-0)').css('display', 'none');
-            else
-                $("#sortablecontainer" + id + " li").filter(':not(.termlevel-0)').css('display', 'block');
-            $(selector).trigger("sortupdate");
-        });
-        $("#sortablecontainer" + id + " .arrow-all-left").click(function(){
-            $("#sortable_conn" + id + " li")
-                .detach().appendTo("#sortable" + id + "");
-            $(selector).trigger("sortupdate");
-        });
-        $("#sortablecontainer" + id + " .arrow-all-right").click(function(){
-            $("#sortable" + id + " li:not(.hiddend)")
-                .detach().appendTo("#sortable_conn" + id);
-            $(selector).trigger("sortupdate");
-        });
-    });
-
-    /**
      * Taxonomy term selector with checkboxes
      */
     $('div.wpdreamsCustomTaxonomyTermSel').each(function(){
@@ -1285,7 +1230,7 @@ jQuery(function($){
                     'asl_cf_search_nonce': $("input[name=asl_cf_search_nonce]", parent).val()
                 };
                 $.post(ajaxurl, data, function (response) {
-                    var o = JSON.parse(Base64.decode($("input.wd_args", parent).val()));
+                    var o = JSON.parse($("input.wd_args", parent).val());
                     var reg = new RegExp(o.delimiter +'(.*[\s\S]*)'+ o.delimiter);
                     var data_r = response.match(reg);
                     try {
@@ -1453,31 +1398,6 @@ jQuery(function($){
         });
     });
     //Image Settings End
-
-    /**
-     * Numeric unit related
-     */
-    $('.wpdreamsNumericUnit select, .wpdreamsNumericUnit input[name=numeric]').change(function () {
-        var value = "";
-        var parent = $(this).parent();
-        while (parent.hasClass('wpdreamsNumericUnit') != true) {
-            parent = $(parent).parent();
-        }
-        var value = $('input[name=numeric]', parent).val() + $('select', parent).val();
-        $('input[type=hidden]', parent).val(value);
-    });
-
-    $('.wpdreamsNumericUnit .triggerer').bind('click', function () {
-        var value = "";
-        var parent = $(this).parent();
-        while (parent.hasClass('wpdreamsNumericUnit') != true) {
-            parent = $(parent).parent();
-        }
-        var hiddenval = $('input[type=hidden]', parent).val();
-        var value = hiddenval.match(/([0-9]+)(.*)/)
-        $('input[name=numeric]', parent).val(value[1]);
-        $('select', parent).val(value[2]);
-    });
 
     /**
      * Image chooser (radio image)

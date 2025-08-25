@@ -1,8 +1,15 @@
+<?php
+/** @noinspection PhpUndefinedVariableInspection */
+
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+?>
 <div class="probox">
 
 	<?php do_action('asl_layout_before_settings', $id); ?>
 
-	<div class='prosettings' <?php echo($settingsHidden ? "style='display:none;'" : ""); ?> data-opened=0>
+	<div class='prosettings' <?php echo( $settings_hidden ? "style='display:none;'" : '' ); ?> data-opened=0>
 		<?php do_action('asl_layout_in_settings', $id); ?>
 		<div class='innericon'>
 			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="22" height="22" viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
@@ -16,22 +23,22 @@
 	<?php do_action('asl_layout_before_input', $id); ?>
 
 	<div class='proinput'>
-        <form role="search" action='#' autocomplete="off"
-			  aria-label="<?php echo esc_attr(asl_icl_t('Search form aria-Label', $style['aria_search_form_label'])); ?>">
+		<form role="search" action='#' autocomplete="off"
+				aria-label="<?php echo esc_attr(asl_icl_t('Search form aria-Label', $style['aria_search_form_label'])); ?>">
 			<input aria-label="<?php echo esc_attr(asl_icl_t('Search input aria-Label', $style['aria_search_input_label'])); ?>"
-				   type='search' class='orig'
-				   tabindex="0"
-				   name='phrase'
-				   placeholder='<?php echo esc_attr(asl_icl_t( "Search bar placeholder text", w_isset_def($style['defaultsearchtext'], '') )); ?>'
-				   value='<?php echo esc_attr(apply_filters('asl_print_search_query', get_search_query())); ?>'
-				   autocomplete="off"/>
+					type='search' class='orig'
+					tabindex="0"
+					name='phrase'
+					placeholder='<?php echo esc_attr(asl_icl_t( 'Search bar placeholder text', w_isset_def($style['defaultsearchtext'], '') )); ?>'
+					value='<?php echo esc_attr(apply_filters('asl_print_search_query', get_search_query())); ?>'
+					autocomplete="off"/>
 			<input aria-label="<?php echo esc_attr(asl_icl_t('Search autocomplete input aria-Label', $style['aria_search_autocomplete_label'])); ?>"
-				   type='text'
-				   class='autocomplete'
-				   tabindex="-1"
-				   name='phrase'
-				   value=''
-				   autocomplete="off" disabled/>
+					type='text'
+					class='autocomplete'
+					tabindex="-1"
+					name='phrase'
+					value=''
+					autocomplete="off" disabled/>
 			<input type='submit' value="Start search" style='width:0; height: 0; visibility: hidden;'>
 		</form>
 	</div>
@@ -64,12 +71,12 @@
 		<?php do_action('asl_layout_in_loading', $id); ?>
 	</div>
 
-	<?php if ($style['show_close_icon']): ?>
+	<?php if ( $style['show_close_icon'] ) : ?>
 		<div class='proclose'>
 			<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
-				 y="0px"
-				 width="12" height="12" viewBox="0 0 512 512" enable-background="new 0 0 512 512"
-				 xml:space="preserve">
+				y="0px"
+				width="12" height="12" viewBox="0 0 512 512" enable-background="new 0 0 512 512"
+				xml:space="preserve">
 				<polygon points="438.393,374.595 319.757,255.977 438.378,137.348 374.595,73.607 255.995,192.225 137.375,73.622 73.607,137.352 192.246,255.983 73.622,374.625 137.352,438.393 256.002,319.734 374.652,438.378 "/>
 			</svg>
 		</div>

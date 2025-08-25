@@ -1,11 +1,14 @@
-<div id="fb-root"></div>
-<script>(function(d, s, id) {
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) return;
-        js = d.createElement(s); js.id = id;
-        js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=470596109688127&version=v2.0";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
+<?php
+/**
+ * Help and support information
+ *
+ * @noinspection HtmlUnknownAttribute
+ */
+
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+?>
 
 <div id="wpdreams" class='asl_updates_help<?php echo isset($_COOKIE['asl-accessibility']) ? ' wd-accessible' : ''; ?>'>
 	<style>
@@ -14,7 +17,7 @@
 		border-radius: 4px;
 		padding: 8px 12px;
 		margin-right: 12px;
-    	text-decoration: none;
+		text-decoration: none;
 		display: inline-block;
 		font: normal 13px/100% Verdana,Tahoma,sans-serif;
 	}
@@ -33,8 +36,8 @@
 		background: #55ACEE;
 	}
 	</style>
-    <div class="wpdreams-box" style='vertical-align: middle;'>
-        <a class='gopro' href='https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&utm_content=helpsupport' target='_blank'>Get the pro version!</a>
+	<div class="wpdreams-box" style='vertical-align: middle;'>
+		<a class='gopro' href='https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&utm_content=helpsupport' target='_blank'>Get the pro version!</a>
 		<span class="socials">
 			<a class="facebook" target="_blank" href="https://www.facebook.com/wpdreams">
 				<svg width="18" height="18" aria-hidden="true" role="img" focusable="false">
@@ -49,43 +52,26 @@
 				Ernest Marcinko
 			</a>
 		</span>
-    </div>
+	</div>
 
-    <div class="wpdreams-box" style="float:left;">
-
-        <div class='wpdreams-slider'>
-
-            <div class="wpd-half">
-                <h3>Support</h3>
-                <div class="item">
-                    <p>For support please visit the <a target='_blank' href="https://wordpress.org/support/plugin/ajax-search-lite">Ajax Search Lite support forums</a> on wordpress.org</p>
-                    <p>
-                        Before opening a ticket please:
-                        <ul>
-                            <li>Search through the threads, the problem might have been solved before</li>
-                            <li>Make sure your search configuration is indeed correct</li>
-                            <li>Upload the debug data to <a href="https://paste.ee" target="_blank">paste.ee</a> (or to any text paste provider) and <strong>share the url to the paste</strong> in the support message.
-                            <br>Please <strong>do not paste this directly to the support forums</strong>, it is lots of data!
-                            </li>
-                        </ul>
-                    </p>
-                </div>
-            </div>
-
-            <div class="wpd-half-last">
-                <div class="item">
-                    <h3>Debug Data</h3>
-                    <textarea><?php echo wd_asl()->debug->getSerializedStorage(); ?></textarea>
-
-                    <p class="descMsg" style="text-align: left;">
-                        This is basic debugging information, mainly for support purposes. In case of contacting
-                        the support forums, please copy and paste this data to <a href="https://paste.ee" target="_blank">paste.ee</a> (or to any text paste provider) and <strong>share the url to the paste</strong> in the support message.
-                        <br>This data contains the configuration and the last 5 search queries executed, it can be extremely helpful for support.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <?php include(ASL_PATH . "backend/sidebar.php"); ?>
-    <div class="clear"></div>
+	<div class="wpdreams-box" style="float:left;">
+		<div class='wpdreams-slider'>
+			<div class="item" style="margin:12px">
+				<h3><?php esc_html_e('Support', 'ajax-search-lite'); ?></h3>
+				<p><?php esc_html_e('For support please visit the', 'ajax-search-lite'); ?>
+					<a target='_blank' href="https://wordpress.org/support/plugin/ajax-search-lite">
+					<?php esc_html_e('Ajax Search Lite support forums', 'ajax-search-lite'); ?>
+					</a> <?php esc_html_e('on wordpress.org', 'ajax-search-lite'); ?></p>
+				<p>
+					<?php esc_html_e('Before opening a ticket please:', 'ajax-search-lite'); ?>
+					<ul>
+						<li><?php esc_html_e('Read', 'ajax-search-lite'); ?> <a href="https://wordpress.org/support/topic/read-this-first-how-to-get-supported/"><?php esc_html_e('this thread', 'ajax-search-lite'); ?></a></li>
+						<li><?php esc_html_e('Search through the previous support threads, the problem might have been solved before', 'ajax-search-lite'); ?></li>
+					</ul>
+				</p>
+			</div>
+		</div>
+	</div>
+	<?php require ASL_PATH . 'backend/sidebar.php'; ?>
+	<div class="clear"></div>
 </div>

@@ -1,6 +1,10 @@
 <?php
 namespace WPDRMS\ASL\Patterns;
 
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+
 /**
  * This can be used in Abstract classes, can handle heritage by storing the singleton data in an array
  */

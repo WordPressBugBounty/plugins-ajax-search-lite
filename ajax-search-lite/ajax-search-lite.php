@@ -3,22 +3,24 @@
 Plugin Name: Ajax Search Lite
 Plugin URI: http://wp-dreams.com
 Description: The lite version of the most powerful ajax powered search engine for WordPress.
-Version: 4.13.1
+Version: 4.13.2
 Author: Ernest Marcinko
+License: GPLv2
 Author URI: http://wp-dreams.com
 Text Domain: ajax-search-lite
 Domain Path: /languages/
 */
 
-/* Prevent direct access */
-defined('ABSPATH') or die("You can't access this file directly.");
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
 
 define('ASL_PATH', plugin_dir_path(__FILE__));
 define('ASL_FILE', __FILE__);
-define('ASL_INCLUDES_PATH', plugin_dir_path(__FILE__)."/includes/");
-define('ASL_CLASSES_PATH', plugin_dir_path(__FILE__)."/includes/classes/");
-define('ASL_AUTOLOAD_PATH', plugin_dir_path(__FILE__)."/src/server/");
-define('ASL_FUNCTIONS_PATH', plugin_dir_path(__FILE__)."/includes/functions/");
+define('ASL_INCLUDES_PATH', plugin_dir_path(__FILE__) . '/includes/');
+define('ASL_CLASSES_PATH', plugin_dir_path(__FILE__) . '/includes/classes/');
+define('ASL_AUTOLOAD_PATH', plugin_dir_path(__FILE__) . '/src/server/');
+define('ASL_FUNCTIONS_PATH', plugin_dir_path(__FILE__) . '/includes/functions/');
 define('ASL_DIR', 'ajax-search-lite');
 define('ASL_SITE_IS_PROBABLY_SSL', strpos(home_url('/'), 'https://') !== false || strpos(plugin_dir_url(__FILE__), 'https://') !== false);
 define(
@@ -26,18 +28,18 @@ define(
 	ASL_SITE_IS_PROBABLY_SSL ?
 		str_replace('http://', 'https://', plugin_dir_url(__FILE__)) : plugin_dir_url(__FILE__)
 );
-define('ASL_URL_NP',  str_replace(array("http://", "https://"), "//", plugin_dir_url(__FILE__)));
-define('ASL_CURRENT_VERSION', 4774);
-define('ASL_CURR_VER_STRING', "4.13.1");
+define('ASL_URL_NP', str_replace(array( 'http://', 'https://' ), '//', plugin_dir_url(__FILE__)));
+define('ASL_CURRENT_VERSION', 4777);
+define('ASL_CURR_VER_STRING', '4.13.2');
 define('ASL_DEBUG', 0);
-define('ASL_DEMO', get_option('wd_asl_demo', 0) );
 
 // The one and most important global
 global $wd_asl;
 
 require_once ASL_AUTOLOAD_PATH . 'Autoloader.php';
-require_once(ASL_CLASSES_PATH . "core/core.inc.php");
+require_once ASL_CLASSES_PATH . 'core/core.inc.php';
 /**
+ * Available:
  *  wd_asl()->_prefix   => correct DB prefix for ASP databases
  *  wd_asl()->tables    => table names
  *  wd_asl()->db        => DB manager
@@ -49,16 +51,16 @@ require_once(ASL_CLASSES_PATH . "core/core.inc.php");
  */
 $wd_asl = new WD_ASL_Globals();
 
-if ( !function_exists("wd_asl") ) {
-    /**
-     * Easy access of the global variable reference
-     *
-     * @return WD_ASL_Globals
-     */
-    function wd_asl() {
-        global $wd_asl;
-        return $wd_asl;
-    }
+if ( !function_exists('wd_asl') ) {
+	/**
+	 * Easy access of the global variable reference
+	 *
+	 * @return WD_ASL_Globals
+	 */
+	function wd_asl(): WD_ASL_Globals {
+		global $wd_asl;
+		return $wd_asl;
+	}
 }
 
 // Initialize the plugin

@@ -2,6 +2,10 @@
 
 namespace WPDRMS\ASL\Rest;
 
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+
 use WP_Error;
 use WPDRMS\ASL\Patterns\SingletonTrait;
 
@@ -21,7 +25,7 @@ abstract class AbstractRest implements RestInterface {
 	 */
 	public function allowOnlyLoggedIn() {
 		if ( !is_user_logged_in() ) {
-			return new WP_Error( 'rest_forbidden', esc_html__( 'Only logged in users can access this resource.' ), array( 'status' => 401 ) );
+			return new WP_Error( 'rest_forbidden', esc_html__( 'Only logged in users can access this resource.', 'ajax-search-lite' ), array( 'status' => 401 ) );
 		}
 		return true;
 	}
@@ -33,7 +37,7 @@ abstract class AbstractRest implements RestInterface {
 	 */
 	public function allowOnlyAdmins() {
 		if ( ! current_user_can( 'manage_options' ) ) {
-			return new WP_Error( 'rest_forbidden', esc_html__( 'Only administrators can access this resource.' ), array( 'status' => 401 ) );
+			return new WP_Error( 'rest_forbidden', esc_html__( 'Only administrators can access this resource.', 'ajax-search-lite' ), array( 'status' => 401 ) );
 		}
 		return true;
 	}

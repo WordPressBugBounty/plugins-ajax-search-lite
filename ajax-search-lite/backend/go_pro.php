@@ -1,3 +1,12 @@
+<?php
+/**
+ * Pro version information messages
+ */
+
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
+?>
 <div id="wpdreams" style="padding: 24px;">
 	<div class="asl_pro_only" style="max-width: 768px;">
 		<h2>An even more powerful search with the PRO version</h2>
@@ -11,11 +20,11 @@
 			<li>Taxonomy, Tag, User, Date, ID and other result exclusion and inclusion methods</li>
 			<li>Individual and results group prioritizing options</li>
 			<li>Powerful API for both the server side and the client side, as well as a REST API</li>
-			<li>..and many other features, check the <a href="https://ajaxsearchpro.com/features/?utm_source=ajax-search-lite&utm_content=gopro" target="_blank">full features list</a>.</li>
+			<li>...and many other features, check the <a href="https://ajaxsearchpro.com/features/?utm_source=ajax-search-lite&utm_content=gopro" target="_blank">full features list</a>.</li>
 		</ul>
 		<a class="gopro"
-		   href="https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&amp;utm_content=frontend"
-		   target="_blank">Discover the pro version!</a>
-		<p>The Lite and the Pro version are two separate plugins, thus you can switch from Pro to Lite and vice-versa at any time, without loosing your settings.</p>
+			href="https://ajaxsearchpro.com/pricing/?utm_source=ajax-search-lite&amp;utm_content=frontend"
+			target="_blank">Discover the pro version!</a>
+		<p>The Lite and the Pro version are two separate plugins, thus you can switch from Pro to Lite and vice versa at any time, without loosing your settings.</p>
 	</div>
 </div>

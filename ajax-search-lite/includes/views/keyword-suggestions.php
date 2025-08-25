@@ -1,6 +1,9 @@
 <?php
-/* Prevent direct access */
-defined('ABSPATH') or die("You can't access this file directly.");
+/** @noinspection PhpUndefinedVariableInspection */
+
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
 
 /**
  * This is the default template for the keyword suggestions
@@ -22,14 +25,14 @@ defined('ABSPATH') or die("You can't access this file directly.");
 ?>
 <div class="asl_nores">
 
-    <span class="asl_nores_header">
-    <?php
-        echo esc_html(asl_icl_t('No results text', $s_options['noresultstext'])) . " " . esc_html(asl_icl_t('Did you mean text', $s_options['didyoumeantext']));
+	<span class="asl_nores_header">
+	<?php
+		echo esc_html(asl_icl_t('No results text', $s_options['noresultstext'])) . ' ' . esc_html(asl_icl_t('Did you mean text', $s_options['didyoumeantext']));
 	?>
-    </span>
-    <br />
-    <?php foreach($s_keywords as $keyword): ?>
-        <span class='asl_keyword'><?php echo esc_html($keyword); ?></span>
-    <?php endforeach; ?>
+	</span>
+	<br />
+	<?php foreach ( $s_keywords as $keyword ) : ?>
+		<span class='asl_keyword'><?php echo esc_html($keyword); ?></span>
+	<?php endforeach; ?>
 
 </div>

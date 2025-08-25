@@ -1,6 +1,7 @@
 <?php
-/* Prevent direct access */
-defined('ABSPATH') or die("You can't access this file directly.");
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
 
 class WD_ASL_Scripts {
 	private static $_instance;
@@ -61,14 +62,14 @@ class WD_ASL_Scripts {
 		$return    = array();
 
 		foreach ( $handles as $handle ) {
-			if ( in_array($handle, $except) || !$this->isRequired($handle) ) {
+			if ( in_array($handle, $except, true) || !$this->isRequired($handle) ) {
 				continue;
 			}
 			if ( isset($this->scripts[ $handle ]) ) {
 				if ( $optimized && isset($this->optimized_scripts[ $handle ]) ) {
 					$prev_handle = '';
 					foreach ( $this->optimized_scripts[ $handle ] as $optimized_script_handle => $optimized_script ) {
-						if ( in_array($optimized_script_handle, $except) || !$this->isRequired($optimized_script_handle) ) {
+						if ( in_array($optimized_script_handle, $except, true) || !$this->isRequired($optimized_script_handle) ) {
 							continue;
 						}
 						$prereq = !isset($optimized_script['prereq']) || $optimized_script['prereq'] === false ? array() : $optimized_script['prereq'];
@@ -150,7 +151,7 @@ class WD_ASL_Scripts {
 	}
 
 	public function isRequired( $handle ) {
-		if ( wd_asl()->manager->getContext() == 'backend' ) {
+		if ( wd_asl()->manager->getContext() === 'backend' ) {
 			return true;
 		}
 

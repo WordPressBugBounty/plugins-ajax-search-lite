@@ -69,6 +69,9 @@ var external_DoMini_default = /*#__PURE__*/__webpack_require__.n(external_DoMini
 
 external_global_namespaceObject.AslPlugin.prototype.initFacetEvents = function() {
   let $this = this;
+  if (!$this.o.trigger.facet) {
+    return;
+  }
   $this.n("searchsettings").find("input[type=checkbox]").on("asl_chbx_change", function(e) {
     $this.ktype = e.type;
     $this.n("searchsettings").find("input[name=filters_changed]").val(1);

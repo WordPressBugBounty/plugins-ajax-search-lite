@@ -1,8 +1,9 @@
 <?php
-/* Prevent direct access */
-defined('ABSPATH') or die("You can't access this file directly.");
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
 
-if (!class_exists('ASL_Search')) {
+if ( !class_exists('ASL_Search') ) {
 	/**
 	 * Search class Abstract
 	 *
@@ -16,11 +17,19 @@ if (!class_exists('ASL_Search')) {
 	 */
 	abstract class ASL_Search {
 
-		// Total results count (unlimited)
-		public $results_count = 0;
+		/**
+		 * Total results count (unlimited)
+		 *
+		 * @var int
+		 */
+		public int $results_count = 0;
 
-		// Actual results count, results which are returned
-		public $return_count = 0;
+		/**
+		 * Actual results count, results which are returned
+		 *
+		 * @var int
+		 */
+		public int $return_count = 0;
 
 		/**
 		 * @var array of parameters
@@ -49,14 +58,7 @@ if (!class_exists('ASL_Search')) {
 		 * @var array of submitted options from the front end
 		 */
 		protected $options;
-		/**
-		 * @var int the ID of the current search instance
-		 */
-		protected $searchId;
-		/**
-		 * @var array of the current search options
-		 */
-		protected $searchData;
+
 		/**
 		 * @var array of results
 		 */
@@ -90,13 +92,14 @@ if (!class_exists('ASL_Search')) {
 		/**
 		 * Create the class
 		 *
-		 * @param $params
+		 * @param array $args
 		 */
-		public function __construct($args) {
+		public function __construct( $args ) {
 			$this->args = $args;
 
-			if ( isset($args['_remaining_limit_mod']) )
-				$this->remaining_limit_mod = $args['_remaining_limit_mod'];
+			if ( isset($args['_remaining_limit_mod']) ) {
+				$this->remaining_limit_mod = intval( $args['_remaining_limit_mod']);
+			}
 
 			$this->c_blogid = get_current_blog_id();
 		}
@@ -104,12 +107,14 @@ if (!class_exists('ASL_Search')) {
 		/**
 		 * Initiates the search operation
 		 *
+		 * @param mixed $s
 		 * @return array
 		 */
 		public function search( $s = false ) {
 
-			if ( ASL_mb::strlen($s) > 120 )
+			if ( ASL_mb::strlen($s) > 120 ) {
 				$s = ASL_mb::substr($s, 0, 120);
+			}
 
 			$this->prepare_keywords($s);
 			$this->do_search();
@@ -118,58 +123,59 @@ if (!class_exists('ASL_Search')) {
 			return is_array($this->results) ? $this->results : array();
 		}
 
-		public function prepare_keywords($s) {
+		public function prepare_keywords( $s ) {
 
-			if ( $s !== false )
+			if ( $s !== false ) {
 				$keyword = $s;
-			else
+			} else {
 				$keyword = $this->args['s'];
+			}
 
 			// This is the "japanese" ideographic space character, replaced by the regular space
-			$keyword = preg_replace("@[ 　]@u", ' ', $keyword);
+			$keyword = preg_replace('@[ 　]@u', ' ', $keyword);
 
-			$keyword = $this->compatibility($keyword);
+			$keyword     = $this->compatibility($keyword);
 			$keyword_rev = ASL_Helpers::reverseString($keyword);
 
-			$this->s = ASL_Helpers::escape( $keyword );
+			$this->s  = ASL_Helpers::escape( $keyword );
 			$this->sr = ASL_Helpers::escape( $keyword_rev );
 
 			/**
 			 * Avoid double escape, explode the $keyword instead of $this->s
 			 * Regex to match individual words and phrases between double quotes
-			 **/
+			 */
 			if (
-				preg_match_all( '/«.*?»/', $keyword, $m ) > 0 &&  // Only if there is at lease one complete «text» match
+				preg_match_all( '/«.*?»/', $keyword, $m ) > 0 && // Only if there is at lease one complete «text» match
 				preg_match_all( '/«.*?(»|$)|((?<=[\t «,+])|^)[^\t »,+]+/', $keyword, $matches )
 			) {
 				$this->_s = $this->parse_search_terms(  $matches[0] );
-			} else if (
+			} elseif (
 			preg_match_all( '/".*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+/', $keyword, $matches )
 			) {
 				$this->_s = $this->parse_search_terms(  $matches[0] );
 			} else {
-				$this->_s = $this->parse_search_terms( explode(" ", $keyword) );
+				$this->_s = $this->parse_search_terms( explode(' ', $keyword) );
 			}
 			if (
-				preg_match_all( '/«.*?»/', $keyword_rev, $m ) > 0 &&  // Only if there is at lease one complete «text» match
+				preg_match_all( '/«.*?»/', $keyword_rev, $m ) > 0 && // Only if there is at lease one complete «text» match
 				preg_match_all( '/«.*?(»|$)|((?<=[\t «,+])|^)[^\t »,+]+/', $keyword_rev, $matches )
 			) {
 				$this->_sr = $this->parse_search_terms(  array_reverse($matches[0]) );
-			} else if ( preg_match_all( '/".*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+/', $keyword_rev, $matches ) ) {
+			} elseif ( preg_match_all( '/".*?("|$)|((?<=[\t ",+])|^)[^\t ",+]+/', $keyword_rev, $matches ) ) {
 				$this->_sr = $this->parse_search_terms(  array_reverse($matches[0]) );
 			} else {
-				$this->_sr = $this->parse_search_terms( array_reverse( explode(" ", $keyword_rev ) ) );
+				$this->_sr = $this->parse_search_terms( array_reverse( explode(' ', $keyword_rev ) ) );
 			}
 
-			foreach ($this->_s as $k=>$w) {
+			foreach ( $this->_s as $k =>$w ) {
 				if ( ASL_mb::strlen($w) < $this->args['min_word_length'] ) {
-					unset($this->_s[$k]);
+					unset($this->_s[ $k ]);
 				}
 			}
 
-			foreach ($this->_sr as $k=>$w) {
+			foreach ( $this->_sr as $k =>$w ) {
 				if ( ASL_mb::strlen($w) < $this->args['min_word_length'] ) {
-					unset($this->_sr[$k]);
+					unset($this->_sr[ $k ]);
 				}
 			}
 
@@ -177,7 +183,7 @@ if (!class_exists('ASL_Search')) {
 			 * Reindex the arrays, in case there are missing keys from the previous removals
 			 */
 			if ( count($this->_s) > 0 ) {
-				$this->_s = array_values($this->_s);
+				$this->_s  = array_values($this->_s);
 				$this->_sr = array_values($this->_sr);
 			}
 		}
@@ -195,20 +201,22 @@ if (!class_exists('ASL_Search')) {
 				// keep before/after spaces when term is for exact match
 				if ( preg_match( '/^".+"$/', $term ) ) {
 					$term = trim($term, "\"'");
-				} else if ( preg_match( '/^«.+»$/', $term ) ) { // same for russian quotes
+				} elseif ( preg_match( '/^«.+»$/', $term ) ) { // same for russian quotes
 					$term = trim($term, "«»'");
 				} else {
 					$term = trim($term, "\"' ");
 				}
 
-				if ( $term != '' )
+				if ( $term !== '' ) {
 					$checked[] = $term;
+				}
 			}
 
-			if ( count($checked) > 0 )
+			if ( count($checked) > 0 ) {
 				$checked = ASL_Helpers::escape(
 					array_slice(array_unique($checked), 0, $this->args['_keyword_count_limit'])
 				);
+			}
 
 			return $checked;
 		}
@@ -223,34 +231,38 @@ if (!class_exists('ASL_Search')) {
 		 */
 		protected function post_process() {
 
-			if (is_array($this->results) && count($this->results) > 0) {
-				foreach ($this->results as $k => &$r) {
-					if ( !is_object($r) ) continue;
-					if ( !isset($r->id) ) $r->id = 0;
-					$r->image = isset($r->image) ? $r->image : "";
+			if ( is_array($this->results) && count($this->results) > 0 ) {
+				foreach ( $this->results as $k => &$r ) {
+					if ( !is_object($r) ) {
+						continue;
+					}
+					if ( !isset($r->id) ) {
+						$r->id = 0;
+					}
+					$r->image = isset($r->image) ? $r->image : '';
 				}
 			}
-
 		}
 
 		/**
 		 * Converts the keyword to the correct case and sets up the pre-suff fields.
 		 *
-		 * @param $s
+		 * @param string $s
 		 * @return string
 		 */
-		protected function compatibility($s) {
+		protected function compatibility( $s ) {
 			/**
 			 *  On forced case sensitivity: Let's add BINARY keyword before the LIKE
 			 *  On forced case in-sensitivity: Append the lower() function around each field
 			 */
 			if ( $this->args['_db_force_case'] === 'sensitivity' ) {
 				$this->pre_like = 'BINARY ';
-			} else if ( $this->args['_db_force_case'] === 'insensitivity' ) {
-				if ( function_exists( 'mb_convert_case' ) )
-					$s = mb_convert_case( $s, MB_CASE_LOWER, "UTF-8" );
-				else
+			} elseif ( $this->args['_db_force_case'] === 'insensitivity' ) {
+				if ( function_exists( 'mb_convert_case' ) ) {
+					$s = mb_convert_case( $s, MB_CASE_LOWER, 'UTF-8' );
+				} else {
 					$s = strtoupper( $s );
+				}
 				// if no mb_ functions :(
 
 				$this->pre_field .= 'lower(';
@@ -260,16 +272,18 @@ if (!class_exists('ASL_Search')) {
 			/**
 			 *  Check if utf8 is forced on LIKE
 			 */
-			if ( w_isset_def( $this->args['_db_force_utf8_like'], 0 ) == 1 )
+			if ( w_isset_def( $this->args['_db_force_utf8_like'], 0 ) ) {
 				$this->pre_like .= '_utf8';
+			}
 
 			/**
 			 *  Check if unicode is forced on LIKE, but only apply if utf8 is not
 			 */
-			if ( w_isset_def( $this->args['_db_force_unicode'], 0 ) == 1
-				&& w_isset_def( $this->args['_db_force_utf8_like'], 0 ) == 0
-			)
+			if ( w_isset_def( $this->args['_db_force_unicode'], 0 )
+				&& !w_isset_def( $this->args['_db_force_utf8_like'], 0 )
+			) {
 				$this->pre_like .= 'N';
+			}
 
 			return $s;
 		}
@@ -277,35 +291,36 @@ if (!class_exists('ASL_Search')) {
 		/**
 		 * Builds the query from the parts
 		 *
-		 * @param $parts
+		 * @param array $parts
 		 *
 		 * @return string query
 		 */
 		protected function build_query( $parts ) {
 
-			$args = &$this->args;
+			$args     = &$this->args;
 			$kw_logic = str_replace('EX', '', strtoupper( $args['keyword_logic'] ) );
-			$kw_logic = $kw_logic != 'AND' && $kw_logic != 'OR' ? 'AND' : $kw_logic;
+			$kw_logic = $kw_logic !== 'AND' && $kw_logic !== 'OR' ? 'AND' : $kw_logic;
 
 			$r_parts = array(); // relevance parts
 
 			/*------------------------- Build like --------------------------*/
-			$exact_query = '';
+			$exact_query    = '';
 			$like_query_arr = array();
-			foreach ( $parts as $k=>$part ) {
-				if ( $k == 0 )
+			foreach ( $parts as $k =>$part ) {
+				if ( $k === 0 ) {
 					$exact_query = '(' . implode(' OR ', $part[0]) . ')';
-				else
+				} else {
 					$like_query_arr[] = '(' . implode(' OR ', $part[0]) . ')';
+				}
 			}
 			$like_query = implode(' ' . $kw_logic . ' ', $like_query_arr);
 
 			// When $exact query is empty, then surely $like_query must be empty too, see above
-			if ( $exact_query == '' ) {
-				$like_query = "(1)";
+			if ( $exact_query === '' ) {
+				$like_query = '(1)';
 			} else {
 				// Both $like_query and $exact_query set
-				if ( $like_query != '' ) {
+				if ( $like_query !== '' ) {
 					$like_query = "( $exact_query OR $like_query )";
 				} else {
 					$like_query = "( $exact_query )";
@@ -315,32 +330,33 @@ if (!class_exists('ASL_Search')) {
 
 			/*---------------------- Build relevance ------------------------*/
 			foreach ( $parts as $part ) {
-				if ( isset($part[1]) && count($part[1]) > 0 )
+				if ( isset($part[1]) && count($part[1]) > 0 ) {
 					$r_parts = array_merge( $r_parts, $part[1] );
+				}
 			}
 			$relevance = implode( ' + ', $r_parts );
-			if ( $args['_post_use_relevance'] != 1 || $relevance == "" ) {
-				$relevance = "(1)";
+			if ( !$args['_post_use_relevance'] || $relevance === '' ) {
+				$relevance = '(1)';
 			} else {
 				$relevance = "($relevance)";
 			}
 			/*---------------------------------------------------------------*/
 
 			if ( isset($this->remaining_limit) ) {
-				if ($this->limit_start != 0)
-					$limit = $this->limit_start . ", " . $this->remaining_limit;
-				else
+				if ( $this->limit_start !== 0 ) {
+					$limit = $this->limit_start . ', ' . $this->remaining_limit;
+				} else {
 					$limit = $this->remaining_limit;
+				}
 			} else {
 				$limit = 10;
 			}
 
 			return str_replace(
-				array( "{relevance_query}", "{like_query}", "{remaining_limit}" ),
+				array( '{relevance_query}', '{like_query}', '{remaining_limit}' ),
 				array( $relevance, $like_query, $limit ),
 				$this->query
 			);
-
 		}
 
 		/**
@@ -349,23 +365,24 @@ if (!class_exists('ASL_Search')) {
 		 *
 		 * @uses ASL_mb
 		 * @uses wd_substr_at_word()
-		 * @param $str string context
-		 * @param $needle string context
-		 * @param $context int length of the context
-		 * @param $maxlength int maximum length of the string in characters
-		 * @param $str_length_limit source string maximum length
+		 * @param string $str  context
+		 * @param string $needle  context
+		 * @param int    $context  length of the context
+		 * @param int    $maxlength  maximum length of the string in characters
+		 * @param string $str_length_limit  maximum length
+		 * @param bool   $false_on_no_match
 		 * @return string
 		 */
-		public function context_find($str, $needle, $context, $maxlength, $str_length_limit = 10000, $false_on_no_match = false) {
-			$haystack = remove_accents(' '.trim($str).' ');
+		public function context_find( $str, $needle, $context, $maxlength, $str_length_limit = 10000, $false_on_no_match = false ) {
+			$haystack = remove_accents(' ' . trim($str) . ' ');
 
 			// To prevent memory overflow, we need to limit the hay to relatively low count
 			$haystack = wd_substr_at_word(ASL_mb::strtolower($haystack), $str_length_limit);
-			$needle = remove_accents(ASL_mb::strtolower($needle));
+			$needle   = remove_accents(ASL_mb::strtolower($needle));
 
-			if ( $needle == "" ) {
-				if ( ASL_mb::strlen($str) > $maxlength) {
-					return wd_substr_at_word($str, $maxlength) . "...";
+			if ( $needle === '' ) {
+				if ( ASL_mb::strlen($str) > $maxlength ) {
+					return wd_substr_at_word($str, $maxlength) . '...';
 				} else {
 					return $str;
 				}
@@ -380,66 +397,73 @@ if (!class_exists('ASL_Search')) {
 			 * Reference ticket: https://wp-dreams.com/forums/topic/search-speed/
 			 * Speed tests: http://stackoverflow.com/questions/3666306/how-to-iterate-utf-8-string-in-php
 			 */
-			$chrArray = preg_split('//u', $haystack, -1, PREG_SPLIT_NO_EMPTY);
-			$hay_length = count($chrArray) - 1;
+			$chr_array  = preg_split('//u', $haystack, -1, PREG_SPLIT_NO_EMPTY);
+			$hay_length = count($chr_array) - 1;
+			$i          = ASL_mb::strpos($haystack, $needle);
 
-			if ( $i = ASL_mb::strpos($haystack, $needle) ) {
-				$start=$i;
-				$end=$i;
-				$spaces=0;
+			if ( $i ) {
+				$start  =$i;
+				$end    =$i;
+				$spaces =0;
 
-				while ($spaces < ((int) $context/2) && $start > 0) {
-					$start--;
-					if ($chrArray[$start] == ' ') {
-						$spaces++;
+				while ( $spaces < ( (int) $context /2 ) && $start > 0 ) {
+					--$start;
+					if ( $chr_array[ $start ] === ' ' ) {
+						++$spaces;
 					}
 				}
 
-				while ($spaces < ($context +1) && $end < $hay_length) {
-					$end++;
-					if ($chrArray[$end] == ' ') {
-						$spaces++;
+				while ( $spaces < ( $context +1 ) && $end < $hay_length ) {
+					++$end;
+					if ( $chr_array[ $end ] === ' ' ) {
+						++$spaces;
 					}
 				}
 
-				while ($spaces < ($context +1) && $start > 0) {
-					$start--;
-					if ($chrArray[$start] == ' ') {
-						$spaces++;
+				while ( $spaces < ( $context +1 ) && $start > 0 ) {
+					--$start;
+					if ( $chr_array[ $start ] === ' ' ) {
+						++$spaces;
 					}
 				}
 
-				$str_start = ($start - 1) < 0 ? 0 : ($start -1);
-				$str_end = ($end - 1) < 0 ? 0 : ($end -1);
+				$str_start = ( $start - 1 ) < 0 ? 0 : ( $start -1 );
+				$str_end   = ( $end - 1 ) < 0 ? 0 : ( $end -1 );
 
-				$result = trim( ASL_mb::substr($str, $str_start, ($str_end - $str_start)) );
+				$result = trim( ASL_mb::substr($str, $str_start, ( $str_end - $str_start )) );
 
 				// Somewhere inbetween..
-				if ( $start != 0 && $end < $hay_length )
-					return "..." . $result . "...";
+				if ( $start !== 0 && $end < $hay_length ) {
+					return '...' . $result . '...';
+				}
 
 				// Beginning
-				if ( $start == 0 && $end < $hay_length )
-					return $result . "...";
+				if ( $start === 0 && $end < $hay_length ) {
+					return $result . '...';
+				}
 
 				// End
-				if ( $start != 0 && $end == $hay_length )
-					return "..." . $result;
+				if ( $start !== 0 && $end === $hay_length ) {
+					return '...' . $result;
+				}
 
 				// If it is too long, strip it
-				if ( ASL_mb::strlen($result) > $maxlength)
-					return wd_substr_at_word( $result, $maxlength ) . "...";
+				if ( ASL_mb::strlen($result) > $maxlength ) {
+					return wd_substr_at_word( $result, $maxlength ) . '...';
+				}
 
 				// Else, it is the whole
 				return $result;
 
 			} else {
-				if ( $false_on_no_match )
+				if ( $false_on_no_match ) {
 					return false;
+				}
 
 				// If it is too long, strip it
-				if ( ASL_mb::strlen($str) > $maxlength)
-					return wd_substr_at_word( $str, $maxlength ) . "...";
+				if ( ASL_mb::strlen($str) > $maxlength ) {
+					return wd_substr_at_word( $str, $maxlength ) . '...';
+				}
 
 				return $str;
 			}

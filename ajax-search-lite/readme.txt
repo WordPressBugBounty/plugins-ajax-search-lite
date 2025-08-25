@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 4.13.1
+Stable tag: 4.13.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,7 +15,7 @@ The Best Ajax Live Search and Filter for WordPress. Live suggestions, Custom Pos
 
 **Ajax Search Lite** is a live search plugin for WordPress. This responsive live search engine, which will boost your user experience by providing a user friendly ajax powered search form – a live search bar. You can filter the results with the category and post type filter boxes as well. Google autocomplete and keyword suggestions also included.
 
-[youtube https://www.youtube.com/watch?v=tMde9nDQOEU]
+[youtube https://www.youtube.com/watch?v=qI2_iKK4n_4]
 
 
 Very smooth animations with mobile device support and regular updates. Use **Ajax Search Lite** as a replacement for the default WordPress search with a better looking, more efficient search engine.
@@ -23,7 +23,7 @@ Fine-tune the user experience by providing a powerful ajax search plugin to your
 
 [Home](https://ajaxsearchpro.com) | [Features](https://ajaxsearchpro.com/features) | [Lite Docs](https://documentation.ajaxsearchlite.com/) | [Pro Docs](https://documentation.ajaxsearchpro.com/)
 
-[youtube https://www.youtube.com/watch?v=qI2_iKK4n_4]
+[youtube https://www.youtube.com/watch?v=tMde9nDQOEU]
 
 Ajax Search Lite and Ajax Search Pro **does not require monthly subscriptions**, does not store your data on external servers – **everything is done locally**, on your server.
 
@@ -137,6 +137,14 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.13.2 =
+* Fixed a security issue, where password protected posts were returned by default, see [CVE-2025-7956](https://www.cve.org/CVERecord?id=CVE-2025-7956)
+* A full scale code review was performed, implementing additional sanitization and escaping of all output based on WP Codesniffs and recommendations
+* Removed a lot of unused code and some unused files
+* Fixed an issue with the results page live loader, where in some cases it was not working
+* Fixed an issue with the thumbnail generator where in some cases a notice was generated
+* Fixed an issue with the facet change trigger settings
+
 = 4.13.1 =
 * Quickfix on 4.13 advanced title and field types, where a bug caused an error 500 in some cases
 

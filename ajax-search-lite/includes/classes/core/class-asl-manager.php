@@ -75,9 +75,6 @@ if ( !class_exists('WD_ASL_Manager') ) {
 				return false;
 			}
 
-			// After 6.7 this must be executed in the "init" hook
-			load_plugin_textdomain( 'ajax-search-lite', false, ASL_DIR . '/languages' );
-
 			$this->getContext();
 			/**
 			 * Available after this point:
@@ -96,13 +93,15 @@ if ( !class_exists('WD_ASL_Manager') ) {
 			add_action('wp_footer', array( $this, 'lateInit' ), 99);
 
 			do_action('wd_asl_loaded');
+
+			return true;
 		}
 
 		private function stopLoading() {
 			$ret = false;
 
-			if ( isset($_GET, $_GET['action']) ) {
-				if ( $_GET['action'] == 'ere_property_search_ajax' ) {
+			if ( isset($_GET, $_GET['action']) ) { // phpcs:ignore
+				if ( $_GET['action'] === 'ere_property_search_ajax' ) { // phpcs:ignore
 					$ret = true;
 				}
 			}
@@ -122,9 +121,6 @@ if ( !class_exists('WD_ASL_Manager') ) {
 			// We need to initialize the init here to get the init->table() function
 			wd_asl()->init = WD_ASL_Init::getInstance();
 
-			require_once ASL_CLASSES_PATH . 'etc/debug_data.class.php';
-			wd_asl()->debug = new wdDebugData( 'asl_debug_data' );
-
 			StringTranslations::init();
 		}
 
@@ -135,15 +131,21 @@ if ( !class_exists('WD_ASL_Manager') ) {
 
 			$backend_pages = WD_ASL_Menu::getMenuPages();
 
+			/**
+			 * Known actions, only checking
+			 */
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( !empty($_POST['action']) ) {
-				if ( in_array($_POST['action'], WD_ASL_Ajax::getAll()) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
+				if ( in_array($_POST['action'], WD_ASL_Ajax::getAll(), true) ) {
 					$this->context = 'ajax';
 				}
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing
 				if ( isset($_POST['wd_required']) ) {
 					$this->context = 'special';
 				}
 				// If it is not part of the plugin ajax actions, the context stays "frontend"
-			} elseif ( !empty($_GET['page']) && in_array($_GET['page'], $backend_pages) ) {
+			} elseif ( !empty($_GET['page']) && in_array($_GET['page'], $backend_pages, true) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$this->context = 'backend';
 			} elseif ( is_admin() ) {
 				$this->context = 'global_backend';
@@ -193,13 +195,8 @@ if ( !class_exists('WD_ASL_Manager') ) {
 					break;
 			}
 
-			// Special case
-			if ( wpdreams_on_backend_post_editor() ) {
-				require_once ASL_PATH . '/backend/tinymce/buttons.php';
-			}
-
 			// Lifting some weight off from ajax requests
-			if ( $this->context != 'ajax' ) {
+			if ( $this->context !== 'ajax' ) {
 				require_once ASL_CLASSES_PATH . 'actions/actions.inc.php';
 				/* Includes on Post/Page/Custom post type edit pages */
 				require_once ASL_CLASSES_PATH . 'widgets/widgets.inc.php';
@@ -224,11 +221,11 @@ if ( !class_exists('WD_ASL_Manager') ) {
 			// CSS
 			// WD_MS_Assets::loadCSS("ms_search_css_basic");
 
-			if ( $this->context == 'backend' ) {
+			if ( $this->context === 'backend' ) {
 				add_action('admin_enqueue_scripts', array( wd_asl()->init, 'scripts' ));
 			}
 
-			if ( $this->context == 'frontend' || $this->context == 'backend' ) {
+			if ( $this->context === 'frontend' || $this->context === 'backend' ) {
 				add_action('wp_enqueue_scripts', array( wd_asl()->init, 'styles' ));
 				add_action('wp_enqueue_scripts', array( wd_asl()->init, 'scripts' ));
 				add_action('wp_footer', array( wd_asl()->init, 'footer' ));
@@ -243,9 +240,6 @@ if ( !class_exists('WD_ASL_Manager') ) {
 			add_action('admin_menu', array( 'WD_ASL_Menu', 'register' ));
 		}
 
-		/**
-		 *
-		 */
 		private function loadHooks() {
 			$factory = Factory::instance();
 			// Register handlers only if the context is ajax indeed
@@ -259,7 +253,7 @@ if ( !class_exists('WD_ASL_Manager') ) {
 					$block->register();
 				}
 
-				if ( $this->context == 'backend' ) {
+				if ( $this->context === 'backend' ) {
 					WD_ASL_Actions::register('admin_init', 'Compatibility');
 				}
 
@@ -268,7 +262,7 @@ if ( !class_exists('WD_ASL_Manager') ) {
 				add_action(
 					'rest_api_init',
 					function () {
-						foreach (\WPDRMS\ASL\Core\Factory::instance()->get('Rest') as $rest ) {
+						foreach ( \WPDRMS\ASL\Core\Factory::instance()->get('Rest') as $rest ) {
 							$rest->registerRoutes();
 						}
 					}
@@ -290,15 +284,7 @@ if ( !class_exists('WD_ASL_Manager') ) {
 		/**
 		 * This is triggered in the footer. Used for conditional loading assets and stuff.
 		 */
-		public function lateInit() {
-			// Non-forcefully push the instance data
-			wd_asl()->debug->pushData(
-				get_option('asl_options'),
-				'asl_options'
-			);
-			// Save everything we did
-			wd_asl()->debug->save();
-		}
+		public function lateInit() {}
 
 
 		// ------------------------------------------------------------

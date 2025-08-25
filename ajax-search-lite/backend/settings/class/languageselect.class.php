@@ -1,17 +1,20 @@
 <?php
-if (!class_exists("wpdreamsLanguageSelect")) {
-    /**
-     * Class wpdreamsLanguageSelect
-     *
-     * Displays a language select box.
-     *
-     * @package  WPDreams/OptionsFramework/Classes
-     * @category Class
-     * @author Ernest Marcinko <ernest.marcinko@wp-dreams.com>
-     * @link http://wp-dreams.com, http://codecanyon.net/user/anago/portfolio
-     * @copyright Copyright (c) 2014, Ernest Marcinko
-     */
-    class wpdreamsLanguageSelect extends wpdreamsType {
+if ( !defined('ABSPATH') ) {
+	die('-1');
+}
+if ( !class_exists('wpdreamsLanguageSelect') ) {
+	/**
+	 * Class wpdreamsLanguageSelect
+	 *
+	 * Displays a language select box.
+	 *
+	 * @package  WPDreams/OptionsFramework/Classes
+	 * @category Class
+	 * @author Ernest Marcinko <ernest.marcinko@wp-dreams.com>
+	 * @link http://wp-dreams.com, http://codecanyon.net/user/anago/portfolio
+	 * @copyright Copyright (c) 2014, Ernest Marcinko
+	 */
+	class wpdreamsLanguageSelect extends wpdreamsType {
 		private array $languages = array(
 			'ab' => 'Abkhazian',
 			'aa' => 'Afar',
@@ -121,7 +124,6 @@ if (!class_exists("wpdreamsLanguageSelect")) {
 			'mi' => 'Maori',
 			'mr' => 'Marathi',
 			'mh' => 'Marshallese',
-			'ro' => 'Moldavian',
 			'mn' => 'Mongolian',
 			'na' => 'Nauru',
 			'nv' => 'Navajo',
@@ -197,26 +199,27 @@ if (!class_exists("wpdreamsLanguageSelect")) {
 			'yi' => 'Yiddish',
 			'yo' => 'Yoruba',
 			'za' => 'Zhuang',
-			'zu' => 'Zulu'
+			'zu' => 'Zulu',
 		);
 
-        function getType() {
-            parent::getType();
-            echo "<div class='wpdreamsLanguageSelect'>";
-            echo "<label for='wpdreamslanguageselect_" . self::$_instancenumber . "'>" . $this->label . "</label>";
-            echo "<select class='wpdreamsselect' id='wpdreamsselect_" . self::$_instancenumber . "' name='" . $this->name . "'>";
-            foreach ($this->languages as $k => $v) {
-                if ($k == $this->data)
-                    echo "<option value='" . esc_attr($k) . "' selected='selected'>" . esc_attr($v) . "</option>";
-                else
-                    echo "<option value='" . esc_attr($k) . "'>" . esc_attr($v) . "</option>";
-            }
-            echo "</select>";
-            echo "</div>";
-        }
+		public function getType() {
+			parent::getType();
+			echo "<div class='wpdreamsLanguageSelect'>";
+			echo "<label for='wpdreamslanguageselect_" . esc_attr(self::$_instancenumber) . "'>" . esc_html($this->label) . '</label>';
+			echo "<select class='wpdreamsselect' id='wpdreamsselect_" . esc_attr(self::$_instancenumber) . "' name='" . esc_attr($this->name) . "'>";
+			foreach ( $this->languages as $k => $v ) {
+				if ( $k === $this->data ) {
+					echo "<option value='" . esc_attr($k) . "' selected='selected'>" . esc_attr($v) . '</option>';
+				} else {
+					echo "<option value='" . esc_attr($k) . "'>" . esc_attr($v) . '</option>';
+				}
+			}
+			echo '</select>';
+			echo '</div>';
+		}
 
-        final function getData() {
-            return $this->data;
-        }
-    }
+		final public function getData() {
+			return $this->data;
+		}
+	}
 }

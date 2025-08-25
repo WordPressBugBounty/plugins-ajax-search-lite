@@ -1,4 +1,5 @@
 <?php
+/** @noinspection RegExpRedundantEscape */
 
 use WPDRMS\ASL\Utils\Polylang\StringTranslations;
 
@@ -31,22 +32,12 @@ if ( !function_exists('wpd_is_wp_newer') ) {
 	}
 }
 
-if ( !function_exists('wpd_get_terms') ) {
-	function wpd_get_terms( $args = array() ) {
-		if ( wpd_is_wp_older('4.5') ) {
-			return get_terms($args['taxonomy'], $args);
-		} else {
-			return get_terms($args);
-		}
-	}
-}
-
 if ( !function_exists('wd_mysql_escape_mimic') ) {
 	/**
 	 * Mimics the old mysql_escape function
 	 *
 	 * @internal
-	 * @param $inp
+	 * @param mixed $inp
 	 * @return mixed
 	 */
 	function wd_mysql_escape_mimic( $inp ) {
@@ -66,18 +57,18 @@ if ( !function_exists('wpdreams_parse_params') ) {
 	function wpdreams_parse_params( $params ) {
 		foreach ( $params as $k =>$v ) {
 			$_tmp = explode('classname-', $k);
-			if ( $_tmp !=null && count($_tmp) >1 ) {
+			if ( $_tmp !== null && count($_tmp) >1 ) {
 				ob_start();
-				$c                                = new $v('0', '0', $params[ $_tmp[1] ]);
-				$out                              = ob_get_clean();
+				$c = new $v('0', '0', $params[ $_tmp[1] ]);
+				ob_get_clean();
 				$params[ 'selected-' . $_tmp[1] ] = $c->getSelected();
 			}
 			$_tmp = null;
 			$_tmp = explode('wpdfont-', $k);
-			if ( $_tmp !=null && count($_tmp) >1 ) {
+			if ( $_tmp !== null && count($_tmp) >1 ) {
 				ob_start();
-				$c                              = new $v('0', '0', $params[ $_tmp[1] ]);
-				$out                            = ob_get_clean();
+				$c = new $v('0', '0', $params[ $_tmp[1] ]);
+				ob_get_clean();
 				$params[ 'import-' . $_tmp[1] ] = $c->getImport();
 			}
 		}
@@ -93,16 +84,16 @@ if ( !function_exists('wpdreams_admin_hex2rgb') ) {
 		if ( strlen($color) <3 ) {
 			return 'rgba(0, 0, 0, 1)';
 		}
-		if ( $color[0] == '#' ) {
+		if ( $color[0] === '#' ) {
 			$color = substr($color, 1);
 		}
-		if ( strlen($color) == 6 ) {
+		if ( strlen($color) === 6 ) {
 			list($r, $g, $b) = array(
 				$color[0] . $color[1],
 				$color[2] . $color[3],
 				$color[4] . $color[5],
 			);
-		} elseif ( strlen($color) == 3 ) {
+		} elseif ( strlen($color) === 3 ) {
 			list($r, $g, $b) = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
 		} else {
 			return false;
@@ -125,6 +116,7 @@ if ( !function_exists('wpdreams_four_to_string') ) {
 if ( !function_exists('wpdreams_in_array_r') ) {
 	function wpdreams_in_array_r( $needle, $haystack, $strict = false ) {
 		foreach ( $haystack as $item ) {
+			// phpcs:ignore
 			if ( ( $strict ? $item === $needle : $item == $needle ) || ( is_array($item) && wpdreams_in_array_r($needle, $item, $strict) ) ) {
 				return true;
 			}
@@ -137,15 +129,15 @@ if ( !function_exists('wd_flatten_array') ) {
 	/**
 	 * Flattens array without preserving the keys
 	 *
-	 * @param mixed $array
+	 * @param mixed $arr
 	 * @return array<int, mixed>
 	 */
-	function wd_flatten_array( array $array ): array {
-		$recursiveArrayIterator = new RecursiveArrayIterator(
-			$array,
+	function wd_flatten_array( array $arr ): array {
+		$recursive_array_iterator = new RecursiveArrayIterator(
+			$arr,
 			RecursiveArrayIterator::CHILD_ARRAYS_ONLY
 		);
-		$iterator               = new RecursiveIteratorIterator($recursiveArrayIterator);
+		$iterator                 = new RecursiveIteratorIterator($recursive_array_iterator);
 
 		return iterator_to_array($iterator, false);
 	}
@@ -153,19 +145,19 @@ if ( !function_exists('wd_flatten_array') ) {
 
 if ( !function_exists('asl_gen_rnd_str') ) {
 	function asl_gen_rnd_str( $length = 6 ) {
-		$characters       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		$charactersLength = strlen($characters);
-		$randomString     = '';
+		$characters        = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		$characters_length = strlen($characters);
+		$random_string     = '';
 		for ( $i = 0; $i < $length; $i++ ) {
-			$randomString .= $characters[ rand(0, $charactersLength - 1) ];
+			$random_string .= $characters[ wp_rand(0, $characters_length - 1) ];
 		}
-		return $randomString;
+		return $random_string;
 	}
 }
 
 if ( !function_exists('asl_is_asset_required') ) {
 	function asl_is_asset_required( $asset ) {
-		if ( wd_asl()->manager->getContext() == 'backend' ) {
+		if ( wd_asl()->manager->getContext() === 'backend' ) {
 			return true;
 		} else {
 			$assets = asl_get_unused_assets();
@@ -185,7 +177,7 @@ if ( !function_exists('asl_get_unused_assets') ) {
 		$external_dependencies = array();
 
 		// --- Analytics
-		if ( wd_asl()->o['asl_analytics']['analytics'] != 0 ) {
+		if ( wd_asl()->o['asl_analytics']['analytics'] !== '0' ) {
 			$dependencies = array_diff($dependencies, array( 'ga' ));
 		}
 
@@ -227,11 +219,11 @@ if ( !function_exists('asl_generate_html_results') ) {
 	 * to generate the correct HTML code. Supports grouping.
 	 *
 	 * @since 4.5
-	 * @param $results
-	 * @param $s_options
+	 * @param mixed $results
+	 * @param mixed $s_options used in included templates
 	 * @return string
 	 */
-	function asl_generate_html_results( $results, $s_options ) {
+	function asl_generate_html_results( $results, $s_options ) { // @phpcs:ignore
 		$html       = '';
 		$theme_path = get_stylesheet_directory() . '/asl/';
 
@@ -281,7 +273,6 @@ if ( !function_exists('asl_generate_html_results') ) {
 }
 
 if ( !function_exists('asl_icl_t') ) {
-	/* Ajax Search Lite wrapper for WPML and Polylang print */
 	function asl_icl_t( $name, $value, $esc_html = false ) {
 		if ( $value === '' ) {
 			return $value;
@@ -310,18 +301,16 @@ if ( !function_exists('wd_strip_tags_ws') ) {
 	/**
 	 * Strips tags, but replaces them with whitespace
 	 *
-	 * @param string $string
+	 * @param string $str
 	 * @param string $allowable_tags
 	 * @return string
 	 * @link https://stackoverflow.com/a/38200395
 	 */
-	function wd_strip_tags_ws( $string, $allowable_tags = '' ) {
-		$string = str_replace('<', ' <', $string);
-		$string = strip_tags($string, $allowable_tags);
-		$string = str_replace('  ', ' ', $string);
-		$string = trim($string);
-
-		return $string;
+	function wd_strip_tags_ws( string $str, string $allowable_tags = '' ): string {
+		$str = str_replace('<', ' <', $str);
+		$str = strip_tags($str, $allowable_tags);
+		$str = str_replace('  ', ' ', $str);
+		return trim($str);
 	}
 }
 
@@ -329,10 +318,10 @@ if ( !function_exists('wd_closetags') ) {
 	/**
 	 * Close unclosed HTML tags
 	 *
-	 * @param $html
+	 * @param string $html
 	 * @return string
 	 */
-	function wd_closetags( $html ) {
+	function wd_closetags( string $html ): string {
 		$unpaired = array( 'hr', 'br', 'img' );
 
 		// put all opened tags into an array
@@ -341,37 +330,34 @@ if ( !function_exists('wd_closetags') ) {
 		// remove unpaired tags
 		if ( is_array($openedtags) && count($openedtags) >0 ) {
 			foreach ( $openedtags as $k =>$tag ) {
-				if ( in_array($tag, $unpaired) ) {
+				if ( in_array($tag, $unpaired) ) { // phpcs:ignore
 					unset($openedtags[ $k ]);
 				}
 			}
 		} else {
 			// Replace a possible un-closed tag from the end, 30 characters backwards check
-			$html = preg_replace('/(.*)(\<[a-zA-Z].{0,30})$/', '$1', $html);
-			return $html;
+			return preg_replace('/(.*)(\<[a-zA-Z].{0,30})$/', '$1', $html);
 		}
 		// put all closed tags into an array
 		preg_match_all( '#</([a-z]+)>#iU', $html, $result );
 		$closedtags = $result[1];
 		$len_opened = count( $openedtags );
 		// all tags are closed
-		if ( count( $closedtags ) == $len_opened ) {
+		if ( count( $closedtags ) === $len_opened ) {
 			// Replace a possible un-closed tag from the end, 30 characters backwards check
-			$html = preg_replace('/(.*)(\<[a-zA-Z].{0,30})$/', '$1', $html);
-			return $html;
+			return preg_replace('/(.*)(\<[a-zA-Z].{0,30})$/', '$1', $html);
 		}
 		$openedtags = array_reverse( $openedtags );
 		// close tags
 		for ( $i = 0; $i < $len_opened; $i++ ) {
-			if ( !in_array( $openedtags[ $i ], $closedtags ) ) {
+			if ( !in_array( $openedtags[ $i ], $closedtags ) ) { // phpcs:ignore
 				$html .= '</' . $openedtags[ $i ] . '>';
 			} else {
-				unset( $closedtags[ array_search( $openedtags[ $i ], $closedtags) ] );
+				unset( $closedtags[ array_search( $openedtags[ $i ], $closedtags) ] ); // phpcs:ignore
 			}
 		}
 		// Replace a possible un-closed tag from the end, 30 characters backwards check
-		$html = preg_replace('/(.*)(\<[a-zA-Z].{0,30})$/', '$1', $html);
-		return $html;
+		return preg_replace('/(.*)(\<[a-zA-Z].{0,30})$/', '$1', $html);
 	}
 }
 
@@ -379,15 +365,15 @@ if ( !function_exists('wpd_font') ) {
 	/**
 	 * Helper method to be used before printing the font styles. Converts font families to apostrophed versions.
 	 *
-	 * @param $font
-	 * @return mixed
+	 * @param string $font
+	 * @return string
 	 */
-	function wpd_font( $font ) {
+	function wpd_font( string $font ): string {
 		preg_match('/family:(.*?)$/', $font, $fonts);
 		if ( isset($fonts[1]) ) {
 			$f = explode(',', stripslashes(str_replace(array( '"', "'" ), '', $fonts[1])) );
 			foreach ( $f as &$_f ) {
-				if ( trim($_f) != 'inherit' ) {
+				if ( trim($_f) !== 'inherit' ) {
 					$_f = '"' . trim($_f) . '"';
 				} else {
 					$_f = trim($_f);
@@ -418,25 +404,24 @@ if ( !function_exists('mysql_escape_mimic') ) {
 if ( !function_exists('wd_in_array_r') ) {
 	function wd_in_array_r( $needle, $haystack, $strict = true ) {
 		foreach ( $haystack as $item ) {
+			// phpcs:ignore
 			if ( ( $strict ? $item === $needle : $item == $needle ) || ( is_array($item) && wd_in_array_r($needle, $item, $strict) ) ) {
 				return true;
 			}
 		}
-  
 		return false;
 	}
 }
 
 if ( !function_exists('wd_array_super_unique') ) {
-	function wd_array_super_unique( $array, $key ) {
+	function wd_array_super_unique( $arr, $key ) {
 		$temp_array = array();
-		foreach ( $array as &$v ) {
+		foreach ( $arr as &$v ) {
 			if ( !isset($temp_array[ $v[ $key ] ]) ) {
 				$temp_array[ $v[ $key ] ] =& $v;
 			}
 		}
-		$array = array_values($temp_array);
-		return $array;
+		return array_values($temp_array);
 	}
 }
 
@@ -444,12 +429,12 @@ if ( !function_exists('wd_array_to_string') ) {
 	/**
 	 * Converts a multi-depth array elements into one string, elements separated by space.
 	 *
-	 * @param $arr
-	 * @param int $level
+	 * @param mixed $arr
+	 * @param int   $level
 	 *
 	 * @return string
 	 */
-	function wd_array_to_string( $arr, $level = 0 ) {
+	function wd_array_to_string( $arr, int $level = 0 ) {
 		$str = '';
 		if ( is_array($arr) ) {
 			foreach ( $arr as $sub_arr ) {
@@ -458,7 +443,7 @@ if ( !function_exists('wd_array_to_string') ) {
 		} else {
 			$str = ' ' . $arr;
 		}
-		if ( $level == 0 ) {
+		if ( $level === 0 ) {
 			$str = trim($str);
 		}
 
@@ -471,43 +456,20 @@ if ( !function_exists('wd_substr_at_word') ) {
 		if ( strlen($text) <= $length ) {
 			return $text;
 		}
-		$blogCharset = get_bloginfo('charset');
-		$charset     = $blogCharset !== '' ? $blogCharset : 'UTF-8';
-		$s           = mb_substr($text, 0, $length, $charset);
+		$blog_charset = get_bloginfo('charset');
+		$charset      = $blog_charset !== '' ? $blog_charset : 'UTF-8';
+		$s            = mb_substr($text, 0, $length, $charset);
 		return mb_substr($s, 0, strrpos($s, ' '), $charset);
 	}
 }
 
-
-if ( !function_exists('wd_current_page_url') ) {
+if ( !function_exists('asl_kses_content') ) {
 	/**
-	 * Returns the current page url
+	 * A variation of wp_kses_post() for the live results
 	 *
+	 * @param string $content
 	 * @return string
 	 */
-	function wd_current_page_url() {
-		$pageURL = 'http';
-
-		$port = !empty($_SERVER['SERVER_PORT']) ? $_SERVER['SERVER_PORT'] : 80;
-
-		$server_name = !empty($_SERVER['SERVER_NAME']) ? $_SERVER['SERVER_NAME'] : '';
-		$server_name = empty($server_name) && !empty($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : $server_name;
-
-		if ( isset($_SERVER['HTTPS']) ) {
-			if ( $_SERVER['HTTPS'] == 'on' ) {
-				$pageURL .= 's';}
-		}
-		$pageURL .= '://';
-		if ( $port != '80' ) {
-			$pageURL .= $server_name . ':' . $port . $_SERVER['REQUEST_URI'];
-		} else {
-			$pageURL .= $server_name . $_SERVER['REQUEST_URI'];
-		}
-		return $pageURL;
-	}
-}
-
-if ( !function_exists('asl_kses_content') ) {
 	function asl_kses_content( string $content ): string {
 		$tags          = wp_kses_allowed_html('post');
 		$tags['input'] = array(
@@ -537,13 +499,13 @@ if ( !function_exists('asl_get_image_from_content') ) {
 	/**
 	 * Gets an image from the HTML content
 	 *
-	 * @param $content
+	 * @param string       $content
 	 * @param int          $number
 	 * @param array|string $exclude
 	 * @return bool|string
 	 */
-	function asl_get_image_from_content( $content, $number = 0, $exclude = array() ) {
-		if ( $content == '' || !class_exists('domDocument') ) {
+	function asl_get_image_from_content( string $content, int $number = 0, $exclude = array() ) {
+		if ( $content === '' || !class_exists('domDocument') ) {
 			return false;
 		}
 
@@ -557,7 +519,7 @@ if ( !function_exists('asl_get_image_from_content') ) {
 		}
 		foreach ( $exclude as $k => &$v ) {
 			$v = trim($v);
-			if ( $v == '' ) {
+			if ( $v === '' ) {
 				unset($exclude[ $k ]);
 			}
 		}
@@ -566,13 +528,17 @@ if ( !function_exists('asl_get_image_from_content') ) {
 		$im         = false;
 
 		$dom = new domDocument();
-		if ( function_exists('mb_convert_encoding') ) {
-			@$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
-		} else {
-			@$dom->loadHTML($content);
+		if ( function_exists('libxml_use_internal_errors') ) {
+			libxml_use_internal_errors(true);
 		}
-		$dom->preserveWhiteSpace = false;
-		@$images                 = $dom->getElementsByTagName('img');
+
+		if ( function_exists('mb_convert_encoding') ) {
+			$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
+		} else {
+			$dom->loadHTML($content);
+		}
+		$dom->preserveWhiteSpace = false; // phpcs:ignore
+		$images                  = $dom->getElementsByTagName('img');
 		if ( $images->length > 0 ) {
 			$get = $images->length > $number ? $number : 0;
 			for ( $i =$get;$i <$images->length;$i++ ) {
@@ -590,22 +556,16 @@ if ( !function_exists('asl_get_image_from_content') ) {
 				}
 				break;
 			}
+			if ( function_exists('libxml_clear_errors') ) {
+				libxml_clear_errors();
+			}
 			return $im;
 		} else {
+			if ( function_exists('libxml_clear_errors') ) {
+				libxml_clear_errors();
+			}
 			return false;
 		}
-	}
-}
-
-
-if ( !function_exists('wpdreams_on_backend_post_editor') ) {
-	/**
-	 * @return bool
-	 */
-	function wpdreams_on_backend_post_editor() {
-		$current_url = wd_current_page_url();
-		return ( strpos($current_url, 'post-new.php') !==false ||
-			strpos($current_url, 'post.php') !==false );
 	}
 }
 
@@ -628,62 +588,22 @@ if ( !function_exists('asl_woo_version_check') ) {
 // 6. NON-AJAX RESULTS
 // ----------------------------------------------------------------------------------------------------------------------
 
-if ( !class_exists('ASL_Post') ) {
-	/**
-	 * Class ASL_Post
-	 *
-	 * A default class to instantiate to generate post like results.
-	 */
-	class ASL_Post {
-
-		public $ID                    = 0;                     // Don't use negative value, because WPML will break into pieces
-		public $post_title            = '';
-		public $post_author           = '';
-		public $post_name             = '';
-		public $post_type             = 'post';         // Everything unknown is going to be a post
-		public $post_date             = '0000-00-00 00:00:00';             // Format: 0000-00-00 00:00:00
-		public $post_date_gmt         = '0000-00-00 00:00:00';         // Format: 0000-00-00 00:00:00
-		public $post_content          = '';          // The full content of the post
-		public $post_content_filtered = '';
-		public $post_excerpt          = '';          // User-defined post excerpt
-		public $post_status           = 'publish';    // See get_post_status for values
-		public $comment_status        = 'closed';  // Returns: { open, closed }
-		public $ping_status           = 'closed';     // Returns: { open, closed }
-		public $post_password         = '';         // Returns empty string if no password
-		public $post_parent           = 0;            // Parent Post ID (default 0)
-		public $post_mime_type        = '';
-		public $to_ping               = '';
-		public $pinged                = '';
-		public $post_modified         = '';         // Format: 0000-00-00 00:00:00
-		public $post_modified_gmt     = '';     // Format: 0000-00-00 00:00:00
-		public $comment_count         = 0;          // Number of comments on post (numeric string)
-		public $menu_order            = 0;             // Order value as set through page-attribute when enabled (numeric string. Defaults to 0)
-		public $guid                  = '';
-		public $asl_guid;
-		public $asl_id;
-		public $asl_data;                   // All the original results data
-		public $blogid;
-
-		public function __construct() {}
-	}
-}
-
 if ( !function_exists('asl_results_to_wp_obj') ) {
 	/**
 	 * Converts ajax results from Ajax Search Pro to post like objects to be displayable
 	 * on the regular search results page.
 	 *
-	 * @param $results
-	 * @param int    $from
-	 * @param string $count
+	 * @param mixed      $results
+	 * @param int        $from
+	 * @param string|int $count
 	 * @return array
 	 */
-	function asl_results_to_wp_obj( $results, $from = 0, $count = 'all' ) {
+	function asl_results_to_wp_obj( $results, int $from = 0, $count = 'all' ) {
 		if ( empty($results) ) {
 			return array();
 		}
 
-		if ( $count == 'all' ) {
+		if ( $count === 'all' ) {
 			$results_slice = array_slice($results, $from);
 		} else {
 			$results_slice = array_slice($results, $from, $count);
@@ -698,7 +618,7 @@ if ( !function_exists('asl_results_to_wp_obj') ) {
 		$date_format = get_option('date_format');
 		$time_format = get_option('time_format');
 
-		$current_date = date($date_format . ' ' . $time_format, time());
+		$current_date = gmdate($date_format . ' ' . $time_format, time());
 
 		foreach ( $results_slice as $r ) {
 
@@ -721,13 +641,13 @@ if ( !function_exists('asl_results_to_wp_obj') ) {
 					 * that the post type object is reset with get_post(), deleting the ->asl_guid
 					 * attribute. Therefore the post type post must be enforced.
 					 */
-					if ( is_multisite() && $res->post_type != 'post' ) {
+					if ( is_multisite() && $res->post_type !== 'post' ) {
 						// Is this a WooCommerce search?
 						if (
 						!(
-							in_array($res->post_type, array( 'product', 'product_variation' )) &&
-							isset($_GET['post_type']) &&
-							$_GET['post_type'] == 'product'
+							in_array($res->post_type, array( 'product', 'product_variation' ), true) &&
+							isset($_GET['post_type']) && // phpcs:ignore
+							$_GET['post_type'] === 'product' // phpcs:ignore
 						)
 						) {
 							$res->post_type = 'post'; // Enforce
@@ -830,18 +750,20 @@ if ( !function_exists('get_asl_result_field') ) {
 	}
 }
 if ( !function_exists('the_asl_result_field') ) {
-	function the_asl_result_field( $field = 'title', $echo = true ) {
-		if ( $echo ) {
+	function the_asl_result_field( $field = 'title', $echo_result = true ) {
+		if ( $echo_result ) {
 			if ( !is_string($field) ) {
-				return;
+				return '';
 			}
-			$print = $field == 'all' ? '' : get_asl_result_field($field);
+			$print = $field === 'all' ? '' : get_asl_result_field($field);
 			if ( $print !== false ) {
-				echo $print;
+				echo esc_html($print);
 			}
 		} else {
 			return get_asl_result_field($field);
 		}
+
+		return '';
 	}
 }
 
@@ -851,7 +773,7 @@ if ( !function_exists('the_asl_result_field') ) {
 // ----------------------------------------------------------------------------------------------------------------------
 if ( !function_exists('asl_wp_get_wp_version') ) {
 	/**
-	 * wp_get_wp_version function only exists in wp 6.7+
+	 * The wp_get_wp_version function only exists in wp 6.7+
 	 *
 	 * @return mixed
 	 */

@@ -9,7 +9,9 @@
  */
 
 /* Prevent direct access */
-defined('ABSPATH') or die("You can't access this file directly.");
+if ( !defined('ABSPATH') ) {
+	die("You can't access this file directly.");
+}
 
 // Include the types
 require 'class/type.class.php';
@@ -21,12 +23,8 @@ require 'class/customposttypes.class.php';
 require 'class/customposttypeseditable.class.php';
 require 'class/customselect.class.php';
 require 'class/customfields.class.php';
-require 'class/customfselect.class.php';
-require 'class/customtaxonomyterm.class.php';
 require 'class/four.class.php';
-require 'class/hidden.class.php';
 require 'class/languageselect.class.php';
-require 'class/numericunit.class.php';
 require 'class/text.class.php';
 require 'class/textsmall.class.php';
 require 'class/textarea.class.php';
@@ -34,23 +32,55 @@ require 'class/textarea-expandable.class.php';
 require 'class/upload.class.php';
 require 'class/yesno.class.php';
 require 'class/wd_cf_search_callback.class.php';
-require 'class/wd_textarea_b64.php';
 
-add_action('admin_print_styles', 'admin_stylesV04');
-add_action('admin_enqueue_scripts', 'admin_scriptsV04');
+add_action(
+	'admin_print_styles',
+	function () {
+		$metadata = require_once ASL_PATH . 'build/css/admin-shared.asset.php';
+		wp_enqueue_style(
+			'wpd-admin-shared',
+			ASL_URL_NP . 'build/css/admin-shared.css',
+			$metadata['dependencies'],
+			$metadata['version'],
+		);
 
+		$metadata = require_once ASL_PATH . 'build/css/components.asset.php';
+		wp_enqueue_style(
+			'wdo-components',
+			ASL_URL_NP . 'build/css/components.css',
+			$metadata['dependencies'],
+			$metadata['version'],
+		);
 
-if ( !function_exists('admin_scriptsV04') ) {
-	function admin_scriptsV04() {
+		wp_register_style('wpdreams-style', ASL_URL_NP . 'backend/settings/assets/style.css', array( 'wpdreams-tabs' ), ASL_CURR_VER_STRING);
+		wp_enqueue_style('wpdreams-style');
+		wp_register_style('wpdreams-style-hc', ASL_URL_NP . 'backend/settings/assets/style-hc.css', array( 'wpdreams-tabs' ), ASL_CURR_VER_STRING);
+		wp_enqueue_style('wpdreams-style-hc');
+		wp_register_style('wpdreams-jqueryui', ASL_URL_NP . 'backend/settings/assets/jquery-ui.css', array(), ASL_CURR_VER_STRING);
+		wp_enqueue_style('wpdreams-jqueryui');
+		wp_register_style('wpdreams-tabs', ASL_URL_NP . 'backend/settings/assets/tabs.css', array(), ASL_CURR_VER_STRING);
+		wp_enqueue_style('wpdreams-tabs');
+		wp_register_style('wpdreams-spectrum', ASL_URL_NP . 'backend/settings/assets/js/spectrum/spectrum.css', array(), ASL_CURR_VER_STRING);
+		wp_enqueue_style('wpdreams-spectrum');
+		wp_register_style('wpd-modal', ASL_URL_NP . 'backend/settings/assets/wpd-modal/wpd-modal.css', array(), ASL_CURR_VER_STRING);
+		wp_enqueue_style('wpd-modal');
+		wp_register_style('wpdreams-fa', ASL_URL_NP . 'backend/settings/assets/fa/css/all.min.css', array( 'wpdreams-style' ), ASL_CURR_VER_STRING);
+		wp_enqueue_style('wpdreams-fa');
+	}
+);
+
+add_action(
+	'admin_enqueue_scripts',
+	function () {
 		wp_enqueue_media(); // For image uploader.
 		wp_enqueue_script('jquery');
 
-		wp_enqueue_script('jquery-ui-core', false, array( 'jquery' ), false, true);
-		wp_enqueue_script('jquery-ui-slider', false, array( 'jquery-ui-core' ), false, true);
-		wp_enqueue_script('jquery-ui-tabs', false, array( 'jquery-ui-core' ), false, true);
-		wp_enqueue_script('jquery-ui-sortable', false, array( 'jquery-ui-core' ), false, true);
-		wp_enqueue_script('jquery-ui-draggable', false, array( 'jquery-ui-core' ), false, true);
-		wp_enqueue_script('jquery-ui-datepicker', false, array( 'jquery-ui-core' ), false, true);
+		wp_enqueue_script('jquery-ui-core', false, array( 'jquery' ), ASL_CURR_VER_STRING, true);
+		wp_enqueue_script('jquery-ui-slider', false, array( 'jquery-ui-core' ), ASL_CURR_VER_STRING, true);
+		wp_enqueue_script('jquery-ui-tabs', false, array( 'jquery-ui-core' ), ASL_CURR_VER_STRING, true);
+		wp_enqueue_script('jquery-ui-sortable', false, array( 'jquery-ui-core' ), ASL_CURR_VER_STRING, true);
+		wp_enqueue_script('jquery-ui-draggable', false, array( 'jquery-ui-core' ), ASL_CURR_VER_STRING, true);
+		wp_enqueue_script('jquery-ui-datepicker', false, array( 'jquery-ui-core' ), ASL_CURR_VER_STRING, true);
 
 		$metadata = require_once ASL_PATH . '/build/js/admin-global.asset.php'; // @phpstan-ignore-line
 		wp_enqueue_script(
@@ -133,39 +163,4 @@ if ( !function_exists('admin_scriptsV04') ) {
 		wp_register_script('wpd-modal', ASL_URL_NP . 'backend/settings/assets/wpd-modal/wpd-modal.js', array( 'jquery' ), ASL_CURR_VER_STRING, true);
 		wp_enqueue_script('wpd-modal');
 	}
-}
-
-if ( !function_exists('admin_stylesV04') ) {
-	function admin_stylesV04() {
-		$metadata = require_once ASL_PATH . 'build/css/admin-shared.asset.php';
-		wp_enqueue_style(
-			'wpd-admin-shared',
-			ASL_URL_NP . 'build/css/admin-shared.css',
-			$metadata['dependencies'],
-			$metadata['version'],
-		);
-
-		$metadata = require_once ASL_PATH . 'build/css/components.asset.php';
-		wp_enqueue_style(
-			'wdo-components',
-			ASL_URL_NP . 'build/css/components.css',
-			$metadata['dependencies'],
-			$metadata['version'],
-		);
-
-		wp_register_style('wpdreams-style', ASL_URL_NP . 'backend/settings/assets/style.css', array( 'wpdreams-tabs' ), ASL_CURR_VER_STRING);
-		wp_enqueue_style('wpdreams-style');
-		wp_register_style('wpdreams-style-hc', ASL_URL_NP . 'backend/settings/assets/style-hc.css', array( 'wpdreams-tabs' ), ASL_CURR_VER_STRING);
-		wp_enqueue_style('wpdreams-style-hc');
-		wp_register_style('wpdreams-jqueryui', ASL_URL_NP . 'backend/settings/assets/jquery-ui.css');
-		wp_enqueue_style('wpdreams-jqueryui');
-		wp_register_style('wpdreams-tabs', ASL_URL_NP . 'backend/settings/assets/tabs.css');
-		wp_enqueue_style('wpdreams-tabs');
-		wp_register_style('wpdreams-spectrum', ASL_URL_NP . 'backend/settings/assets/js/spectrum/spectrum.css');
-		wp_enqueue_style('wpdreams-spectrum');
-		wp_register_style('wpd-modal', ASL_URL_NP . 'backend/settings/assets/wpd-modal/wpd-modal.css');
-		wp_enqueue_style('wpd-modal');
-		wp_register_style('wpdreams-fa', ASL_URL_NP . 'backend/settings/assets/fa/css/all.min.css', array( 'wpdreams-style' ), ASL_CURR_VER_STRING);
-		wp_enqueue_style('wpdreams-fa');
-	}
-}
+);
