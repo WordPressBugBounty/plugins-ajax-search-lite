@@ -1565,13 +1565,13 @@ class AslPlugin {
     resultsposition: "hover",
     itemscount: 10,
     charcount: 0,
-    highlight: 1,
+    highlight: true,
     blocking: false,
     detectVisibility: false,
     redirectOnClick: true,
     redirectOnEnter: true,
-    highlightWholewords: 1,
-    singleHighlight: 0,
+    highlightWholewords: true,
+    singleHighlight: false,
     settingsVisible: 0,
     scrollToResults: {
       enabled: 1,
@@ -1642,8 +1642,8 @@ class AslPlugin {
       width_phone: "auto"
     },
     settingsimagepos: "left",
-    closeOnDocClick: 1,
-    overridewpdefault: 0,
+    closeOnDocClick: true,
+    overridewpdefault: false,
     override_method: "get"
   };
 }

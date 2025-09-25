@@ -1565,13 +1565,13 @@ class AslPlugin_AslPlugin {
     resultsposition: "hover",
     itemscount: 10,
     charcount: 0,
-    highlight: 1,
+    highlight: true,
     blocking: false,
     detectVisibility: false,
     redirectOnClick: true,
     redirectOnEnter: true,
-    highlightWholewords: 1,
-    singleHighlight: 0,
+    highlightWholewords: true,
+    singleHighlight: false,
     settingsVisible: 0,
     scrollToResults: {
       enabled: 1,
@@ -1642,8 +1642,8 @@ class AslPlugin_AslPlugin {
       width_phone: "auto"
     },
     settingsimagepos: "left",
-    closeOnDocClick: 1,
-    overridewpdefault: 0,
+    closeOnDocClick: true,
+    overridewpdefault: false,
     override_method: "get"
   };
 }
@@ -2154,7 +2154,7 @@ AslPlugin_AslPlugin.prototype.doRedirectToResults = function(ktype) {
   }
   let url = this.getRedirectURL(ktype);
   if (this.o.overridewpdefault) {
-    if (this.o.resPage.useAjax == 1) {
+    if (this.o.resPage.useAjax) {
       this.hideResults();
       this.liveLoad(this.o.resPage.selector, url);
       this.showLoader();
@@ -2276,7 +2276,7 @@ AslPlugin_AslPlugin.prototype.showResultsBox = function() {
 AslPlugin_AslPlugin.prototype.addHighlightString = function($items) {
   let $this = this, phrase = $this.n("text").val().replace(/["']/g, "");
   $items = typeof $items == "undefined" ? $this.n("items").find("a.asl_res_url") : $items;
-  if ($this.o.singleHighlight == 1 && phrase != "" && $items.length > 0) {
+  if ($this.o.singleHighlight && phrase != "" && $items.length > 0) {
     $items.forEach(function(el) {
       try {
         const url = new URL(domini_default()(el).attr("href"));
@@ -2970,7 +2970,7 @@ AslPlugin_AslPlugin.prototype.initResultsEvents = function() {
     if (domini_default()(e.target).closest(".asl_w").length == 0) {
       $this.hideOnInvisibleBox();
       if (ktype != "click" || ktype != "touchend" || keycode != 3) {
-        if (!$this.resultsOpened || $this.o.closeOnDocClick != 1) return;
+        if (!$this.resultsOpened || !$this.o.closeOnDocClick) return;
         if (!$this.dragging) {
           $this.hideLoader();
           $this.searchAbort();
@@ -3349,11 +3349,11 @@ AslPlugin_AslPlugin.prototype.showVerticalResults = function() {
     }
     $this.n("items").last().addClass("asl_last_item");
     $this.n("results").find(".asl_group_header").prev(".item").addClass("asl_last_item");
-    if ($this.o.highlight == 1) {
+    if ($this.o.highlight) {
       $this.n("resultsDiv").find("div.item").highlight($this.n("text").val().split(" "), {
         element: "span",
         className: "highlighted",
-        wordsOnly: !!$this.o.highlightWholewords
+        wordsOnly: $this.o.highlightWholewords
       });
     }
   }

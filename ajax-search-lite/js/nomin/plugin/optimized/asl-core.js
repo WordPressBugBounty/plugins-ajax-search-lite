@@ -533,7 +533,7 @@ external_global_namespaceObject.AslPlugin.prototype.doRedirectToResults = functi
   }
   let url = this.getRedirectURL(ktype);
   if (this.o.overridewpdefault) {
-    if (this.o.resPage.useAjax == 1) {
+    if (this.o.resPage.useAjax) {
       this.hideResults();
       this.liveLoad(this.o.resPage.selector, url);
       this.showLoader();
@@ -653,7 +653,7 @@ external_global_namespaceObject.AslPlugin.prototype.showResultsBox = function() 
 external_global_namespaceObject.AslPlugin.prototype.addHighlightString = function($items) {
   let $this = this, phrase = $this.n("text").val().replace(/["']/g, "");
   $items = typeof $items == "undefined" ? $this.n("items").find("a.asl_res_url") : $items;
-  if ($this.o.singleHighlight == 1 && phrase != "" && $items.length > 0) {
+  if ($this.o.singleHighlight && phrase != "" && $items.length > 0) {
     $items.forEach(function(el) {
       try {
         const url = new URL(external_DoMini_default()(el).attr("href"));
@@ -1347,7 +1347,7 @@ external_global_namespaceObject.AslPlugin.prototype.initResultsEvents = function
     if (external_DoMini_default()(e.target).closest(".asl_w").length == 0) {
       $this.hideOnInvisibleBox();
       if (ktype != "click" || ktype != "touchend" || keycode != 3) {
-        if (!$this.resultsOpened || $this.o.closeOnDocClick != 1) return;
+        if (!$this.resultsOpened || !$this.o.closeOnDocClick) return;
         if (!$this.dragging) {
           $this.hideLoader();
           $this.searchAbort();

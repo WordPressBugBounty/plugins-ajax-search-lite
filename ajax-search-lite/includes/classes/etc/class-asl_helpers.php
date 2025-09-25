@@ -700,20 +700,23 @@ if ( !class_exists('ASL_Helpers') ) {
 					if ( $sd['exclude_woo_catalog'] ) {
 						$exclude[] = 'exclude-from-catalog';
 					}
-					$_t = get_terms(
-						array(
-							'slug'       => $exclude,
-							'hide_empty' => 0,
-							'fields'     => 'ids',
-						)
-					);
-
-					if ( !is_wp_error($_t) && count($_t) > 0 ) {
-						$ret[] = array(
-							'taxonomy'    => 'product_visibility',
-							'exclude'  => $_t, // phpcs:ignore
-							'allow_empty' => true,
+					if ( !empty($exclude) ) {
+						$_t = get_terms(
+							array(
+								'taxonomy'   => 'product_visibility',
+								'slug'       => $exclude,
+								'hide_empty' => 0,
+								'fields'     => 'ids',
+							)
 						);
+
+						if ( !is_wp_error($_t) && count($_t) > 0 ) {
+							$ret[] = array(
+								'taxonomy'    => 'product_visibility',
+								'exclude'  => $_t, // phpcs:ignore
+								'allow_empty' => true,
+							);
+						}
 					}
 				}
 			}

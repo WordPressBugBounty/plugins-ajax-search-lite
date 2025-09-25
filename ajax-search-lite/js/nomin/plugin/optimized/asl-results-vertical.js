@@ -92,11 +92,11 @@ external_global_namespaceObject.AslPlugin.prototype.showVerticalResults = functi
     }
     $this.n("items").last().addClass("asl_last_item");
     $this.n("results").find(".asl_group_header").prev(".item").addClass("asl_last_item");
-    if ($this.o.highlight == 1) {
+    if ($this.o.highlight) {
       $this.n("resultsDiv").find("div.item").highlight($this.n("text").val().split(" "), {
         element: "span",
         className: "highlighted",
-        wordsOnly: !!$this.o.highlightWholewords
+        wordsOnly: $this.o.highlightWholewords
       });
     }
   }

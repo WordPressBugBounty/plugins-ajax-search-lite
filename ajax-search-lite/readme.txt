@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 6.8
-Stable tag: 4.13.2
+Stable tag: 4.13.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,11 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.13.3 =
+* Fixed a type coercion issue which caused the auto complete to be enabled at all times even when it was turned off
+* Fixed an issue with WooCommerce related advanced fields, where it would cause an error when WooCommerce is not enabled but a product post type is used
+* Fixed an issue with WooCommerce catalog/hidden product exclusions, which caused an error in very rare cases due to an unspecified taxonomy argument
+
 = 4.13.2 =
 * Fixed a security issue, where password protected posts were returned by default, see [CVE-2025-7956](https://www.cve.org/CVERecord?id=CVE-2025-7956)
 * A full scale code review was performed, implementing additional sanitization and escaping of all output based on WP Codesniffs and recommendations
