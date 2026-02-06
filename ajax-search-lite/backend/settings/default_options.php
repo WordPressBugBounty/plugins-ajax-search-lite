@@ -310,6 +310,7 @@ function asl_do_init_options() {
 		'resultareaclickable'            => 1,
 		'close_on_document_click'        => 1,
 		'show_close_icon'                => 1,
+		'post_type_res_title_length'     => 999,
 		'showauthor'                     => 0,
 		'showdate'                       => 0,
 		'custom_date'                    => 0,

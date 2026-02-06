@@ -191,6 +191,11 @@ if ( !defined('ABSPATH') ) {
 </div>
 <div class="item">
 	<?php
+	new wpdreamsTextSmall('post_type_res_title_length', __('Result title length', 'ajax-search-lite'), $sd['post_type_res_title_length']);
+	?>
+</div>
+<div class="item">
+	<?php
 	new wpdreamsYesNo('showauthor', __('Show author in results?', 'ajax-search-lite'), $sd['showauthor']);
 	?>
 </div>

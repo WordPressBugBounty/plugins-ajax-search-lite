@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Lite 4.13.3\n"
+"Project-Id-Version: Ajax Search Lite 4.13.4\n"
 "Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-lite\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-09-25T14:47:21+00:00\n"
+"POT-Creation-Date: 2025-10-11T11:40:31+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: ajax-search-lite\n"
@@ -1629,42 +1629,46 @@ msgid "' Show more results..' text"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:194
-msgid "Show author in results?"
+msgid "Result title length"
 msgstr ""
 
 #: backend/tabs/instance/layout/results_layout.php:199
+msgid "Show author in results?"
+msgstr ""
+
+#: backend/tabs/instance/layout/results_layout.php:204
 msgid "Show date in results?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:205
+#: backend/tabs/instance/layout/results_layout.php:210
 msgid "Use custom date format?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:214
+#: backend/tabs/instance/layout/results_layout.php:219
 msgid " format"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:224
+#: backend/tabs/instance/layout/results_layout.php:229
 msgid "If turned OFF, it will use WordPress defaults. Default custom value: Y-m-d H:i:s"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:229
+#: backend/tabs/instance/layout/results_layout.php:234
 msgid "Show description in results?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:234
+#: backend/tabs/instance/layout/results_layout.php:239
 msgid "Display the description context?"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:235
+#: backend/tabs/instance/layout/results_layout.php:240
 msgid " ..depth"
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:243
+#: backend/tabs/instance/layout/results_layout.php:248
 msgid "Will display the description from around the search phrase, not from the beginning."
 msgstr ""
 
-#: backend/tabs/instance/layout/results_layout.php:248
+#: backend/tabs/instance/layout/results_layout.php:253
 msgid "Description length"
 msgstr ""
 

@@ -74,7 +74,7 @@ if ( !class_exists('wpdreamsCustomPostTypesEditable') ) {
 			echo '<div class="sortablecontainer" id="sortablecontainer' . esc_attr(self::$_instancenumber) . '">
             <p>Available post types</p><ul id="sortable' . esc_attr(self::$_instancenumber) . '" class="connectedSortable">';
 			foreach ( $this->types as $k => $v ) {
-				if ( !wd_in_array_r($v, $this->selected) ) {
+				if ( !wd_in_array_r($k, $this->selected) ) {
 					echo '<li class="ui-state-default ui-left" style="background: #ddd;">
 				          <label>' . esc_attr($k) . '</label>
 				          <input type="text" value="' . esc_attr($k) . '"/>

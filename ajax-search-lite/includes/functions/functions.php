@@ -2,6 +2,7 @@
 /** @noinspection RegExpRedundantEscape */
 
 use WPDRMS\ASL\Utils\Polylang\StringTranslations;
+use WPDRMS\ASL\Utils\Str;
 
 if ( !function_exists('w_isset_def') ) {
 	function w_isset_def( &$v, $d ) {
@@ -55,21 +56,26 @@ if ( !function_exists('wd_mysql_escape_mimic') ) {
 
 if ( !function_exists('wpdreams_parse_params') ) {
 	function wpdreams_parse_params( $params ) {
-		foreach ( $params as $k =>$v ) {
-			$_tmp = explode('classname-', $k);
-			if ( $_tmp !== null && count($_tmp) >1 ) {
-				ob_start();
-				$c = new $v('0', '0', $params[ $_tmp[1] ]);
-				ob_get_clean();
-				$params[ 'selected-' . $_tmp[1] ] = $c->getSelected();
-			}
-			$_tmp = null;
-			$_tmp = explode('wpdfont-', $k);
-			if ( $_tmp !== null && count($_tmp) >1 ) {
-				ob_start();
-				$c = new $v('0', '0', $params[ $_tmp[1] ]);
-				ob_get_clean();
-				$params[ 'import-' . $_tmp[1] ] = $c->getImport();
+		if ( !is_array($params) ) {
+			return $params;
+		}
+		foreach ( $params as $k => $v ) {
+			$value           = sanitize_text_field(wp_unslash($v));
+			$allowed_classes = array(
+				'wpdreamsCategories',
+				'wpdreamsCustomFields',
+				'wpdreamsCustomPostTypes',
+				'wpdreamsCustomPostTypesEditable',
+			);
+
+			if ( str_starts_with($k, 'classname-') && in_array($value, $allowed_classes, true) ) {
+				$_tmp = explode('classname-', $k);
+				if ( $_tmp !== null && count($_tmp) > 1 && isset($params[ $_tmp[1] ]) ) {
+					ob_start();
+					$c = new $value('0', '0', Str::anyToString($params[ $_tmp[1] ]) );
+					ob_get_clean();
+					$params[ 'selected-' . $_tmp[1] ] = $c->getSelected();
+				}
 			}
 		}
 		return $params;
@@ -452,14 +458,47 @@ if ( !function_exists('wd_array_to_string') ) {
 }
 
 if ( !function_exists('wd_substr_at_word') ) {
-	function wd_substr_at_word( $text, $length ) {
-		if ( strlen($text) <= $length ) {
+	/**
+	 * Substring cut off at word endings
+	 *
+	 * @param $text
+	 * @param $length
+	 * @param $suffix
+	 * @param $tolerance
+	 * @return string
+	 */
+	function wd_substr_at_word( $text, $length, $suffix = ' ...', $tolerance = 8 ) {
+
+		if ( function_exists('mb_strlen') &&
+			function_exists('mb_strrpos') &&
+			function_exists('mb_substr')
+		) {
+			$fn_strlen  = 'mb_strlen';
+			$fn_strrpos = 'mb_strrpos';
+			$fn_substr  = 'mb_substr';
+		} else {
+			$fn_strlen  = 'strlen';
+			$fn_strrpos = 'strrpos';
+			$fn_substr  = 'substr';
+		}
+
+		if ( $fn_strlen($text) <= $length ) {
 			return $text;
 		}
-		$blog_charset = get_bloginfo('charset');
-		$charset      = $blog_charset !== '' ? $blog_charset : 'UTF-8';
-		$s            = mb_substr($text, 0, $length, $charset);
-		return mb_substr($s, 0, strrpos($s, ' '), $charset);
+
+		$s = $fn_substr($text, 0, $length);
+		$s = $fn_substr($s, 0, $fn_strrpos($s, ' '));
+
+		// In case of a long mash-up, it will not let overflow the length
+		if ( $fn_strlen($s) > ( $length + $tolerance ) ) {
+			$s = $fn_substr($s, 0, ( $length + $tolerance ));
+		}
+
+		if ( $suffix !== '' && $fn_strlen($s) !== $fn_strlen($text) ) {
+			$s .= $suffix;
+		}
+
+		return $s;
 	}
 }
 

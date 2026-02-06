@@ -1377,6 +1377,10 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 					$r->title = AdvancedFieldParser::instance()->parse($sd['advtitlefield'], $r);
 				}
 
+				if ( $r->title !== '' && ( MB::strlen( $r->title ) > intval($sd['post_type_res_title_length']) ) ) {
+					$r->title = wd_substr_at_word($r->title, intval($sd['post_type_res_title_length']));
+				}
+
 				if ( ! isset( $sd['striptagsexclude'] ) ) {
 					$sd['striptagsexclude'] = '<a><span>';
 				}

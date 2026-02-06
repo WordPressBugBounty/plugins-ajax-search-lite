@@ -143,7 +143,7 @@ if ( function_exists('qtranxf_getLanguage') ) {
 					<div class="asl_option_checkbox"></div>
 				</div>
 				<div class="asl_option_label">
-					<?php echo esc_attr(asl_icl_t('Search filter for post type: ' . $v[1], $v[1])); ?>
+					<?php echo esc_html(asl_icl_t('Search filter for post type: ' . $v[1], $v[1])); ?>
 				</div>
 			</div>
 			<?php
