@@ -538,13 +538,30 @@ if ( !function_exists('asl_get_image_from_content') ) {
 	/**
 	 * Gets an image from the HTML content
 	 *
-	 * @param string       $content
-	 * @param int          $number
+	 * @param mixed        $content
+	 * @param mixed        $number
 	 * @param array|string $exclude
 	 * @return bool|string
 	 */
-	function asl_get_image_from_content( string $content, int $number = 0, $exclude = array() ) {
-		if ( $content === '' || !class_exists('domDocument') ) {
+	function asl_get_image_from_content( $content, $number = 0, $exclude = array() ) {
+		if ( !is_string($content) || $content === '' || !class_exists('domDocument') ) {
+			return false;
+		}
+
+		if ( function_exists('mb_encode_numericentity') ) {
+			$encoded_content = mb_encode_numericentity(
+				htmlspecialchars_decode(
+					htmlentities( $content, ENT_NOQUOTES, 'UTF-8', false ),
+					ENT_NOQUOTES
+				),
+				array( 0x80, 0x10FFFF, 0, ~0 ),
+				'UTF-8'
+			);
+		} else {
+			$encoded_content = $content;
+		}
+
+		if ( $encoded_content === '' ) {
 			return false;
 		}
 
@@ -563,48 +580,52 @@ if ( !function_exists('asl_get_image_from_content') ) {
 			}
 		}
 
-		$attributes = array( 'src', 'data-src-fg' );
-		$im         = false;
+		$elements   = array( 'img', 'div' );
+		$attributes = array(
+			'src',
+			'data-src-fg',
+			'data-img',
+			'data-image',
+			'data-thumbnail',
+			'data-thumb',
+			'data-imgsrc',
+		);
+		$im         = '';
 
-		$dom = new domDocument();
-		if ( function_exists('libxml_use_internal_errors') ) {
-			libxml_use_internal_errors(true);
+		foreach ( $elements as $element ) {
+			$dom = new domDocument();
+			/**
+			 * The libxml_use_internal_errors & libxml_clear_errors solutions
+			 * seem not to work on some servers, so we are stuck using @ operator instead.
+			 */
+			@$dom->loadHTML($encoded_content); // phpcs:ignore
+			$dom->preserveWhiteSpace = false;  // phpcs:ignore
+			@$images                 = $dom->getElementsByTagName($element); // phpcs:ignore
+			if ( $images->length > 0 ) {
+				$get = $images->length > $number ? $number : 0;
+				for ( $i =$get;$i <$images->length;$i++ ) {
+					foreach ( $attributes as $att ) {
+						$im = $images->item($i)->getAttribute($att);
+						if ( !empty($im) ) {
+							break;
+						}
+					}
+					foreach ( $exclude as $ex ) {
+						if ( strpos($im, $ex) !== false ) {
+							$im = '';
+							continue 2;
+						}
+					}
+					break;
+				}
+				if ( $im !== '' ) {
+					return $im;
+				}
+			}
 		}
 
-		if ( function_exists('mb_convert_encoding') ) {
-			$dom->loadHTML(mb_convert_encoding($content, 'HTML-ENTITIES', 'UTF-8'));
-		} else {
-			$dom->loadHTML($content);
-		}
-		$dom->preserveWhiteSpace = false; // phpcs:ignore
-		$images                  = $dom->getElementsByTagName('img');
-		if ( $images->length > 0 ) {
-			$get = $images->length > $number ? $number : 0;
-			for ( $i =$get;$i <$images->length;$i++ ) {
-				foreach ( $attributes as $att ) {
-					$im = $images->item($i)->getAttribute($att);
-					if ( !empty($im) ) {
-						break;
-					}
-				}
-				foreach ( $exclude as $ex ) {
-					if ( strpos($im, $ex) !== false ) {
-						$im = '';
-						continue 2;
-					}
-				}
-				break;
-			}
-			if ( function_exists('libxml_clear_errors') ) {
-				libxml_clear_errors();
-			}
-			return $im;
-		} else {
-			if ( function_exists('libxml_clear_errors') ) {
-				libxml_clear_errors();
-			}
-			return false;
-		}
+		// Still no image
+		return false;
 	}
 }
 

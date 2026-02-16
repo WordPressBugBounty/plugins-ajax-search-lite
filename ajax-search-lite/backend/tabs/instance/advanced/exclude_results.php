@@ -18,6 +18,31 @@ if ( !defined('ABSPATH') ) {
 		new wpdreamsYesNo('wpml_compatibility', __('WPML compatibility', 'ajax-search-lite'), $sd['wpml_compatibility']);
 		?>
 	</div>
+	<div class="item<?php echo class_exists('SitePress') ? '' : ' hiddend'; ?>">
+		<?php
+		$o = new wpdreamsCustomSelect(
+			'wpml_display_missing_translations',
+			__('Display items, which have no translations?', 'ajax-search-lite'),
+			array(
+				'selects' =>array(
+					array(
+						'option' =>__('On main language only', 'ajax-search-lite'),
+						'value'  => 'on_main_language',
+					),
+					array(
+						'option' =>__('On all languages', 'ajax-search-lite'),
+						'value'  => 'on_all_languages',
+					),
+					array(
+						'option' =>__('Off', 'ajax-search-lite'),
+						'value'  => 'off',
+					),
+				),
+				'value'   =>$sd['wpml_display_missing_translations'],
+			)
+		);
+		?>
+	</div>
 	<div class="item<?php echo function_exists('pll_current_language') ? '' : ' hiddend'; ?>">
 		<?php
 		new wpdreamsYesNo('polylang_compatibility', __('Polylang compatibility', 'ajax-search-lite'), $sd['polylang_compatibility']);

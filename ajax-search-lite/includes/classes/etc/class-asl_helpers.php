@@ -551,6 +551,8 @@ if ( !class_exists('ASL_Helpers') ) {
 				if ( is_object($sitepress) && method_exists($sitepress, 'switch_lang') ) {
 					$sitepress->switch_lang($args['_wpml_lang']);
 				}
+
+				$args['wpml_display_missing_translations'] = $sd['wpml_display_missing_translations'];
 			}
 
 			/*-------------------- Content, Excerpt -------------------------*/

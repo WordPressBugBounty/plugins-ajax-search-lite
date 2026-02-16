@@ -241,7 +241,10 @@ if ( ! class_exists( 'ASL_Search_CPT' ) ) {
 				 * For missing translations..
 				 * If the site language is used, the translation can be non-existent
 				 */
-				if ( $site_lang_selected ) {
+				if (
+					$args['wpml_display_missing_translations'] === 'on_all_languages' ||
+					( $args['wpml_display_missing_translations'] === 'on_main_language' && $site_lang_selected )
+				) {
 					$wpml_query = '
                     NOT EXISTS (
                         SELECT DISTINCT(wpml.element_id)

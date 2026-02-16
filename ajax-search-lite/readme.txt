@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 4.13.4
+Stable tag: 4.13.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -137,6 +137,13 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.13.5 =
+* Added an option to control visibility for WPML non-translated content (display on main language, on all or off)
+* Greatly improved the image parser by allowing additional data attributes and divs with these data attributes as a potential image source
+* Fixed a deprecation warning in PHP 8.0+
+* Fixed an issue for a potential conflict where a null value could be returned in the get_posts hook
+* Fixed and issue with the WooCommerce advanced field handler
+
 = 4.13.4 =
 * Added an option to limit the result title length (default 999 characters)
 * Fixed a potential security issue, see [CVE-2025-48086](https://www.cve.org/CVERecord?id=CVE-2025-48086)

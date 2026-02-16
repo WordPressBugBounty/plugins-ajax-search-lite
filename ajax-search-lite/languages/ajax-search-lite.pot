@@ -1,17 +1,17 @@
-# Copyright (C) 2025 Ernest Marcinko
+# Copyright (C) 2026 Ernest Marcinko
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Lite 4.13.4\n"
+"Project-Id-Version: Ajax Search Lite 4.13.5\n"
 "Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-lite\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-10-11T11:40:31+00:00\n"
+"POT-Creation-Date: 2026-02-16T13:21:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.11.0\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ajax-search-lite\n"
 
 #. Plugin Name of the plugin
@@ -66,6 +66,7 @@ msgstr ""
 
 #. translators: Analytics integration docs
 #: backend/analytics.php:112
+#, php-format
 msgid "To understand how this works, please read the <a href=\"%s\">Analytics Integration Documentation</a>"
 msgstr ""
 
@@ -75,6 +76,7 @@ msgstr ""
 
 #. translators: %s: GA docs url
 #: backend/analytics.php:126
+#, php-format
 msgid "Please read this <a href=\"%s\">google analytics documentation</a> to get your tracking ID."
 msgstr ""
 
@@ -116,6 +118,7 @@ msgstr ""
 #: backend/analytics.php:272
 #: backend/analytics.php:300
 #: backend/analytics.php:328
+#, php-format
 msgid "Usable variables: %s"
 msgstr ""
 
@@ -604,6 +607,7 @@ msgstr ""
 
 #. translators: %s: sql docs url
 #: backend/tabs/compatibility/query_options.php:45
+#, php-format
 msgid "If you have case/diacritic issues then please read the <a href=\"%s\" target=\"_blank\">MySql manual on collations</a> or consult a <b>database expert</b> - those issues should be treated on database level!"
 msgstr ""
 
@@ -717,43 +721,59 @@ msgstr ""
 msgid "WPML compatibility"
 msgstr ""
 
-#: backend/tabs/instance/advanced/exclude_results.php:23
-msgid "Polylang compatibility"
+#: backend/tabs/instance/advanced/exclude_results.php:25
+msgid "Display items, which have no translations?"
 msgstr ""
 
-#: backend/tabs/instance/advanced/exclude_results.php:28
-msgid "WooCommerce related"
-msgstr ""
-
-#: backend/tabs/instance/advanced/exclude_results.php:31
-msgid "Exclude hidden search WooCommerce products from search?"
+#: backend/tabs/instance/advanced/exclude_results.php:29
+msgid "On main language only"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:33
-msgid "\"Hidden\" in this case means \"Shop only\" or \"Hidden\""
+msgid "On all languages"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:37
-msgid "Exclude hidden catalog WooCommerce products from search?"
-msgstr ""
-
-#: backend/tabs/instance/advanced/exclude_results.php:39
-msgid "This case means \"Search results only\""
-msgstr ""
-
-#: backend/tabs/instance/advanced/exclude_results.php:43
-msgid "Exclude WooCommerce out of stock products?"
+msgid "Off"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:48
-msgid "Exclude results"
+msgid "Polylang compatibility"
 msgstr ""
 
-#: backend/tabs/instance/advanced/exclude_results.php:51
-msgid "Exclude categories"
+#: backend/tabs/instance/advanced/exclude_results.php:53
+msgid "WooCommerce related"
+msgstr ""
+
+#: backend/tabs/instance/advanced/exclude_results.php:56
+msgid "Exclude hidden search WooCommerce products from search?"
 msgstr ""
 
 #: backend/tabs/instance/advanced/exclude_results.php:58
+msgid "\"Hidden\" in this case means \"Shop only\" or \"Hidden\""
+msgstr ""
+
+#: backend/tabs/instance/advanced/exclude_results.php:62
+msgid "Exclude hidden catalog WooCommerce products from search?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/exclude_results.php:64
+msgid "This case means \"Search results only\""
+msgstr ""
+
+#: backend/tabs/instance/advanced/exclude_results.php:68
+msgid "Exclude WooCommerce out of stock products?"
+msgstr ""
+
+#: backend/tabs/instance/advanced/exclude_results.php:73
+msgid "Exclude results"
+msgstr ""
+
+#: backend/tabs/instance/advanced/exclude_results.php:76
+msgid "Exclude categories"
+msgstr ""
+
+#: backend/tabs/instance/advanced/exclude_results.php:83
 msgid "Exclude Posts by ID's (comma separated post ID-s)"
 msgstr ""
 

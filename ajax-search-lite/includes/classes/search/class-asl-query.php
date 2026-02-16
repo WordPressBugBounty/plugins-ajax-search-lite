@@ -12,7 +12,7 @@ if ( !class_exists('ASL_Query') ) {
 	 * @uses ASL_Helpers
 	 */
 	class ASL_Query {
-		public $posts;
+		public $posts = array();
 
 		/**
 		 * The real results count
@@ -37,7 +37,7 @@ if ( !class_exists('ASL_Query') ) {
 			// ----------------------------------------------------------------
 			// 1. GENERIC arguments
 			// ----------------------------------------------------------------
-			's'                             => '',                  // search query
+			's'                                 => '',                  // search query
 			/**
 			 *  @param string|array search_type
 			 *      cpt -> posts, pages, custom post types
@@ -48,36 +48,36 @@ if ( !class_exists('ASL_Query') ) {
 			 *      comments -> comment results
 			 *      attachments -> file attachments
 			 */
-			'search_type'                   => 'cpt',
-			'engine'                        => 'regular',      // regular|index -> index only used on cpt
-			'posts_per_page'                => 0,     // posts per page, for non ajax requests only. If 0, then get_option(posts_per_page) is used
-			'page'                          => 1,                // which page of results, starts from 1
-			'keyword_logic'                 => 'OR',    // OR|AND|OREX|ANDEX
-			'secondary_logic'               => '',    // OR|AND|OREX|none or empty string
-			'min_word_length'               => 0,     // Minimum word length of each word to be considered as a standalone word in the phrase (removed if shorter)
+			'search_type'                       => 'cpt',
+			'engine'                            => 'regular',      // regular|index -> index only used on cpt
+			'posts_per_page'                    => 0,     // posts per page, for non ajax requests only. If 0, then get_option(posts_per_page) is used
+			'page'                              => 1,                // which page of results, starts from 1
+			'keyword_logic'                     => 'OR',    // OR|AND|OREX|ANDEX
+			'secondary_logic'                   => '',    // OR|AND|OREX|none or empty string
+			'min_word_length'                   => 0,     // Minimum word length of each word to be considered as a standalone word in the phrase (removed if shorter)
 			// ----------------------------------------------------------------
 
 			// ----------------------------------------------------------------
 			// 2. POST and CUSTOM POST TYPE related arguments
 			// ----------------------------------------------------------------
-			'post_type'                     => array( 'post', 'page' ),       // post types to look for
-			'post_status'                   => array( 'publish' ),          // post statuses
-			'has_password'                  => false,                    // password protected
-			'post_fields'                   => array(                     // post fields to search within
+			'post_type'                         => array( 'post', 'page' ),       // post types to look for
+			'post_status'                       => array( 'publish' ),          // post statuses
+			'has_password'                      => false,                    // password protected
+			'post_fields'                       => array(                     // post fields to search within
 				// (title, content, excerpt, terms, permalink)
 				'title',
 				'ids',
 				'excerpt',
 				'terms',
 			),
-			'post_custom_fields_all'        => 0,              // search all custom fields
-			'post_custom_fields'            => array(),            // ..or search within custom fields
-			'post_in'                       => array(),                       // string|array -> limit potential results pool to array of IDs
-			'post_not_in'                   => array(),                   // string|array -> explicity exclude IDs from search results
-			'post_not_in2'                  => array(),                  // array -> secondary exclusion for manual override
-			'post_parent'                   => array(),                   // array -> post parent IDs
-			'post_parent_exclude'           => array(),           // array -> post parent IDs
-			'post_tax_filter'               => array(                 // taxonomy filter support
+			'post_custom_fields_all'            => 0,              // search all custom fields
+			'post_custom_fields'                => array(),            // ..or search within custom fields
+			'post_in'                           => array(),                       // string|array -> limit potential results pool to array of IDs
+			'post_not_in'                       => array(),                   // string|array -> explicity exclude IDs from search results
+			'post_not_in2'                      => array(),                  // array -> secondary exclusion for manual override
+			'post_parent'                       => array(),                   // array -> post parent IDs
+			'post_parent_exclude'               => array(),           // array -> post parent IDs
+			'post_tax_filter'                   => array(                 // taxonomy filter support
 				/*
 				array(
 					'taxonomy'    => 'category',          // taxonomy name
@@ -87,7 +87,7 @@ if ( !class_exists('ASL_Query') ) {
 				)
 				*/
 			),
-			'post_meta_filter'              => array(      // meta_query support
+			'post_meta_filter'                  => array(      // meta_query support
 				/*
 				array(
 					'key'     => 'age',         // meta key
@@ -108,7 +108,7 @@ if ( !class_exists('ASL_Query') ) {
 				)
 				*/
 			),
-			'post_date_filter'              => array(        // date_query support
+			'post_date_filter'                  => array(        // date_query support
 				/*
 				array(
 					'year'  => 2015,            // year, month, day ...
@@ -120,31 +120,31 @@ if ( !class_exists('ASL_Query') ) {
 				)
 				*/
 			),
-			'post_user_filter'              => array(
+			'post_user_filter'                  => array(
 				/*
 				'include' => (1, 2, 3, 4),  // include by IDs
 				'exclude' => (5, 6, 7, 8)   // exclude by IDs
 				*/
 			),
-			'post_primary_order'            => 'relevance DESC', // CAN be a custom field name
-			'post_secondary_order'          => 'post_date DESC',
-			'post_primary_order_metatype'   => false, // false (if not meta), 'numeric', 'string'
-			'post_secondary_order_metatype' => false, // false (if not meta), 'numeric', 'string'
-			'_post_primary_order_metakey'   => false,   // gets parsed later, do not touch
-			'_post_secondary_order_metakey' => false, // gets parsed later  do not touch
+			'post_primary_order'                => 'relevance DESC', // CAN be a custom field name
+			'post_secondary_order'              => 'post_date DESC',
+			'post_primary_order_metatype'       => false, // false (if not meta), 'numeric', 'string'
+			'post_secondary_order_metatype'     => false, // false (if not meta), 'numeric', 'string'
+			'_post_primary_order_metakey'       => false,   // gets parsed later, do not touch
+			'_post_secondary_order_metakey'     => false, // gets parsed later  do not touch
 			// ADVANCED
-			'_post_get_content'             => false,
-			'_post_get_excerpt'             => false,
-			'_post_allow_empty_tax_term'    => true,
-			'_post_use_relevance'           => true,
+			'_post_get_content'                 => false,
+			'_post_get_excerpt'                 => false,
+			'_post_allow_empty_tax_term'        => true,
+			'_post_use_relevance'               => true,
 			// Special post tag filtering
-			'_post_tags_active'             => false,
-			'_post_tags_include'            => array(),
-			'_post_tags_exclude'            => array(),
-			'_post_tags_logic'              => 'OR',
-			'_post_tags_empty'              => 0,
-			'_post_meta_logic'              => 'AND',
-			'_post_meta_allow_null'         => 0,
+			'_post_tags_active'                 => false,
+			'_post_tags_include'                => array(),
+			'_post_tags_exclude'                => array(),
+			'_post_tags_logic'                  => 'OR',
+			'_post_tags_empty'                  => 0,
+			'_post_meta_logic'                  => 'AND',
+			'_post_meta_allow_null'             => 0,
 			// ----------------------------------------------------------------
 
 
@@ -152,7 +152,7 @@ if ( !class_exists('ASL_Query') ) {
 			// ----------------------------------------------------------------
 			// QUERY FIELDS
 			// ----------------------------------------------------------------
-			'cpt_query'                     => array(
+			'cpt_query'                         => array(
 				'fields'  => '',
 				'join'    => '',
 				'where'   => '',
@@ -166,50 +166,51 @@ if ( !class_exists('ASL_Query') ) {
 			 *
 			 * Don't use/override these, unless you know what you are doing.
 			 */
-			'_id'                           => -1,
-			'_o'                            => false,
+			'_id'                               => -1,
+			'_o'                                => false,
 			// LIMITS
-			'limit'                         => 0, // overall results limit, if >=0, then evenly distributed between sources
-			'_limit'                        => 0, // calculated limit based on the previous limit parameter
+			'limit'                             => 0, // overall results limit, if >=0, then evenly distributed between sources
+			'_limit'                            => 0, // calculated limit based on the previous limit parameter
 			/**
 			 * _call_num ->
 			 *  Number of the consecutive ajax requests with the same configuration triggered by
 			 *  clicking on the 'More results..' link
 			 *  This is required to calculate the correct start of the result slicing
 			 */
-			'_call_num'                     => 0,
-			'posts_limit'                   => 10,
-			'posts_limit_override'          => 1000, // Results count on the results page
-			'posts_limit_distribute'        => 0,
+			'_call_num'                         => 0,
+			'posts_limit'                       => 10,
+			'posts_limit_override'              => 1000, // Results count on the results page
+			'posts_limit_distribute'            => 0,
 
-			'_charcount'                    => 0,
-			'_keyword_count_limit'          => 6, // Number of words in the search phrase allowed
-			'_exact_matches'                => false,
-			'_exact_match_location'         => 'anywhere',  // anywhere, start, end
-			'_qtranslate_lang'              => 'en',         // qtranslatex language data
-			'_wpml_lang'                    => '',           // WPML language
-			'_polylang_lang'                => '',       // Polylang language
-			'_exclude_page_parent_child'    => '', // parent page exclusion data (comma separated list)
-			'_taxonomy_group_logic'         => 'AND',
-			'_db_force_case'                => 'none',
-			'_db_force_utf8_like'           => 0,
-			'_db_force_unicode'             => 0,
-			'_ajax_search'                  => false,     // Needs to be set explicitly to TRUE in search Ajax Handler class
-			'_no_post_process'              => false,     // Forcefully turns off post-processing to return RAW results
+			'_charcount'                        => 0,
+			'_keyword_count_limit'              => 6, // Number of words in the search phrase allowed
+			'_exact_matches'                    => false,
+			'_exact_match_location'             => 'anywhere',  // anywhere, start, end
+			'_qtranslate_lang'                  => 'en',         // qtranslatex language data
+			'_wpml_lang'                        => '',           // WPML language
+			'wpml_display_missing_translations' => '', // 'on_main_language'|'on_all_languages'|'off'
+			'_polylang_lang'                    => '',       // Polylang language
+			'_exclude_page_parent_child'        => '', // parent page exclusion data (comma separated list)
+			'_taxonomy_group_logic'             => 'AND',
+			'_db_force_case'                    => 'none',
+			'_db_force_utf8_like'               => 0,
+			'_db_force_unicode'                 => 0,
+			'_ajax_search'                      => false,     // Needs to be set explicitly to TRUE in search Ajax Handler class
+			'_no_post_process'                  => false,     // Forcefully turns off post-processing to return RAW results
 
 			/**
 			 * Other stuff
 			 */
-			'_page_id'                      => 0,                // Current Page ID
+			'_page_id'                          => 0,                // Current Page ID
 			/**
 			 * Remaining Limit Modifier
 			 *      This is used mostly for more results overall limit.
 			 *      Overall Limit = LIMIT * _remaining_limit_mod
 			 */
-			'_remaining_limit_mod'          => 10,
-			'_show_more_results'            => false,  // Show more results feature enabled (only used via ajax search instance)
-			'filters_changed'               => false,   // Only via AJAX - if the filters have been touched by the user
-			'filters_initial'               => true,     // Only via AJAX - if the filters are on the initial state
+			'_remaining_limit_mod'              => 10,
+			'_show_more_results'                => false,  // Show more results feature enabled (only used via ajax search instance)
+			'filters_changed'                   => false,   // Only via AJAX - if the filters have been touched by the user
+			'filters_initial'                   => true,     // Only via AJAX - if the filters are on the initial state
 		);
 
 		private $final_phrases = array();
@@ -528,7 +529,7 @@ if ( !class_exists('ASL_Query') ) {
 				$results = apply_filters('asl_noajax_results', $results, $args['_id'], false, $args);
 			}
 
-			return $results;
+			return is_array( $results ) ? $results : array();
 		}
 
 		public function kwSuggestions() {
