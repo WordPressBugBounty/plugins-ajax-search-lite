@@ -44,7 +44,7 @@ var external_global_namespaceObject = Object(window.WPD)["global"];
 ;// ./src/client/plugin/core/AjaxSearchLite.ts
 
 
-const AjaxSearchLite_AjaxSearchLite = {
+const AjaxSearchLite = {
   plugin: new external_global_namespaceObject.AslPlugin(),
   addons: {
     addons: [],
@@ -67,11 +67,12 @@ const AjaxSearchLite_AjaxSearchLite = {
     }
   }
 };
-/* harmony default export */ var core_AjaxSearchLite = (AjaxSearchLite_AjaxSearchLite);
+/* harmony default export */ var core_AjaxSearchLite = (AjaxSearchLite);
 
 ;// external "utils"
 var external_utils_namespaceObject = Object(window.WPD)["utils"];
 ;// ./src/client/addons/woocommerce.ts
+/* unused harmony import specifier */ var woocommerce_AjaxSearchLite;
 
 
 
@@ -186,9 +187,10 @@ class WooCommerceAddToCartAddon {
   }
 }
 core_AjaxSearchLite.addons.add(new WooCommerceAddToCartAddon());
-/* harmony default export */ var woocommerce = ((/* unused pure expression or super */ null && (AjaxSearchLite)));
+/* harmony default export */ var woocommerce = ((/* unused pure expression or super */ null && (woocommerce_AjaxSearchLite)));
 
 ;// ./src/client/addons/divi.ts
+/* unused harmony import specifier */ var divi_AjaxSearchLite;
 
 
 class DiviAddon {
@@ -200,7 +202,7 @@ class DiviAddon {
   }
 }
 core_AjaxSearchLite.addons.add(new DiviAddon());
-/* harmony default export */ var divi = ((/* unused pure expression or super */ null && (AjaxSearchLite)));
+/* harmony default export */ var divi = ((/* unused pure expression or super */ null && (divi_AjaxSearchLite)));
 
 ;// ./src/client/plugin/wrapper/loader.ts
 

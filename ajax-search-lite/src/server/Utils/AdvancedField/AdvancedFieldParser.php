@@ -4,8 +4,8 @@ namespace WPDRMS\ASL\Utils\AdvancedField;
 
 use InvalidArgumentException;
 use stdClass;
-use WPDRMS\ASL\Patterns\SingletonTrait;
-use WPDRMS\ASL\Utils\Str;
+use WPDRMS\PluginCore\Traits\SingletonTrait;
+use WPDRMS\Utils\Str;
 
 class AdvancedFieldParser {
 	use SingletonTrait;

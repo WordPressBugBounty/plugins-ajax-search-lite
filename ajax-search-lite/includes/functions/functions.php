@@ -2,7 +2,7 @@
 /** @noinspection RegExpRedundantEscape */
 
 use WPDRMS\ASL\Utils\Polylang\StringTranslations;
-use WPDRMS\ASL\Utils\Str;
+use WPDRMS\Utils\Str;
 
 if ( !function_exists('w_isset_def') ) {
 	function w_isset_def( &$v, $d ) {
@@ -275,6 +275,18 @@ if ( !function_exists('asl_generate_html_results') ) {
 
 		StringTranslations::save();
 		return preg_replace("/(^[\r\n]*|[\r\n]+)[\s\t]*[\r\n]+/", "\n", $html);
+	}
+}
+
+if ( !function_exists('asl_is_multilang') ) {
+	function asl_is_multilang(): bool {
+		if ( function_exists('pll_register_string') && function_exists('pll__') ) {
+			return true;
+		} elseif ( defined('WPML_PLUGIN_BASENAME') || defined('ICL_SITEPRESS_VERSION') ) {
+			return true;
+		}
+
+		return false;
 	}
 }
 

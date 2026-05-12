@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 4.13.5
+Stable tag: 4.14.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,6 +36,8 @@ Ajax Search Lite and Ajax Search Pro **does not require monthly subscriptions**,
 * Automatic search replacement as well as **widget** and **shortcode** availalbe
 * Custom Filter boxes (checkbox filters) for categories and post types
 * **WPML**, **Polylang** and **QtranslateX** compatible
+* Live Search Statistics
+* Super Fast Search Cache - instant cached results
 * 10+ built in templates + options for color adjustments
 * Retina ready vectorized **SVG** and **CSS3** icons
 * Category and post exclusions
@@ -137,6 +139,15 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.14.0 =
+* New: Live search statistics — tracks searches, result counts, device types and cache hit rates via a new admin panel
+* New: Search results cache admin panel with real-time hit/miss chart and per-entry management (File, Database and Super File cache modes)
+* New: PSR-4 modern search layer (AbstractSearch, SearchQuery, SearchQueryArgs) as the foundation for future improvements
+* New: Detects when Ajax Search Pro is active and disables conflicting Lite features to prevent duplicate operation
+* Improvement: Shared code extracted into separate versioned repositories
+* Fix: Exact match prioritization for keyword suggestion auto-scroll (#94)
+* Fix: Possible undefined `$_sdata` variable warning (#95)
+
 = 4.13.5 =
 * Added an option to control visibility for WPML non-translated content (display on main language, on all or off)
 * Greatly improved the image parser by allowing additional data attributes and divs with these data attributes as a potential image source

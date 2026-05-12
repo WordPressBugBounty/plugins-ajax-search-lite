@@ -3,7 +3,7 @@
 namespace WPDRMS\ASL\Utils\AdvancedField\Types;
 
 use stdClass;
-use WPDRMS\ASL\Utils\Html;
+use WPDRMS\Utils\Html;
 
 class WooCommercePrice extends AbstractWooCommerceBase implements AdvancedFieldTypeInterface {
 	private string $currency;

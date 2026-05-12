@@ -1,6 +1,6 @@
 <?php
 
-use WPDRMS\ASL\Utils\Html;
+use WPDRMS\Utils\Html;
 
 if ( !defined('ABSPATH') ) {
 	die('-1');

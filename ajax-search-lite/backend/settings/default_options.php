@@ -136,6 +136,7 @@ function asl_do_init_options() {
 		'searchinterms'                     => 0,
 
 		'charcount'                         => 0,
+		'min_word_length'                   => 2,
 		'maxresults'                        => 10,
 		'itemscount'                        => 4,
 		'resultitemheight'                  => '70px',

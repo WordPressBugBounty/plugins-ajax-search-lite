@@ -39,6 +39,7 @@ var __webpack_exports__ = {};
 ;// external "global"
 var external_global_namespaceObject = Object(window.WPD)["global"];
 ;// ./src/client/plugin/core/actions/settings.ts
+/* unused harmony import specifier */ var AslPlugin;
 
 
 external_global_namespaceObject.AslPlugin.prototype.showSettings = function() {
@@ -87,6 +88,7 @@ external_global_namespaceObject.AslPlugin.prototype.initFacetEvents = function()
 ;// external "utils"
 var external_utils_namespaceObject = Object(window.WPD)["utils"];
 ;// ./src/client/plugin/core/events/settings.ts
+/* unused harmony import specifier */ var settings_AslPlugin;
 
 
 
@@ -178,9 +180,10 @@ external_global_namespaceObject.AslPlugin.prototype.initSettingsEvents = functio
     }
   );
 };
-/* harmony default export */ var events_settings = ((/* unused pure expression or super */ null && (AslPlugin)));
+/* harmony default export */ var events_settings = ((/* unused pure expression or super */ null && (settings_AslPlugin)));
 
 ;// ./src/client/plugin/core/init/settings.ts
+/* unused harmony import specifier */ var init_settings_AslPlugin;
 
 
 
@@ -243,7 +246,7 @@ external_global_namespaceObject.AslPlugin.prototype.initSettingsAnimations = fun
     "animation-duration": $this.settAnim.duration + "ms"
   });
 };
-/* harmony default export */ var init_settings = ((/* unused pure expression or super */ null && (AslPlugin)));
+/* harmony default export */ var init_settings = ((/* unused pure expression or super */ null && (init_settings_AslPlugin)));
 
 ;// ./src/client/bundle/optimized/settings.ts
 

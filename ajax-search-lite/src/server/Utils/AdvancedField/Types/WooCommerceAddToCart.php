@@ -3,7 +3,7 @@
 namespace WPDRMS\ASL\Utils\AdvancedField\Types;
 
 use stdClass;
-use WPDRMS\ASL\Utils\Html;
+use WPDRMS\Utils\Html;
 
 class WooCommerceAddToCart extends AbstractWooCommerceBase implements AdvancedFieldTypeInterface {
 	private string $text_color;

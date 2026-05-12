@@ -1,7 +1,10 @@
 <?php
 
+use WPDRMS\ASL\Cache\ResultsCacheService;
 use WPDRMS\ASL\Core\Factory;
+use WPDRMS\ASL\Statistics\StatisticsService;
 use WPDRMS\ASL\Utils\Polylang\StringTranslations;
+use WPDRMS\Utils\FileManager;
 
 if ( !defined('ABSPATH') ) {
 	die('-1');
@@ -54,6 +57,17 @@ if ( !class_exists('WD_ASL_Manager') ) {
 
 			$this->preLoad();
 			$this->loadInstances();
+			$this->initUploadGlobals();
+			$this->initCacheGlobals();
+
+			FileManager::instance()->setAllowedDirectories(
+				array(
+					wd_asl()->upload_path,
+					wd_asl()->bfi_path,
+					wd_asl()->cache_path,
+				)
+			);
+
 			/**
 			 * Available after this point:
 			 *      (WD_ASL_Init) wd_asl()->instances, (global) $wd_asl->instances
@@ -125,8 +139,83 @@ if ( !class_exists('WD_ASL_Manager') ) {
 		}
 
 		/**
+		 * Gets the upload path with back-slash
+		 */
+		public function initUploadGlobals() {
+			if ( is_multisite() ) {
+				/**
+				 * On multisite, the wp_upload_dir() returns the current blog URLs,
+				 * even if the switch_to_blog(1) is initiated (WordPress core bug?)
+				 *
+				 * Bypass solution: Save the upload dir option as a site option, when the main blog is visited,
+				 *                  then get this value on each site, with a fallback.
+				 * WARNING: DO NOT USE get_site_option() and update_site_option() - as those slow down the multisite loading by a LOT
+				 *          use get_blog_option() and update_blog_option() instead
+				 */
+				$upload_dir = wp_upload_dir();
+				if ( get_current_blog_id() == get_network()->site_id ) {
+					update_blog_option(get_network()->site_id, '_asp_upload_dir', $upload_dir);
+				} else {
+					$upload_dir = get_blog_option(get_network()->site_id, '_asp_upload_dir', $upload_dir);
+				}
+			} else {
+				$upload_dir = wp_upload_dir();
+			}
+
+			$upload_dir = apply_filters('asp_glob_upload_dir', $upload_dir);
+
+			wd_asl()->upload_path = $upload_dir['basedir'] . '/' . wd_asl()->upload_dir . '/';
+			wd_asl()->upload_url  = $upload_dir['baseurl'] . '/' . wd_asl()->upload_dir . '/';
+			// Let us make sure, that the URL is using the correct protocol
+			if ( defined('ASP_URL') ) {
+				// Site is https, but URL is http
+				if ( strpos(ASP_URL, 'https://') === 0 && strpos(wd_asl()->upload_url, 'https://') === false ) {
+					wd_asl()->upload_url = str_replace('http://', 'https://', wd_asl()->upload_url);
+					// Site is http, but URL is https
+				} elseif ( strpos(ASP_URL, 'http://') === 0 && strpos(wd_asl()->upload_url, 'http://') === false ) {
+					wd_asl()->upload_url = str_replace('https://', 'http://', wd_asl()->upload_url);
+				}
+			}
+
+			if ( defined( 'BFITHUMB_UPLOAD_DIR' ) ) {
+				wd_asl()->bfi_path = $upload_dir['basedir'] . '/' . BFITHUMB_UPLOAD_DIR . '/';
+			} else {
+				wd_asl()->bfi_path = $upload_dir['basedir'] . '/' . wd_asl()->bfi_dir . '/';
+			}
+
+			// Allow globals modification for developers
+			wd_asl()->upload_path = apply_filters('asp_glob_upload_path', wd_asl()->upload_path);
+			wd_asl()->upload_url  = apply_filters('asp_glob_upload_url', wd_asl()->upload_url);
+			wd_asl()->bfi_path    = apply_filters('asp_glob_bfi_path', wd_asl()->bfi_path);
+		}
+
+
+		public function initCacheGlobals() {
+			$base_url = WP_CONTENT_URL;
+			if ( defined('ASP_URL') ) {
+				if ( strpos(ASP_URL, 'https://') === 0 && strpos($base_url, 'https://') === false ) {
+					$base_url = str_replace('http://', 'https://', $base_url);
+				}
+			}
+			wd_asl()->global_cache_path = apply_filters('asp_glob_global_cache_path', WP_CONTENT_DIR . '/cache/');
+			wd_asl()->cache_path        = apply_filters('asp_glob_cache_path', WP_CONTENT_DIR . '/cache/asp/');
+			wd_asl()->cache_url         = apply_filters('asp_glob_cache_url', $base_url . '/cache/asp/');
+		}
+		
+		/**
 		 * Gets the call context for further use
 		 */
+		/**
+		 * Returns true for backend pages that are pure React UI and don't need
+		 * the legacy option types (jQuery UI, wpdreams-* scripts/styles) or
+		 * the frontend search instance scripts.
+		 */
+		private function isReactPage(): bool {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$page = isset($_GET['page']) ? sanitize_key($_GET['page']) : '';
+			return in_array($page, array( 'asl_cache', 'asl_statistics' ), true);
+		}
+
 		public function getContext() {
 
 			$backend_pages = WD_ASL_Menu::getMenuPages();
@@ -173,9 +262,6 @@ if ( !class_exists('WD_ASL_Manager') ) {
 			require_once ASL_CLASSES_PATH . 'ajax/ajax.inc.php';
 			require_once ASL_CLASSES_PATH . 'filters/filters.inc.php';
 			require_once ASL_CLASSES_PATH . 'etc/class-asl_helpers.php';
-			require_once ASL_CLASSES_PATH . 'cache/cache.inc.php';
-			require_once ASL_CLASSES_PATH . 'suggest/suggest.inc.php';
-			require_once ASL_CLASSES_PATH . 'search/search.inc.php';
 			require_once ASL_CLASSES_PATH . 'shortcodes/shortcodes.inc.php';
 
 			switch ( $this->context ) {
@@ -187,7 +273,9 @@ if ( !class_exists('WD_ASL_Manager') ) {
 				case 'frontend':
 					break;
 				case 'backend':
-					require_once ASL_PATH . '/backend/settings/types.inc.php';
+					if ( !$this->isReactPage() ) {
+						require_once ASL_PATH . '/backend/settings/types.inc.php';
+					}
 					break;
 				case 'global_backend':
 					break;
@@ -221,7 +309,7 @@ if ( !class_exists('WD_ASL_Manager') ) {
 			// CSS
 			// WD_MS_Assets::loadCSS("ms_search_css_basic");
 
-			if ( $this->context === 'backend' ) {
+			if ( $this->context === 'backend' && !$this->isReactPage() ) {
 				add_action('admin_enqueue_scripts', array( wd_asl()->init, 'scripts' ));
 			}
 
@@ -262,13 +350,15 @@ if ( !class_exists('WD_ASL_Manager') ) {
 				add_action(
 					'rest_api_init',
 					function () {
-						foreach ( \WPDRMS\ASL\Core\Factory::instance()->get('Rest') as $rest ) {
-							$rest->registerRoutes();
+						foreach ( Factory::instance()->get('Rest') as $rest ) {
+							$rest->registerRoutes( ASL_DIR );
 						}
 					}
 				);
 			}
 
+			StatisticsService::instance()->loadHooks();
+			ResultsCacheService::instance()->loadHooks();
 			WD_ASL_Filters::registerAll();
 		}
 

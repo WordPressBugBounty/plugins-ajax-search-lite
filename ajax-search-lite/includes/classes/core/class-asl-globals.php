@@ -76,4 +76,35 @@ class WD_ASL_Globals {
 	 * @var string
 	 */
 	public $_prefix;
+
+	public string $bfi_dir = 'bfi_thumb';
+
+	public string $bfi_path = '';
+
+	public string $upload_dir = 'asp_upload';
+
+	public string $upload_url = '';
+
+	public string $upload_path = '';
+
+	/**
+	 * Cache subdirectory name for CSS/JS assets
+	 *
+	 * @var string
+	 */
+	public $global_cache_path;
+
+	/**
+	 * Cache path for CSS/JS assets
+	 *
+	 * @var string
+	 */
+	public $cache_path;
+
+	/**
+	 * Cache url for CSS/JS assets
+	 *
+	 * @var string
+	 */
+	public $cache_url;
 }

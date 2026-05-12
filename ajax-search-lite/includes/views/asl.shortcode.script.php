@@ -12,6 +12,7 @@ $search_config = array(
 	'resultsposition'     => $style['resultsposition'] === 'hover' ? 'hover' : 'block',
 	'itemscount'          => max(1, intval($style['itemscount'])),
 	'charcount'           => max(0, intval($style['charcount'])),
+	'minWordLength'       => max(1, intval($style['min_word_length'])),
 	'highlight'           => boolval($style['kw_highlight']),
 	'highlightWholewords' => boolval($style['kw_highlight_whole_words']),
 	'singleHighlight'     => boolval($style['single_highlight']),

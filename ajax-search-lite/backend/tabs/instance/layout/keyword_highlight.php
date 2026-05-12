@@ -32,6 +32,14 @@ if ( !defined('ABSPATH') ) {
 			?>
 		</div>
 		<div class="item">
+			<?php
+			new wpdreamsTextSmall('min_word_length', __('Minimum word length to highlight', 'ajax-search-lite'), $sd['min_word_length']);
+			?>
+			<div class="descMsg">
+				<?php esc_html_e('Words shorter than this value will not be highlighted. Default: 2', 'ajax-search-lite'); ?>
+			</div>
+		</div>
+		<div class="item">
 		<?php
 			new wpdreamsColorPicker('highlight_color', 'Highlight text color', $sd['highlight_color']);
 		?>

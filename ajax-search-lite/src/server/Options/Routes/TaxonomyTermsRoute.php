@@ -9,10 +9,10 @@ if ( !defined('ABSPATH') ) {
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use WPDRMS\ASL\Rest\AbstractRest;
+use WPDRMS\PluginCore\Rest\AbstractRest;
 
 class TaxonomyTermsRoute extends AbstractRest {
-	public function registerRoutes(): void {
+	public function registerRoutes( string $route_namespace = '' ): void {
 		register_rest_route(
 			ASL_DIR,
 			'options/taxonomies/get',

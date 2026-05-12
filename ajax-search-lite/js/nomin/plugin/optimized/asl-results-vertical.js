@@ -42,6 +42,7 @@ var external_DoMini_default = /*#__PURE__*/__webpack_require__.n(external_DoMini
 ;// external "global"
 var external_global_namespaceObject = Object(window.WPD)["global"];
 ;// ./src/client/plugin/core/actions/results_vertical.ts
+/* unused harmony import specifier */ var AslPlugin;
 
 
 
@@ -93,7 +94,8 @@ external_global_namespaceObject.AslPlugin.prototype.showVerticalResults = functi
     $this.n("items").last().addClass("asl_last_item");
     $this.n("results").find(".asl_group_header").prev(".item").addClass("asl_last_item");
     if ($this.o.highlight) {
-      $this.n("resultsDiv").find("div.item").highlight($this.n("text").val().split(" "), {
+      const _words = $this.n("text").val().split(" ").map((s) => s.trim()).filter((s) => s.length >= $this.o.minWordLength);
+      $this.n("resultsDiv").find("div.item").highlight(_words, {
         element: "span",
         className: "highlighted",
         wordsOnly: $this.o.highlightWholewords

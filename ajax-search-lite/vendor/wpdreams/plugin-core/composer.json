@@ -1,0 +1,30 @@
+{
+	"name": "wpdreams/plugin-core",
+	"type": "library",
+	"autoload": {
+		"psr-4": {
+			"WPDRMS\\PluginCore\\": "src/"
+		}
+	},
+	"require-dev": {
+		"phpstan/phpstan": "2.*",
+		"squizlabs/php_codesniffer": "*",
+		"wp-coding-standards/wpcs": "*",
+		"yoast/phpunit-polyfills" : "*",
+		"phpunit/phpunit": "9.*",
+		"zircote/swagger-php": "*",
+		"mockery/mockery": "^1.6",
+		"php-mock/php-mock": "^2.5",
+		"php-mock/php-mock-phpunit": "^2.10",
+		"wp-cli/wp-cli-bundle": "*",
+		"doctrine/instantiator": "^1.5"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"platform": {
+			"php": "7.4"
+		}
+	}
+}

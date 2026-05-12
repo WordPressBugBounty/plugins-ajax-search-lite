@@ -1,4 +1,8 @@
 <?php
+/**
+ * @deprecated
+ */
+
 /** @noinspection PhpComposerExtensionStubsInspection */
 
 if ( !defined('ABSPATH') ) {

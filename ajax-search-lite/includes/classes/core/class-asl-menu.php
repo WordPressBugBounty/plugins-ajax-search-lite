@@ -37,38 +37,68 @@ if ( !class_exists('WD_ASL_Menu') ) {
 		 *
 		 * @var array
 		 */
-		private static $submenu_items = array(
-			array(
-				'title' => 'Analytics Integration',
-				'file'  => '/backend/analytics.php',
-				'slug'  => 'asl_analytics',
-			),
-			array(
-				'title' => 'Compatibility Settings',
-				'file'  => '/backend/compatibility.php',
-				'slug'  => 'asl_compatibility',
-			),
-			array(
-				'title' => 'Performance options',
-				'file'  => '/backend/performance_options.php',
-				'slug'  => 'asl_performance_options',
-			),
-			array(
-				'title' => 'Maintenance',
-				'file'  => '/backend/maintenance.php',
-				'slug'  => 'asl_maintenance',
-			),
-			array(
-				'title' => "<span class='asl_menu_help'>Help & Support</span>",
-				'file'  => '/backend/help_and_support.php',
-				'slug'  => 'asl_help_and_support',
-			),
-			array(
-				'title' => "<span class='asl_menu_pro'>Go PRO</span>",
-				'file'  => '/backend/go_pro.php',
-				'slug'  => 'asl_go_pro',
-			),
-		);
+		private static $submenu_items = array();
+
+		/**
+		 * Bypass method to support translations, because static array varialbes cannot have a value defined as a result
+		 * of a function, like 'key' => __('text', ..)
+		 */
+		private static function preInit() {
+			if ( count(self::$submenu_items) === 0 ) {
+				$main_menu     = array(
+					'title'    => __('Ajax Search Lite', 'ajax-search-lite'),
+					'slug'     => 'asl_settings',
+					'file'     => '/backend/settings.php',
+					'position' => '206.5',
+					'icon_url' => 'icon.png',
+				);
+				$submenu_items = array(
+					array(
+						'title' => __('Search Statistics', 'ajax-search-lite'),
+						'file'  => '/backend/statistics.php',
+						'slug'  => 'asl_statistics',
+					),
+					array(
+						'title' => __('Analytics Integration', 'ajax-search-lite'),
+						'file'  => '/backend/analytics.php',
+						'slug'  => 'asl_analytics',
+					),
+					array(
+						'title' => __('Cache', 'ajax-search-pro'),
+						'file'  => '/backend/cache.php',
+						'slug'  => 'asl_cache',
+					),
+					array(
+						'title' => __('Compatibility Settings', 'ajax-search-lite'),
+						'file'  => '/backend/compatibility.php',
+						'slug'  => 'asl_compatibility',
+					),
+					array(
+						'title' => __('Performance options', 'ajax-search-lite'),
+						'file'  => '/backend/performance_options.php',
+						'slug'  => 'asl_performance_options',
+					),
+					array(
+						'title' => __('Maintenance', 'ajax-search-lite'),
+						'file'  => '/backend/maintenance.php',
+						'slug'  => 'asl_maintenance',
+					),
+					array(
+						'title' => "<span class='asl_menu_help'>Help & Support</span>",
+						'file'  => '/backend/help_and_support.php',
+						'slug'  => 'asl_help_and_support',
+					),
+					array(
+						'title' => "<span class='asl_menu_pro'>Go PRO</span>",
+						'file'  => '/backend/go_pro.php',
+						'slug'  => 'asl_go_pro',
+					),
+				);
+
+				self::$main_menu     = $main_menu;
+				self::$submenu_items = $submenu_items;
+			}
+		}
 
 		/**
 		 * Runs the menu registration process
@@ -76,6 +106,11 @@ if ( !class_exists('WD_ASL_Menu') ) {
 		public static function register() {
 
 			$capability = 'manage_options';
+
+			self::preInit();
+
+			add_action('admin_head', array('WD_ASL_Menu', 'upgradeMenuStyle'));
+			add_action('admin_init', array('WD_ASL_Menu', 'maybeRedirectUpgrade'));
 
 			$h                 = add_menu_page(
 				self::$main_menu['title'],
@@ -101,6 +136,51 @@ if ( !class_exists('WD_ASL_Menu') ) {
 			}
 		}
 
+		/** URL for the upgrade/pricing page including UTM parameters */
+		const UPGRADE_URL = 'https://ajaxsearchpro.com/pricing?utm_source=ajax-search-lite&utm_medium=admin-menu&utm_campaign=upgrade';
+
+		public static function maybeRedirectUpgrade() {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$page = isset($_GET['page']) ? sanitize_key($_GET['page']) : '';
+			if ( $page === 'asl_go_pro' ) {
+				wp_redirect(self::UPGRADE_URL);
+				exit;
+			}
+		}
+
+		public static function upgradeMenuStyle() {
+			?>
+			<style>
+				#adminmenu a[href$="page=asl_go_pro"],
+				#adminmenu a[href*="ajaxsearchpro.com"],
+				#adminmenu a[href$="page=asl_go_pro"]:focus,
+				#adminmenu a[href*="ajaxsearchpro.com"]:focus,
+				#adminmenu a[href$="page=asl_go_pro"]:hover,
+				#adminmenu a[href*="ajaxsearchpro.com"]:hover {
+					color: #fff !important;
+					background: linear-gradient(135deg, #f97316, #ea580c) !important;
+					border-radius: 4px !important;
+					margin: 6px 12px 2px !important;
+					padding: 6px 10px !important;
+					font-weight: 700 !important;
+					text-align: center !important;
+					display: block !important;
+					box-shadow: 0 2px 6px rgba(234,88,12,.4) !important;
+				}
+			</style>
+			<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				var link = document.querySelector('#adminmenu a[href$="page=asl_go_pro"]');
+				if (link) {
+					link.setAttribute('target', '_blank');
+					link.setAttribute('rel', 'noopener noreferrer');
+					link.href = '<?php echo esc_js(self::UPGRADE_URL); ?>';
+				}
+			});
+			</script>
+			<?php
+		}
+
 		public static function route() {
 			$current_view = self::$hooks[ current_filter() ];
 			include ASL_PATH . 'backend/' . str_replace('asl_', '', $current_view) . '.php';
@@ -112,6 +192,7 @@ if ( !class_exists('WD_ASL_Menu') ) {
 		 * @return array
 		 */
 		public static function getMenuPages() {
+			self::preInit();
 			$ret = array();
 
 			$ret[] = self::$main_menu['slug'];

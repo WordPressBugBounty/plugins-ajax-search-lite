@@ -7,7 +7,9 @@ if ( !defined('ABSPATH') ) {
 }
 
 use WPDRMS\ASL\BlockEditor\ASLBlock;
-use WPDRMS\ASL\Patterns\SingletonTrait;
+use WPDRMS\ASL\Cache\CacheRoute;
+use WPDRMS\ASL\Statistics\StatisticsRoute;
+use WPDRMS\PluginCore\Traits\SingletonTrait;
 use WPDRMS\ASL\Options\Routes\SearchOptionsRoute;
 use WPDRMS\ASL\Options\Routes\TaxonomyTermsRoute;
 
@@ -23,6 +25,8 @@ class Factory {
 		'Rest'  => array(
 			TaxonomyTermsRoute::class,
 			SearchOptionsRoute::class,
+			StatisticsRoute::class,
+			CacheRoute::class,
 		),
 		'Block' => array(
 			ASLBlock::class,

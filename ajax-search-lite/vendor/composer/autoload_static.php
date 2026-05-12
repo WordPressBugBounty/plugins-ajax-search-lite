@@ -4,8 +4,32 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8fcffca3608d7ddbcc0a5a5470842a03
+class ComposerStaticInit4fdfa142b31101618bf21ed601389371
 {
+    public static $prefixLengthsPsr4 = array (
+        'W' =>
+        array (
+            'WPDRMS\\Utils\\' => 13,
+            'WPDRMS\\PluginCore\\' => 18,
+            'WPDRMS\\AdminUI\\' => 15,
+        ),
+    );
+
+    public static $prefixDirsPsr4 = array (
+        'WPDRMS\\Utils\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/wpdreams/php-utils/src',
+        ),
+        'WPDRMS\\PluginCore\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/wpdreams/plugin-core/src',
+        ),
+        'WPDRMS\\AdminUI\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/wpdreams/admin-ui/src',
+        ),
+    );
+
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
     );
@@ -13,7 +37,9 @@ class ComposerStaticInit8fcffca3608d7ddbcc0a5a5470842a03
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit8fcffca3608d7ddbcc0a5a5470842a03::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4fdfa142b31101618bf21ed601389371::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4fdfa142b31101618bf21ed601389371::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4fdfa142b31101618bf21ed601389371::$classMap;
 
         }, null, ClassLoader::class);
     }

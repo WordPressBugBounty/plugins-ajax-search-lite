@@ -42,6 +42,7 @@ var external_DoMini_default = /*#__PURE__*/__webpack_require__.n(external_DoMini
 ;// external "global"
 var external_global_namespaceObject = Object(window.WPD)["global"];
 ;// ./src/client/plugin/core/actions/autocomplete.ts
+/* unused harmony import specifier */ var AslPlugin;
 
 
 
@@ -97,6 +98,7 @@ external_global_namespaceObject.AslPlugin.prototype.fixAutocompleteScrollLeft = 
 /* harmony default export */ var autocomplete = ((/* unused pure expression or super */ null && (AslPlugin)));
 
 ;// ./src/client/plugin/core/events/autocomplete.ts
+/* unused harmony import specifier */ var autocomplete_AslPlugin;
 
 
 
@@ -125,7 +127,7 @@ external_global_namespaceObject.AslPlugin.prototype.initAutocompleteEvent = func
     $this.fixAutocompleteScrollLeft();
   });
 };
-/* harmony default export */ var events_autocomplete = ((/* unused pure expression or super */ null && (AslPlugin)));
+/* harmony default export */ var events_autocomplete = ((/* unused pure expression or super */ null && (autocomplete_AslPlugin)));
 
 ;// ./src/client/bundle/optimized/autocomplete.ts
 

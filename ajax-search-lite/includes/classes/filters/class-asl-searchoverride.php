@@ -1,4 +1,7 @@
 <?php
+
+use WPDRMS\ASL\Search\SearchQuery;
+
 if ( !defined('ABSPATH') ) {
 	die('-1');
 }
@@ -72,9 +75,9 @@ if ( !class_exists('WD_ASL_SearchOverride_Filter') ) {
 			add_filter('asl_query_args', array( $this, 'getAdditionalArgs' ), 10, 1);
 
 			if ( count($s_data) === 0 ) {
-				$asl_query = new ASL_Query($args, 0);
+				$asl_query = new SearchQuery($args, 0);
 			} else {
-				$asl_query = new ASL_Query($args, 0, $s_data);
+				$asl_query = new SearchQuery($args, 0, $s_data);
 			}
 			$res = $asl_query->posts;
 

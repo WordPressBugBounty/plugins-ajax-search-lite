@@ -1,4 +1,7 @@
 <?php
+
+use WPDRMS\ASL\Search\SearchQuery;
+
 if ( !defined('ABSPATH') ) {
 	die('-1');
 }
@@ -35,16 +38,28 @@ if ( !class_exists('WD_ASL_Search_Handler') ) {
 				parse_str($_POST['options'], $options); // phpcs:ignore
 			}
 
-			$id       = 0;
-			$instance = wd_asl()->instances->get($id);
-			$sd       = &$instance['data'];
+			$id          = 0;
+			$call_num    = isset($_POST['asl_call_num']) ? intval(wp_unslash($_POST['asl_call_num'])) : 0; // phpcs:ignore
+			$is_new_client = isset($_POST['asl_req_json']); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$instance    = wd_asl()->instances->get($id);
+			$sd          = &$instance['data'];
 
-			$asl_query = new ASL_Query(
+			// Cache check — only for new JS clients that can parse JSON responses.
+			if ( $is_new_client ) {
+				$custom_output = apply_filters('asp/ajax/search/custom_output', '', $id, $s, $options, $call_num, '');
+				if ( !empty($custom_output) ) {
+					ASL_Helpers::prepareAjaxHeaders('application/json');
+					print $custom_output; // phpcs:ignore
+					die();
+				}
+			}
+
+			$asl_query = new SearchQuery(
 				array(
 					's'            => $s,
 					'_id'          => $id,
 					'_ajax_search' => true,
-					'_call_num'    => isset($_POST['asl_call_num']) ? intval(wp_unslash($_POST['asl_call_num'])) : 0, // phpcs:ignore
+					'_call_num'    => $call_num,
 				),
 				$id,
 				$options
@@ -70,21 +85,35 @@ if ( !class_exists('WD_ASL_Search_Handler') ) {
 
 			$html_results = apply_filters('asl_before_ajax_output', $html_results, $id, $results, $asl_query->getArgs());
 
-			$final_output = '';
-			/* Clear output buffer, possible warnings */
-			$final_output .= '___ASLSTART___' . $html_results . '___ASLEND___';
-			$final_output .= '___ASLSTART_DATA___';
-			$final_output .= wp_json_encode(
-				array(
-					'results_count'      => isset($results['keywords']) ? 0 : count($results),
-					'full_results_count' => $asl_query->found_posts,
-				)
-			);
-			$final_output .= '___ASLEND_DATA___';
+			$args = $asl_query->getArgs();
+			$lang = $args->_wpml_lang !== '' ? $args->_wpml_lang :
+				( $args->_polylang_lang !== '' ? $args->_polylang_lang : '' );
 
-			ASL_Helpers::prepareAjaxHeaders();
-			// Safe
-			print $final_output; // phpcs:ignore
+			$response = array(
+				'html'               => $html_results,
+				'results_count'      => isset($results['keywords']) ? 0 : count($results),
+				'full_results_count' => $asl_query->found_posts,
+				'lang'               => $lang,
+			);
+
+			if ( $is_new_client ) {
+				// Allow cache/statistics services to hook in (new feature, new clients only).
+				$response = apply_filters('asp/ajax/search/response', $response, $id, $s, $options, $call_num, '');
+				ASL_Helpers::prepareAjaxHeaders('application/json');
+				print wp_json_encode($response); // phpcs:ignore
+			} else {
+				$final_output  = '___ASLSTART___' . $html_results . '___ASLEND___';
+				$final_output .= '___ASLSTART_DATA___';
+				$final_output .= wp_json_encode(
+					array(
+						'results_count'      => isset($results['keywords']) ? 0 : count($results),
+						'full_results_count' => $asl_query->found_posts,
+					)
+				);
+				$final_output .= '___ASLEND_DATA___';
+				ASL_Helpers::prepareAjaxHeaders();
+				print $final_output; // phpcs:ignore
+			}
 			die();
 		}
 

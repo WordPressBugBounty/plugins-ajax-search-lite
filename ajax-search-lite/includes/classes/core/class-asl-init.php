@@ -1,4 +1,9 @@
 <?php
+
+use WPDRMS\ASL\Cache\ORM\CacheOptions;
+use WPDRMS\ASL\Cache\ResultsCacheService;
+use WPDRMS\ASL\Statistics\StatisticsService;
+
 if ( !defined('ABSPATH') ) {
 	die("You can't access this file directly.");
 }
@@ -27,6 +32,8 @@ class WD_ASL_Init {
 	public function activate() {
 
 		WD_ASL_DBMan::getInstance()->create();
+		ResultsCacheService::instance()->create();
+		StatisticsService::instance()->createTables();
 
 		$this->chmod();
 		$this->backwards_compatibility_fixes();
@@ -292,6 +299,7 @@ class WD_ASL_Init {
 						'scroll'        => boolval($s['data']['single_highlight_scroll']),
 						'scroll_offset' => intval($s['data']['single_highlight_offset']),
 						'whole'         => boolval($s['data']['single_highlightwholewords']),
+						'minWordLength' => intval($s['data']['min_word_length']),
 					);
 				}
 			}
@@ -350,6 +358,7 @@ class WD_ASL_Init {
 				'ajaxurl'               => $ajax_url,
 				'backend_ajaxurl'       => admin_url('admin-ajax.php'),
 				'asl_url'               => ASL_URL,
+				'rest_url'              => apply_filters('asl/rest/base_url/', rest_url()),
 				'detect_ajax'           => w_isset_def($comp_settings['detect_ajax'], 0),
 				'media_query'           => ASL_CURRENT_VERSION,
 				'version'               => ASL_CURRENT_VERSION,
@@ -417,6 +426,16 @@ class WD_ASL_Init {
 							'value'    => $analytics['gtag_result_click_value'],
 						),
 					),
+				),
+				'statistics'            => array(
+					'enabled' => StatisticsService::instance()->options->status->value,
+					'uid'     => get_current_user_id(),
+				),
+				'cache'                 => array(
+					'enabled' => CacheOptions::instance()->status->value,
+					'type'    => CacheOptions::instance()->cache_type->value,
+					'list'    => array(),
+					'url'     => ResultsCacheService::instance()->resultsCacheUrl(),
 				),
 			),
 			'before',
@@ -486,6 +505,7 @@ class WD_ASL_Init {
 
 		// Database
 		wd_asl()->db->delete();
+		StatisticsService::instance()->dropTables();
 
 		// Deactivate
 		deactivate_plugins(ASL_FILE);

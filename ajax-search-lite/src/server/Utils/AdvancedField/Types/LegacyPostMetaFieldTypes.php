@@ -3,9 +3,9 @@
 namespace WPDRMS\ASL\Utils\AdvancedField\Types;
 
 use stdClass;
-use WPDRMS\ASL\Utils\Post;
-use WPDRMS\ASL\Utils\Str;
-use WPDRMS\ASL\Utils\User;
+use WPDRMS\Utils\Post;
+use WPDRMS\Utils\Str;
+use WPDRMS\Utils\User;
 
 /**
  * Handles special and built in advanced field types related to results fields

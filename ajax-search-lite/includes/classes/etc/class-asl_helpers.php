@@ -381,10 +381,7 @@ if ( !class_exists('ASL_Helpers') ) {
 		 * @param array $args
 		 * @return mixed
 		 */
-		public static function toQueryArgs( $search_id, $o, $args = array() ) {
-			global $wpdb;
-			// When $o is (bool)false, then this is called individually, not as ajax request
-
+		public static function toQueryArgs( int $search_id, array $o = array(), array $args = array() ): array {
 			// Always return an emtpy array if something goes wrong
 			if ( !wd_asl()->instances->exists($search_id) ) {
 				return array();
@@ -393,7 +390,6 @@ if ( !class_exists('ASL_Helpers') ) {
 			$search = wd_asl()->instances->get(0);
 			$sd     = $search['data'];
 
-			$args         = empty($args) ? ASL_Query::$defaults : array_merge(ASL_Query::$defaults, $args);
 			$comp_options = wd_asl()->o['asl_compatibility'];
 			
 			$exclude_post_ids = array_unique(explode(',', str_replace(' ', '', $sd['excludeposts'])));
@@ -412,7 +408,6 @@ if ( !class_exists('ASL_Helpers') ) {
 				$args,
 				array(
 					'_sd'                  => $sd, // Search Data
-					'_sid'                 => 0,
 					'keyword_logic'        => $sd['keyword_logic'],
 					'secondary_logic'      => 'none',
 					'post_not_in'          => $exclude_post_ids,
@@ -472,13 +467,11 @@ if ( !class_exists('ASL_Helpers') ) {
 
 			/*----------------------- Gather Types --------------------------*/
 			$args['post_type'] = array();
-			if ( $o === false ) {
-				if ( isset( $sd['customtypes'] ) && is_array($sd['customtypes']) && count( $sd['customtypes'] ) > 0 ) {
-					$args['post_type'] = array_merge( $args['post_type'], $sd['customtypes'] );
-				}
-			} elseif ( isset( $o['customset'] ) && is_array($o['customset']) && count( $o['customset'] ) > 0 ) {
-					$o['customset']    = self::escape( $o['customset'], true, ' ;:.,(){}@[]!?&|#^=' );
-					$args['post_type'] = array_merge($args['post_type'], $o['customset']);
+			if ( isset( $o['customset'] ) && is_array($o['customset']) && count( $o['customset'] ) > 0 ) {
+				$o['customset']    = self::escape( $o['customset'], true, ' ;:.,(){}@[]!?&|#^=' );
+				$args['post_type'] = array_merge($args['post_type'], $o['customset']);
+			} elseif ( isset( $sd['customtypes'] ) && is_array($sd['customtypes']) && count( $sd['customtypes'] ) > 0 ) {
+				$args['post_type'] = array_merge( $args['post_type'], $sd['customtypes'] );
 			}
 
 			/*--------------------- OTHER FILTER RELATED --------------------*/
@@ -491,17 +484,7 @@ if ( !class_exists('ASL_Helpers') ) {
 			if ( $sd['searchinterms'] ) {
 				$args['post_fields'][] = 'terms';
 			}
-			if ( $o === false ) {
-				if ( $sd['searchintitle'] ) {
-					$args['post_fields'][] = 'title';
-				}
-				if ( $sd['searchincontent'] ) {
-					$args['post_fields'][] = 'content';
-				}
-				if ( $sd['searchinexcerpt'] ) {
-					$args['post_fields'][] = 'excerpt';
-				}
-			} elseif ( isset($o['asl_gen']) && is_array($o['asl_gen']) ) {
+			if ( isset($o['asl_gen']) && is_array($o['asl_gen']) ) {
 				if ( in_array('title', $o['asl_gen'], true) ) {
 					$args['post_fields'][] = 'title';
 				}
@@ -509,6 +492,16 @@ if ( !class_exists('ASL_Helpers') ) {
 					$args['post_fields'][] = 'content';
 				}
 				if ( in_array('excerpt', $o['asl_gen'], true) ) {
+					$args['post_fields'][] = 'excerpt';
+				}
+			} else {
+				if ( $sd['searchintitle'] ) {
+					$args['post_fields'][] = 'title';
+				}
+				if ( $sd['searchincontent'] ) {
+					$args['post_fields'][] = 'content';
+				}
+				if ( $sd['searchinexcerpt'] ) {
 					$args['post_fields'][] = 'excerpt';
 				}
 			}
@@ -612,7 +605,7 @@ if ( !class_exists('ASL_Helpers') ) {
 			// X. MISC FIXES
 			// ----------------------------------------------------------------
 			$args['woo_currency'] = $o['woo_currency'] ?? ( function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : '' );
-			$args['_page_id']     = isset($o['current_page_id']) ? intval($o['current_page_id']) : $args['_page_id'];
+			$args['_page_id']     = intval($o['current_page_id'] ?? ( $args['_page_id'] ?? 0 ));
 			// Reset search type and post types for WooCommerce search results page
 			if ( isset($_GET['post_type']) && $_GET['post_type'] === 'product' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$old_ptype         = $args['post_type'];
@@ -641,7 +634,7 @@ if ( !class_exists('ASL_Helpers') ) {
 		 * @param mixed $o
 		 * @return array
 		 */
-		private static function toQueryArgs_Taxonomies( $sd, $o ) {
+		private static function toQueryArgs_Taxonomies( $sd, array $o = array() ) {
 			$ret = array();
 
 			$term_logic = 'and';

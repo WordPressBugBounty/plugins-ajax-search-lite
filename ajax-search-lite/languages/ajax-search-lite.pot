@@ -2,21 +2,22 @@
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Lite 4.13.5\n"
+"Project-Id-Version: Ajax Search Lite 4.14.0\n"
 "Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-lite\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-02-16T13:21:24+00:00\n"
+"POT-Creation-Date: 2026-05-12T12:46:20+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ajax-search-lite\n"
 
 #. Plugin Name of the plugin
 #: ajax-search-lite.php
-#: build/js/block-editor.js:947
+#: includes/classes/core/class-asl-menu.php:49
+#: build/js/block-editor.js:12
 msgid "Ajax Search Lite"
 msgstr ""
 
@@ -466,9 +467,11 @@ msgstr ""
 #: backend/tabs/instance/general_options.php:54
 #: backend/tabs/instance/layout/box_layout.php:52
 #: backend/tabs/instance/layout/keyword_highlight.php:18
-#: backend/tabs/instance/layout/keyword_highlight.php:51
+#: backend/tabs/instance/layout/keyword_highlight.php:59
 #: backend/tabs/instance/layout_options.php:29
 #: backend/tabs/instance/layout_options.php:41
+#: build/js/cache.js:215
+#: build/js/statistics.js:259
 msgid "Documentation"
 msgstr ""
 
@@ -1283,6 +1286,7 @@ msgstr ""
 
 #: backend/tabs/instance/general_options.php:16
 #: backend/tabs/instance/general_options.php:39
+#: build/js/statistics.js:194
 msgid "Ordering"
 msgstr ""
 
@@ -1504,47 +1508,55 @@ msgstr ""
 msgid "Highlight whole words only?"
 msgstr ""
 
-#: backend/tabs/instance/layout/keyword_highlight.php:48
-msgid "Results text keyword highlighter - Single result page"
+#: backend/tabs/instance/layout/keyword_highlight.php:36
+msgid "Minimum word length to highlight"
+msgstr ""
+
+#: backend/tabs/instance/layout/keyword_highlight.php:39
+msgid "Words shorter than this value will not be highlighted. Default: 2"
 msgstr ""
 
 #: backend/tabs/instance/layout/keyword_highlight.php:56
+msgid "Results text keyword highlighter - Single result page"
+msgstr ""
+
+#: backend/tabs/instance/layout/keyword_highlight.php:64
 msgid "<strong>Disclaimer: </strong> This feature is highly experimental, and may not work correctly in all cases."
 msgstr ""
 
-#: backend/tabs/instance/layout/keyword_highlight.php:60
+#: backend/tabs/instance/layout/keyword_highlight.php:68
 msgid "Highlight search text on single result pages?"
 msgstr ""
 
-#: backend/tabs/instance/layout/keyword_highlight.php:66
+#: backend/tabs/instance/layout/keyword_highlight.php:74
 msgid "Highlight only whole words?"
 msgstr ""
 
-#: backend/tabs/instance/layout/keyword_highlight.php:71
+#: backend/tabs/instance/layout/keyword_highlight.php:79
 msgid "Highlight text color"
 msgstr ""
 
-#: backend/tabs/instance/layout/keyword_highlight.php:76
+#: backend/tabs/instance/layout/keyword_highlight.php:84
 msgid "Highlight-text background color"
 msgstr ""
 
-#: backend/tabs/instance/layout/keyword_highlight.php:81
+#: backend/tabs/instance/layout/keyword_highlight.php:89
 msgid "Scroll to the first keyword match if possible?"
 msgstr ""
 
-#: backend/tabs/instance/layout/keyword_highlight.php:82
+#: backend/tabs/instance/layout/keyword_highlight.php:90
 msgid "scroll offset (px)"
 msgstr ""
 
-#: backend/tabs/instance/layout/keyword_highlight.php:85
+#: backend/tabs/instance/layout/keyword_highlight.php:93
 msgid "A negative offset will move the window upwards, a positive downwards. Default: 0"
 msgstr ""
 
-#: backend/tabs/instance/layout/keyword_highlight.php:90
+#: backend/tabs/instance/layout/keyword_highlight.php:98
 msgid "Result page content jQuery element selector"
 msgstr ""
 
-#: backend/tabs/instance/layout/keyword_highlight.php:93
+#: backend/tabs/instance/layout/keyword_highlight.php:101
 msgid "Optional, but very useful - it tells which element contains exactly the result content, so words are highlighted only on the given section of the page."
 msgstr ""
 
@@ -1710,493 +1722,1336 @@ msgstr ""
 msgid "Keyword Highlighting"
 msgstr ""
 
-#: includes/classes/cache/bfi_thumb.php:230
-msgid "Image rotate failed."
+#: includes/classes/core/class-asl-menu.php:57
+msgid "Search Statistics"
 msgstr ""
 
-#: includes/classes/cache/bfi_thumb.php:253
-msgid "Image opacity change failed."
+#: includes/classes/core/class-asl-menu.php:62
+msgid "Analytics Integration"
 msgstr ""
 
-#: includes/classes/cache/bfi_thumb.php:340
-msgid "Image color change failed."
+#: includes/classes/core/class-asl-menu.php:72
+msgid "Compatibility Settings"
 msgstr ""
 
-#: includes/classes/cache/bfi_thumb.php:357
-msgid "Image grayscale failed."
+#: includes/classes/core/class-asl-menu.php:77
+msgid "Performance options"
 msgstr ""
 
-#: includes/classes/cache/bfi_thumb.php:374
-msgid "Image negate failed."
+#: includes/classes/core/class-asl-menu.php:82
+msgid "Maintenance"
 msgstr ""
 
-#: build/js/block-editor.js:960
+#: build/js/block-editor.js:12
 msgid "search"
 msgstr ""
 
-#: build/js/block-editor.js:960
+#: build/js/block-editor.js:12
 msgid "ajax"
 msgstr ""
 
-#: build/js/search-instance.js:24329
-msgid "Do you want to delete this tag?"
+#: build/js/cache.js:145
+#: build/js/statistics.js:129
+msgid "Options saved successfully!"
 msgstr ""
 
-#: build/js/search-instance.js:24383
-msgid "Insert Field"
+#: build/js/cache.js:145
+#: build/js/statistics.js:129
+msgid "Options reset successfully!"
 msgstr ""
 
-#: build/js/search-instance.js:24387
-msgid "Switch to Text Editor"
+#: build/js/cache.js:145
+msgid "Successfully purged"
 msgstr ""
 
-#: build/js/search-instance.js:24387
-msgid "Switch to Visual Editor"
+#: build/js/cache.js:145
+msgid "items from the cache."
 msgstr ""
 
-#: build/js/search-instance.js:24389
-msgid "Non-webkit browsers may not work correctly for the visual editor! Recommended browser: Chrome"
+#: build/js/cache.js:145
+#: build/js/statistics.js:129
+msgid "There are unsaved changes, are you sure you want to leave?"
 msgstr ""
 
-#: build/js/search-instance.js:24483
-msgid "Result:"
-msgstr ""
-
-#: build/js/search-instance.js:24602
-msgid "Select a taxonomy first"
-msgstr ""
-
-#: build/js/search-instance.js:24837
-msgid "Field editor"
-msgstr ""
-
-#: build/js/search-instance.js:24901
-msgid "Custom field (post metadata) content. Supports ACF."
-msgstr ""
-
-#: build/js/search-instance.js:24902
-msgid "Field name"
-msgstr ""
-
-#: build/js/search-instance.js:24902
-msgid "Enter field name"
-msgstr ""
-
-#: build/js/search-instance.js:24903
-msgid "Type"
-msgstr ""
-
-#: build/js/search-instance.js:24906
-msgid "Source"
-msgstr ""
-
-#: build/js/search-instance.js:24909
-msgid "Post Meta or ACF"
-msgstr ""
-
-#: build/js/search-instance.js:24910
-msgid "User (author) Meta or ACF"
-msgstr ""
-
-#: build/js/search-instance.js:24911
-msgid "Relationship to Post Type"
-msgstr ""
-
-#: build/js/search-instance.js:24912
-msgid "Relationship to Users"
-msgstr ""
-
-#: build/js/search-instance.js:24913
-msgid "Relationship to Taxonomy Terms"
-msgstr ""
-
-#: build/js/search-instance.js:24914
-msgid "PODs field"
-msgstr ""
-
-#: build/js/search-instance.js:24917
-msgid "Max. length"
-msgstr ""
-
-#: build/js/search-instance.js:24917
-#: build/js/search-instance.js:25009
-#: build/js/search-instance.js:25010
-#: build/js/search-instance.js:25013
-#: build/js/search-instance.js:25099
-#: build/js/search-instance.js:25100
-#: build/js/search-instance.js:25110
-#: build/js/search-instance.js:25111
-#: build/js/search-instance.js:25117
-msgid "Default"
-msgstr ""
-
-#: build/js/search-instance.js:24920
-#: build/js/search-instance.js:24988
-msgid "Separation"
-msgstr ""
-
-#: build/js/search-instance.js:24922
-msgid "How to separate items if the field contains an array of values"
-msgstr ""
-
-#: build/js/search-instance.js:24924
-#: build/js/search-instance.js:24992
-msgid "Text with separator"
-msgstr ""
-
-#: build/js/search-instance.js:24925
-#: build/js/search-instance.js:24993
-msgid "HTML List (ul>li)"
-msgstr ""
-
-#: build/js/search-instance.js:24935
-#: build/js/search-instance.js:25003
-msgid "Separator"
-msgstr ""
-
-#: build/js/search-instance.js:24936
-#: build/js/search-instance.js:25004
-msgid " ,"
-msgstr ""
-
-#: build/js/search-instance.js:24939
-msgid "Separator between the items when the value is an array"
-msgstr ""
-
-#: build/js/search-instance.js:24941
-msgid "Allow HTML in field output?"
-msgstr ""
-
-#: build/js/search-instance.js:24950
-#: build/js/search-instance.js:25071
-msgid "Date Format"
-msgstr ""
-
-#: build/js/search-instance.js:24953
-#: build/js/search-instance.js:25074
-msgid "WordPress Default"
-msgstr ""
-
-#: build/js/search-instance.js:24954
-#: build/js/search-instance.js:25075
-msgid "DateTime format, ex.: \"F j, Y, g:i a\" -> \"March 10, 2001, 5:16 pm\""
-msgstr ""
-
-#: build/js/search-instance.js:24959
-msgid "Thousand separator"
-msgstr ""
-
-#: build/js/search-instance.js:24964
-msgid "Decimals"
-msgstr ""
-
-#: build/js/search-instance.js:24967
-msgid "Decimal separator"
-msgstr ""
-
-#: build/js/search-instance.js:24978
-msgid "List of taxonomy terms (categories, tags etc..)."
-msgstr ""
-
-#: build/js/search-instance.js:24979
-msgid "Taxonomy"
-msgstr ""
-
-#: build/js/search-instance.js:24979
-msgid "Select taxonomy"
-msgstr ""
-
-#: build/js/search-instance.js:24980
-msgid "Count"
-msgstr ""
-
-#: build/js/search-instance.js:24980
-msgid "5"
-msgstr ""
-
-#: build/js/search-instance.js:24981
-msgid "Order by"
-msgstr ""
-
-#: build/js/search-instance.js:24982
-msgid "Order"
-msgstr ""
-
-#: build/js/search-instance.js:24983
-msgid "Exclude terms"
-msgstr ""
-
-#: build/js/search-instance.js:24983
-msgid "Select terms to exclude"
-msgstr ""
-
-#: build/js/search-instance.js:24985
-msgid "Make terms clickable links"
-msgstr ""
-
-#: build/js/search-instance.js:24990
-msgid "How to separate the terms?"
-msgstr ""
-
-#: build/js/search-instance.js:25007
-msgid "Separator between the items if the value is an array"
-msgstr ""
-
-#: build/js/search-instance.js:25009
-#: build/js/search-instance.js:25013
-msgid "Term color"
-msgstr ""
-
-#: build/js/search-instance.js:25010
-msgid "Separator color"
-msgstr ""
-
-#: build/js/search-instance.js:25018
-msgid "Open links in new tab?"
-msgstr ""
-
-#: build/js/search-instance.js:25027
-msgid "Field"
-msgstr ""
-
-#: build/js/search-instance.js:25030
-#: build/js/search-instance.js:25151
-msgid "Result ID"
-msgstr ""
-
-#: build/js/search-instance.js:25031
-#: build/js/search-instance.js:25152
-msgid "Result Title"
-msgstr ""
-
-#: build/js/search-instance.js:25032
-#: build/js/search-instance.js:25153
-msgid "Result Content"
-msgstr ""
-
-#: build/js/search-instance.js:25033
-#: build/js/search-instance.js:25154
-msgid "Result Post Type"
-msgstr ""
-
-#: build/js/search-instance.js:25034
-#: build/js/search-instance.js:25155
-msgid "Result URL"
-msgstr ""
-
-#: build/js/search-instance.js:25035
-#: build/js/search-instance.js:25156
-msgid "Result image URL"
-msgstr ""
-
-#: build/js/search-instance.js:25036
-#: build/js/search-instance.js:25157
-msgid "Result date"
-msgstr ""
-
-#: build/js/search-instance.js:25037
-#: build/js/search-instance.js:25158
-msgid "Result author (Display name)"
-msgstr ""
-
-#: build/js/search-instance.js:25046
-msgid "The default Result Title Field as set in the primary or secondary source."
-msgstr ""
-
-#: build/js/search-instance.js:25052
-msgid "The default Result Content Field as set in the primary or secondary source."
-msgstr ""
-
-#: build/js/search-instance.js:25058
-msgid "The result URL parsed by Ajax Search Pro."
-msgstr ""
-
-#: build/js/search-instance.js:25064
-msgid "The image URL parsed by Ajax Search Pro."
-msgstr ""
-
-#: build/js/search-instance.js:25085
-msgid "Price field"
-msgstr ""
-
-#: build/js/search-instance.js:25089
-msgid "Default Price HTML"
-msgstr ""
-
-#: build/js/search-instance.js:25090
-msgid "Price without tax"
-msgstr ""
-
-#: build/js/search-instance.js:25091
-msgid "Price with tax"
-msgstr ""
-
-#: build/js/search-instance.js:25092
-msgid "Sale Price"
-msgstr ""
-
-#: build/js/search-instance.js:25099
-msgid "Regular Price Color"
-msgstr ""
-
-#: build/js/search-instance.js:25100
-msgid "Sale Price Color"
-msgstr ""
-
-#: build/js/search-instance.js:25107
-msgid "Display Quantity Input"
-msgstr ""
-
-#: build/js/search-instance.js:25108
-msgid "Display only when product is in-stock"
-msgstr ""
-
-#: build/js/search-instance.js:25109
-msgid "Default quantity"
-msgstr ""
-
-#: build/js/search-instance.js:25109
-msgid "Default: 1"
-msgstr ""
-
-#: build/js/search-instance.js:25110
-msgid "Button Color"
-msgstr ""
-
-#: build/js/search-instance.js:25111
-msgid "Button Text Color"
-msgstr ""
-
-#: build/js/search-instance.js:25114
-msgid "Justification"
-msgstr ""
-
-#: build/js/search-instance.js:25147
-msgid "Custom field"
-msgstr ""
-
-#: build/js/search-instance.js:25148
-msgid "Categories or other Taxonomy Terms"
-msgstr ""
-
-#: build/js/search-instance.js:25149
-msgid "Title Field (default)"
-msgstr ""
-
-#: build/js/search-instance.js:25150
-msgid "Description Field (default)"
-msgstr ""
-
-#: build/js/search-instance.js:25159
-msgid "WooCommerce: Price"
-msgstr ""
-
-#: build/js/search-instance.js:25160
-msgid "WooCommerce: Add to Cart"
-msgstr ""
-
-#: build/js/search-instance.js:25161
-msgid "Result Field"
-msgstr ""
-
-#: build/js/search-instance.js:25162
-msgid "WooCommerce: Star rating"
-msgstr ""
-
-#: build/js/search-instance.js:25163
-msgid "WooCommerce: Stock Status"
-msgstr ""
-
-#: build/js/search-instance.js:25164
-msgid "Star rating field"
-msgstr ""
-
-#: build/js/search-instance.js:25168
-msgid "Terms"
-msgstr ""
-
-#: build/js/search-instance.js:25169
-msgid "Price"
-msgstr ""
-
-#: build/js/search-instance.js:25170
-msgid "Woo Star Rating"
-msgstr ""
-
-#: build/js/search-instance.js:25171
-msgid "Woo Add to Cart"
-msgstr ""
-
-#: build/js/search-instance.js:25172
-msgid "Woo Stock Status"
-msgstr ""
-
-#: build/js/search-instance.js:25173
-msgid "Star Rating"
-msgstr ""
-
-#: build/js/search-instance.js:25855
-msgid "Conditional: If field values wrapped in this tag are empty, it returns an empty string."
-msgstr ""
-
-#: build/js/search-instance.js:25855
-msgid "Shortcode escape: To insert a shortcode into the field, wrap with this tag."
-msgstr ""
-
-#: build/js/search-instance.js:25855
-msgid "See documentation"
-msgstr ""
-
-#: build/js/search-instance.js:25931
-msgid "Paragraph HTML tag"
-msgstr ""
-
-#: build/js/search-instance.js:25937
-msgid "Div HTML tag"
-msgstr ""
-
-#: build/js/search-instance.js:25943
-msgid "Span HTML tag"
-msgstr ""
-
-#: build/js/search-instance.js:25949
-msgid "Strong (bold) HTML tag"
-msgstr ""
-
-#: build/js/search-instance.js:25955
-msgid "Italic HTML tag"
-msgstr ""
-
-#: build/js/search-instance.js:25961
-msgid "Emphasis HTML tag"
-msgstr ""
-
-#: build/js/search-instance.js:25967
-msgid "Line break HTML tag"
-msgstr ""
-
-#: build/js/search-instance.js:27054
+#: build/js/cache.js:145
+#: build/js/search-instance.js:87
+#: build/js/statistics.js:129
 msgid "Loading..."
 msgstr ""
 
-#: build/js/search-instance.js:27057
+#: build/js/cache.js:145
+#: build/js/statistics.js:129
+msgid "Error loading options, please reload the page."
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Super File"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "File"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Database"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Results cache enabled"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Greatly improves repeated live search queries by storing the responses in a cache."
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Results cache method"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Super File is recommended for the fastest responses. In case of compatibility issues use File or Database instead."
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Default: Super File"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Purge the results cache when a post is created/updated?"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Great when content is not created or updated frequently."
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Results cache expiration"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Records older than this are considered stale and will be cleared automatically from the cache."
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Default: 7 days"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Cache images by cropping them"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Crops images and stores them in a cache folder for faster access."
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "The results and image cache is automatically purged when the search instance settings or these settings are saved."
+msgstr ""
+
+#: build/js/cache.js:145
+#: build/js/statistics.js:129
+msgid "Reset to defaults"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Purge Cache"
+msgstr ""
+
+#: build/js/cache.js:145
+#: build/js/statistics.js:129
+#: build/js/statistics.js:194
+msgid "Confirm"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Are you sure you want to purge the cache?"
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "This will clear the cache database and all the cached results and cached images."
+msgstr ""
+
+#: build/js/cache.js:145
+msgid "Purge"
+msgstr ""
+
+#: build/js/cache.js:145
+#: build/js/statistics.js:129
+#: build/js/statistics.js:194
+msgid "Cancel"
+msgstr ""
+
+#: build/js/cache.js:145
+#: build/js/statistics.js:129
+msgid "Are you sure you want to reset the settings to defaults?"
+msgstr ""
+
+#: build/js/cache.js:145
+#: build/js/statistics.js:129
+msgid "Reset"
+msgstr ""
+
+#: build/js/cache.js:195
+msgid "Cache hits last 24 hours"
+msgstr ""
+
+#: build/js/cache.js:195
+msgid "of"
+msgstr ""
+
+#: build/js/cache.js:195
+msgid "total hits."
+msgstr ""
+
+#: build/js/cache.js:195
+msgid "Cache hits all time"
+msgstr ""
+
+#: build/js/cache.js:195
+msgid "Total items in cache:"
+msgstr ""
+
+#: build/js/cache.js:195
+msgid "Last 20 Cache Hits"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "Phrase"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/search-instance.js:87
+#: build/js/statistics.js:194
+msgid "Type"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "Date"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "Device"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "User"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "Referer"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "Search ID"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "Blog ID"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "Language"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "Page"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "Results Displayed"
+msgstr ""
+
+#: build/js/cache.js:195
+#: build/js/statistics.js:194
+msgid "Results Found"
+msgstr ""
+
+#: build/js/cache.js:200
+msgid "Statistics are not recorded! This feature requires search statistics to be enabled!"
+msgstr ""
+
+#: build/js/cache.js:200
+#: build/js/statistics.js:259
+msgid "Click here"
+msgstr ""
+
+#: build/js/cache.js:200
+#: build/js/statistics.js:259
+msgid "to enable."
+msgstr ""
+
+#: build/js/cache.js:200
+msgid "Cache is turned off! "
+msgstr ""
+
+#: build/js/cache.js:210
+#: build/js/statistics.js:254
+msgid "⭐ Upgrade to Pro"
+msgstr ""
+
+#: build/js/cache.js:215
+#: build/js/statistics.js:259
+msgid "Ajax Search Pro is active"
+msgstr ""
+
+#: build/js/cache.js:215
+#: build/js/statistics.js:259
+msgid "Please deactivate Ajax Search Lite to manage this feature from Ajax Search Pro."
+msgstr ""
+
+#: build/js/cache.js:215
+#: build/js/statistics.js:259
+msgid "Go to Plugins page"
+msgstr ""
+
+#: build/js/cache.js:215
+msgid "Cache Statistics"
+msgstr ""
+
+#: build/js/cache.js:215
+#: build/js/statistics.js:259
+msgid "Settings"
+msgstr ""
+
+#: build/js/search-instance.js:62
+msgid "Select a taxonomy first"
+msgstr ""
+
+#: build/js/search-instance.js:62
+msgid "Field editor"
+msgstr ""
+
+#: build/js/search-instance.js:62
+msgid "Result:"
+msgstr ""
+
+#: build/js/search-instance.js:69
+msgid "Paragraph HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:69
+msgid "Div HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:69
+msgid "Span HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:69
+msgid "Strong (bold) HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:69
+msgid "Italic HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:69
+msgid "Emphasis HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:69
+msgid "Line break HTML tag"
+msgstr ""
+
+#: build/js/search-instance.js:85
+msgid "Conditional: If field values wrapped in this tag are empty, it returns an empty string."
+msgstr ""
+
+#: build/js/search-instance.js:86
+msgid "Shortcode escape: To insert a shortcode into the field, wrap with this tag."
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "See documentation"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Do you want to delete this tag?"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Insert Field"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Switch to Text Editor"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Switch to Visual Editor"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Non-webkit browsers may not work correctly for the visual editor! Recommended browser: Chrome"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Custom field (post metadata) content. Supports ACF."
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Field name"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Enter field name"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Source"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Post Meta or ACF"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "User (author) Meta or ACF"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Relationship to Post Type"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Relationship to Users"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Relationship to Taxonomy Terms"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "PODs field"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Max. length"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Default"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Separation"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "How to separate items if the field contains an array of values"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Text with separator"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "HTML List (ul>li)"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Separator"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid " ,"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Separator between the items when the value is an array"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Allow HTML in field output?"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Date Format"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "WordPress Default"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "DateTime format, ex.: \"F j, Y, g:i a\" -> \"March 10, 2001, 5:16 pm\""
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Thousand separator"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Decimals"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Decimal separator"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "List of taxonomy terms (categories, tags etc..)."
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Taxonomy"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Select taxonomy"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Count"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "5"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Order by"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Order"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Exclude terms"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Select terms to exclude"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Make terms clickable links"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "How to separate the terms?"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Separator between the items if the value is an array"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Term color"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Separator color"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Open links in new tab?"
+msgstr ""
+
+#: build/js/search-instance.js:87
+#: build/js/statistics.js:194
+msgid "Field"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Result ID"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Result Title"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Result Content"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Result Post Type"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Result URL"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Result image URL"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Result date"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Result author (Display name)"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "The default Result Title Field as set in the primary or secondary source."
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "The default Result Content Field as set in the primary or secondary source."
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "The result URL parsed by Ajax Search Pro."
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "The image URL parsed by Ajax Search Pro."
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Price field"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Default Price HTML"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Price without tax"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Price with tax"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Sale Price"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Regular Price Color"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Sale Price Color"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Display Quantity Input"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Display only when product is in-stock"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Default quantity"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Default: 1"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Button Color"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Button Text Color"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Justification"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Custom field"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Categories or other Taxonomy Terms"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Title Field (default)"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Description Field (default)"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "WooCommerce: Price"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "WooCommerce: Add to Cart"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Result Field"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "WooCommerce: Star rating"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "WooCommerce: Stock Status"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Star rating field"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Terms"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Price"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Woo Star Rating"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Woo Add to Cart"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Woo Stock Status"
+msgstr ""
+
+#: build/js/search-instance.js:87
+msgid "Star Rating"
+msgstr ""
+
+#: build/js/search-instance.js:87
 msgid "There was an issue loading the data, please reload the page."
 msgstr ""
 
-#: build/js/search-instance.js:27065
+#: build/js/search-instance.js:87
 msgid "Advanced Title Field for Post Type Results"
 msgstr ""
 
-#: build/js/search-instance.js:27073
-#: build/js/search-instance.js:27090
+#: build/js/search-instance.js:87
 msgid "For more information and tutorial check the"
 msgstr ""
 
-#: build/js/search-instance.js:27074
-#: build/js/search-instance.js:27091
+#: build/js/search-instance.js:87
 msgid "documentation."
 msgstr ""
 
-#: build/js/search-instance.js:27082
+#: build/js/search-instance.js:87
 msgid "Advanced Description Field for Post Type Results"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "The search statistics data was removed successfully!"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "1 Week"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "2 Weeks"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "1 Month"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "3 Months"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "6 Months"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "1 Year"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "2 Year"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Search statistics enabled"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Record result statistics"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Records the results displayed for each search query."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Record result interaction statistics"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Records user interactions with the search results."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Max. search phrase length"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Limits the length of the search phrase (in characters) when logging. Longer phrases will be truncated to this length."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Default: 100, Min.: 1, Max: 255"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Max. number of database rows to save"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Limits the number of rows in the main statistics database. When the limit is reached, the oldest records are deleted."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Default: 1000000, Min.: 1000"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Max. number of results to record per search?"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Limits the number of results to log in the results statistics database for each search."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Default: 50, Min.: 1, Max: 100"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Max. age of database rows to save"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Limits the maximum age of rows in the main statistics database. Wen the limit is reached, the oldest records are deleted."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Default: 1 Year"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Exclude keywords (partial matches)"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "When the search phrase contains ANY of these keywords, it will not be logged."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Tags copied to the clipboard!"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Exclude keywords (full matches)"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "When the search phrase MATCHES EXACTLY ANY of these keywords, it will not be logged."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Record predictively suggested searches?"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "When enabled, it will record searches, which are predictively suggested if no results were found."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Realtime stats refresh interval (in seconds)"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Sets how often should the realtime statistics update under the Realtime menu."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Default: 5, Min.: 1, Max: 1800"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Results page elements custom DOM selector"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "DOM selector to the result elements on the results page. It helps registering the interactions."
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Default: empty"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Delete all statistics data"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "Are you sure you want to delete all statistics data?"
+msgstr ""
+
+#: build/js/statistics.js:129
+msgid "This will remove all recorded data and it can't be reverted!"
+msgstr ""
+
+#: build/js/statistics.js:129
+#: build/js/statistics.js:194
+msgid "Delete"
+msgstr ""
+
+#: build/js/statistics.js:186
+msgid "minutes"
+msgstr ""
+
+#: build/js/statistics.js:186
+msgid "hours"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Searches in last 60 minutes"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Searches in last 24 hours"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by referer (type to search)"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Search Phrase"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Referer page"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Search Bar"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Search Type"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Device Type"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Compare to previous period?"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Export current page to CSV"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Export all pages to CSV"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by Device"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Desktop"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Tablet"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Mobile"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by Search Type"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Live"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Redirect"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by Results Status"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Returned at least 1 result"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Returned 0 results"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by User Interaction"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "User clicked a result"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "User did not interact"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by Users"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by Cache Status"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Cache hit"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Cache miss"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by Query Type"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Normal Search"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Suggested Predictive Search"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Include empty"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Most popular"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "from"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "to"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Total Searches"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "(vs prev. period)"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Avg. Results/Search"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Avg. Interactions/Search"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Total users"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by phrase (type to search)"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Export to CSV"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Results Status"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by Users (type to search)"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Display 0 search volume dates?"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Search volume"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Total searches"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Change"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Results Shown"
+msgstr ""
+
+#: build/js/statistics.js:194
+#: build/js/statistics.js:259
+msgid "Interactions"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Search instance ID"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "User name"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "There was an error."
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Latest searches"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "ID"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Result Page Num."
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Actions"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Are you sure you want to delete this search statistic row?"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Post Type"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Taxonomy Term"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Multisite blog"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Media File"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Comment"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "BuddyPress Group"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "BuddyPress Activity"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Views"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Criteria"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by Result Type"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Include empty searches"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Most popular results"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Result"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by Search ID"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Filter by Page"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Latest results"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "User interacted"
+msgstr ""
+
+#: build/js/statistics.js:194
+msgid "Latest interactions (result clicks)"
+msgstr ""
+
+#: build/js/statistics.js:224
+msgid "Top searched keywords ranked by volume & interaction rate"
+msgstr ""
+
+#: build/js/statistics.js:224
+msgid "Period-over-period trend comparison to spot growth & decline"
+msgstr ""
+
+#: build/js/statistics.js:224
+msgid "Filter by date range, device, language, referer & more"
+msgstr ""
+
+#: build/js/statistics.js:224
+msgid "Full Results & Interactions analytics — see exactly what users click"
+msgstr ""
+
+#: build/js/statistics.js:224
+#: build/js/statistics.js:239
+#: build/js/statistics.js:249
+msgid "Ajax Search Pro"
+msgstr ""
+
+#: build/js/statistics.js:224
+msgid "Know exactly what your visitors are searching for"
+msgstr ""
+
+#: build/js/statistics.js:224
+msgid "Popular Searches reveals the keywords driving your traffic — helping you close content gaps, improve findability, and turn more searches into conversions."
+msgstr ""
+
+#: build/js/statistics.js:224
+#: build/js/statistics.js:239
+#: build/js/statistics.js:249
+msgid "Upgrade to Ajax Search Pro →"
+msgstr ""
+
+#: build/js/statistics.js:224
+#: build/js/statistics.js:239
+#: build/js/statistics.js:249
+msgid "Maybe later"
+msgstr ""
+
+#: build/js/statistics.js:239
+msgid "See which posts, pages & products appear most in search results"
+msgstr ""
+
+#: build/js/statistics.js:239
+msgid "Track click-through rates — spot high-impression content that needs better titles"
+msgstr ""
+
+#: build/js/statistics.js:239
+msgid "Period-over-period comparison to measure content discoverability over time"
+msgstr ""
+
+#: build/js/statistics.js:239
+msgid "Filter by content type, date range, device, language & more"
+msgstr ""
+
+#: build/js/statistics.js:239
+msgid "Find out which content your visitors actually discover"
+msgstr ""
+
+#: build/js/statistics.js:239
+msgid "Results analytics shows you what surfaces in searches and what gets clicked — so you can identify underperforming content and optimize it for better engagement."
+msgstr ""
+
+#: build/js/statistics.js:249
+msgid "Every result click logged — know exactly what visitors engage with after searching"
+msgstr ""
+
+#: build/js/statistics.js:249
+msgid "Tie interactions back to the originating search phrase for full journey context"
+msgstr ""
+
+#: build/js/statistics.js:249
+msgid "Measure true search-to-click conversion rate across your entire content library"
+msgstr ""
+
+#: build/js/statistics.js:249
+msgid "Filter by content type, device, language, referer & date range"
+msgstr ""
+
+#: build/js/statistics.js:249
+msgid "Understand what visitors click after they search"
+msgstr ""
+
+#: build/js/statistics.js:249
+msgid "Interactions tracking closes the loop between search and action — revealing which results earn clicks and which lose visitors, so you can focus on content that actually converts."
+msgstr ""
+
+#: build/js/statistics.js:259
+msgid "Statistics are disabled! User searches are not recorded until enabled again!"
+msgstr ""
+
+#: build/js/statistics.js:259
+msgid "Realtime"
+msgstr ""
+
+#: build/js/statistics.js:259
+msgid "Searches"
+msgstr ""
+
+#: build/js/statistics.js:259
+msgid "Volume"
+msgstr ""
+
+#: build/js/statistics.js:259
+msgid "Popular"
+msgstr ""
+
+#: build/js/statistics.js:259
+msgid "All Searches"
+msgstr ""
+
+#: build/js/statistics.js:259
+msgid "Results"
+msgstr ""
+
+#: build/js/statistics.js:259
+msgid "All Results"
 msgstr ""
