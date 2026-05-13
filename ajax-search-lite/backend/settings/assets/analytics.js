@@ -2,15 +2,9 @@ jQuery(function($){
     $('select[name=analytics]').on('change', function(){
         var v = $(this).val();
         if ( v == '0' ) {
-            $('.asl_al_pageview').addClass('hiddend');
             $('.asl_al_event').addClass('hiddend');
             $('.asl_al_both').addClass('hiddend');
-        } else if ( v == 'pageview' ) {
-            $('.asl_al_pageview').removeClass('hiddend');
-            $('.asl_al_event').addClass('hiddend');
-            $('.asl_al_both').removeClass('hiddend');
         } else if ( v == 'event' ) {
-            $('.asl_al_pageview').addClass('hiddend');
             $('.asl_al_event').removeClass('hiddend');
             $('.asl_al_both').removeClass('hiddend');
         }

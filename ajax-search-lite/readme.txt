@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 4.14.0
+Stable tag: 4.14.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -36,8 +36,8 @@ Ajax Search Lite and Ajax Search Pro **does not require monthly subscriptions**,
 * Automatic search replacement as well as **widget** and **shortcode** availalbe
 * Custom Filter boxes (checkbox filters) for categories and post types
 * **WPML**, **Polylang** and **QtranslateX** compatible
-* Live Search Statistics
-* Super Fast Search Cache - instant cached results
+* [Live Search Statistics](https://documentation.ajaxsearchpro.com/search-statistics)
+* [Super Fast Search Cache](https://documentation.ajaxsearchpro.com/performance-tuning/cache) - instant cached results
 * 10+ built in templates + options for color adjustments
 * Retina ready vectorized **SVG** and **CSS3** icons
 * Category and post exclusions
@@ -139,9 +139,13 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.14.1 =
+* Fix: Multiple potential TypeError exceptions on PHP 8+ (charcount, posts_per_page, search override filter, query args type coercion)
+* Fix: Undefined array key notice in search helper filters
+
 = 4.14.0 =
-* New: Live search statistics — tracks searches, result counts, device types and cache hit rates via a new admin panel
-* New: Search results cache admin panel with real-time hit/miss chart and per-entry management (File, Database and Super File cache modes)
+* New: [Search statistics](https://documentation.ajaxsearchpro.com/search-statistics) — tracks searches, result counts, device types and cache hit rates via a new admin panel
+* New: [Search results cache](https://documentation.ajaxsearchpro.com/performance-tuning/cache) admin panel with real-time hit/miss chart and per-entry management (File, Database and Super File cache modes)
 * New: PSR-4 modern search layer (AbstractSearch, SearchQuery, SearchQueryArgs) as the foundation for future improvements
 * New: Detects when Ajax Search Pro is active and disables conflicting Lite features to prevent duplicate operation
 * Improvement: Shared code extracted into separate versioned repositories

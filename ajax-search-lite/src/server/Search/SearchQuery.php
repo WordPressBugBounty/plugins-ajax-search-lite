@@ -1,9 +1,8 @@
 <?php
 namespace WPDRMS\ASL\Search;
 
-// use WPDRMS\ASL\Cache\ORM\CacheOptions;
+use WPDRMS\ASL\Cache\ORM\CacheOptions;
 use WPDRMS\ASL\Suggest\KeywordSuggest;
-use WPDRMS\Utils\MB;
 use WPDRMS\Utils\Str;
 
 defined('ABSPATH') || die("You can't access this file directly.");
@@ -98,7 +97,7 @@ class SearchQuery {
 		}
 
 		if ( $args->posts_per_page === 0 ) {
-			$args->posts_per_page = get_option('posts_per_page');
+			$args->posts_per_page = (int) get_option('posts_per_page');
 		} elseif ( $args->posts_per_page < 0 ) {
 			$args->posts_per_page = 999999; // @phpcs:ignore
 		}
@@ -220,6 +219,9 @@ class SearchQuery {
 		$results_order_arr    = explode('|', $results_order);
 		$ordered_search_types = array();
 		foreach ( $results_order_arr as $result_type ) {
+			if ( !isset($search_type_by_result_type[ $result_type ]) ) {
+				continue;
+			}
 			$search_type = $search_type_by_result_type[ $result_type ];
 			if ( in_array($search_type, $args->search_type, true) ) {
 				$ordered_search_types[] = $search_type;
@@ -227,11 +229,10 @@ class SearchQuery {
 		}
 		$args->search_type = array_unique($ordered_search_types);
 
-		$args->_charcount = $sd['charcount'];
+		$args->_charcount = (int) $sd['charcount'];
 
 		$sd['image_options'] = array(
-			// 'image_cropping'        => CacheOptions::instance()->crop_images->value,
-			'image_cropping'        => true,
+			'image_cropping'        => CacheOptions::instance()->crop_images->value,
 			'show_images'           => $sd['show_images'],
 			'apply_content_filter'  => $sd['image_apply_content_filter'],
 			'image_width'           => $sd['image_width'],
@@ -509,7 +510,9 @@ class SearchQuery {
 
 			$results = array();
 			foreach ( $results_order_arr as $rv ) {
-				$results = array_merge($results, $results_arr[ $rv ]);
+				if ( isset($results_arr[ $rv ]) ) {
+					$results = array_merge($results, $results_arr[ $rv ]);
+				}
 			}
 			$rca                   = count($results);
 			$results               = apply_filters('asl_results', $results, $args->_id, $args->_ajax_search, $args);

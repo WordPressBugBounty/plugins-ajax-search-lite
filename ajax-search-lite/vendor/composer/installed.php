@@ -3,7 +3,7 @@
         'name' => 'wpdreams/ajax-search-lite',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '28ff3d6d4b3fe88937065285683ca7c2f2a1f357',
+        'reference' => '06c5ea39e5e76ef3de765bdf6552f30e20ea183e',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'wpdreams/admin-ui' => array(
-            'pretty_version' => 'v0.0.12',
-            'version' => '0.0.12.0',
-            'reference' => '882420c3f8cb5bd62cf57bd73fdc70a755cdc9f4',
+            'pretty_version' => 'v0.0.13',
+            'version' => '0.0.13.0',
+            'reference' => '5f069b4e869eea3ebb92820185d9171e342c393c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../wpdreams/admin-ui',
             'aliases' => array(),
@@ -22,7 +22,7 @@
         'wpdreams/ajax-search-lite' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '28ff3d6d4b3fe88937065285683ca7c2f2a1f357',
+            'reference' => '06c5ea39e5e76ef3de765bdf6552f30e20ea183e',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

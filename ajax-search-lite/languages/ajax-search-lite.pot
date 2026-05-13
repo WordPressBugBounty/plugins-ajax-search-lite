@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Lite 4.14.0\n"
+"Project-Id-Version: Ajax Search Lite 4.14.1\n"
 "Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-lite\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-12T12:46:20+00:00\n"
+"POT-Creation-Date: 2026-05-13T11:59:04+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ajax-search-lite\n"
@@ -45,178 +45,162 @@ msgstr ""
 msgid "ERROR Resetting: Invalid NONCE, please try again!"
 msgstr ""
 
-#: backend/analytics.php:70
+#: backend/analytics.php:69
 msgid "Analytics settings saved!"
 msgstr ""
 
-#: backend/analytics.php:72
+#: backend/analytics.php:71
 msgid "ERROR: Invalid NONCE, please try again!"
 msgstr ""
 
-#: backend/analytics.php:91
+#: backend/analytics.php:90
 msgid "Disabled"
 msgstr ""
 
-#: backend/analytics.php:95
+#: backend/analytics.php:94
 msgid "Event Tracking"
 msgstr ""
 
-#: backend/analytics.php:99
-msgid "Tracking as pageview (legacy)"
-msgstr ""
-
 #. translators: Analytics integration docs
-#: backend/analytics.php:112
+#: backend/analytics.php:107
 #, php-format
 msgid "To understand how this works, please read the <a href=\"%s\">Analytics Integration Documentation</a>"
 msgstr ""
 
-#: backend/analytics.php:120
+#: backend/analytics.php:115
 msgid "Google analytics Tracking ID (ex.: UA-XXXXXX-X)"
 msgstr ""
 
 #. translators: %s: GA docs url
-#: backend/analytics.php:126
+#: backend/analytics.php:121
 #, php-format
 msgid "Please read this <a href=\"%s\">google analytics documentation</a> to get your tracking ID."
 msgstr ""
 
-#: backend/analytics.php:135
-msgid "Google analytics pageview string"
-msgstr ""
-
-#: backend/analytics.php:137
-msgid "This is how the pageview will look like on the google analytics website. Use the {asl_term} variable to add the search term to the pageview."
-msgstr ""
-
-#: backend/analytics.php:141
-msgid "After some time you should be able to see the hits on your analytics board."
-msgstr ""
-
-#: backend/analytics.php:146
+#: backend/analytics.php:130
 msgid "Search input focus event tracking"
 msgstr ""
 
-#: backend/analytics.php:149
-#: backend/analytics.php:177
-#: backend/analytics.php:205
-#: backend/analytics.php:233
-#: backend/analytics.php:261
-#: backend/analytics.php:289
-#: backend/analytics.php:317
+#: backend/analytics.php:133
+#: backend/analytics.php:161
+#: backend/analytics.php:189
+#: backend/analytics.php:217
+#: backend/analytics.php:245
+#: backend/analytics.php:273
+#: backend/analytics.php:301
 msgid "Enabled"
 msgstr ""
 
-#: backend/analytics.php:152
+#: backend/analytics.php:136
 msgid "Triggers, whenever the user clicks on the search input field."
 msgstr ""
 
 #. translators: %s: search term placeholder
-#: backend/analytics.php:160
-#: backend/analytics.php:188
-#: backend/analytics.php:216
-#: backend/analytics.php:244
-#: backend/analytics.php:272
-#: backend/analytics.php:300
-#: backend/analytics.php:328
+#: backend/analytics.php:144
+#: backend/analytics.php:172
+#: backend/analytics.php:200
+#: backend/analytics.php:228
+#: backend/analytics.php:256
+#: backend/analytics.php:284
+#: backend/analytics.php:312
 #, php-format
 msgid "Usable variables: %s"
 msgstr ""
 
-#: backend/analytics.php:166
-#: backend/analytics.php:194
-#: backend/analytics.php:222
-#: backend/analytics.php:250
-#: backend/analytics.php:278
-#: backend/analytics.php:306
-#: backend/analytics.php:334
+#: backend/analytics.php:150
+#: backend/analytics.php:178
+#: backend/analytics.php:206
+#: backend/analytics.php:234
+#: backend/analytics.php:262
+#: backend/analytics.php:290
+#: backend/analytics.php:318
 msgid "Event action"
 msgstr ""
 
-#: backend/analytics.php:167
-#: backend/analytics.php:195
-#: backend/analytics.php:223
-#: backend/analytics.php:251
-#: backend/analytics.php:279
-#: backend/analytics.php:307
-#: backend/analytics.php:335
+#: backend/analytics.php:151
+#: backend/analytics.php:179
+#: backend/analytics.php:207
+#: backend/analytics.php:235
+#: backend/analytics.php:263
+#: backend/analytics.php:291
+#: backend/analytics.php:319
 msgid "Event category"
 msgstr ""
 
-#: backend/analytics.php:168
-#: backend/analytics.php:196
-#: backend/analytics.php:224
-#: backend/analytics.php:252
-#: backend/analytics.php:280
-#: backend/analytics.php:308
-#: backend/analytics.php:336
+#: backend/analytics.php:152
+#: backend/analytics.php:180
+#: backend/analytics.php:208
+#: backend/analytics.php:236
+#: backend/analytics.php:264
+#: backend/analytics.php:292
+#: backend/analytics.php:320
 msgid "Event label"
 msgstr ""
 
-#: backend/analytics.php:169
-#: backend/analytics.php:197
-#: backend/analytics.php:225
-#: backend/analytics.php:253
-#: backend/analytics.php:281
-#: backend/analytics.php:309
-#: backend/analytics.php:337
+#: backend/analytics.php:153
+#: backend/analytics.php:181
+#: backend/analytics.php:209
+#: backend/analytics.php:237
+#: backend/analytics.php:265
+#: backend/analytics.php:293
+#: backend/analytics.php:321
 msgid "Event value"
 msgstr ""
 
-#: backend/analytics.php:174
+#: backend/analytics.php:158
 msgid "Live search start event tracking"
 msgstr ""
 
-#: backend/analytics.php:180
+#: backend/analytics.php:164
 msgid "Triggers, whenever the live search starts."
 msgstr ""
 
-#: backend/analytics.php:202
+#: backend/analytics.php:186
 msgid "Live search end event tracking"
 msgstr ""
 
-#: backend/analytics.php:208
+#: backend/analytics.php:192
 msgid "Triggers, whenever the live search ends."
 msgstr ""
 
-#: backend/analytics.php:230
+#: backend/analytics.php:214
 msgid "Magnifier click event tracking"
 msgstr ""
 
-#: backend/analytics.php:236
+#: backend/analytics.php:220
 msgid "Triggers, whenever the user clicks the magnifier icon"
 msgstr ""
 
-#: backend/analytics.php:258
+#: backend/analytics.php:242
 msgid "Return key event tracking"
 msgstr ""
 
-#: backend/analytics.php:264
+#: backend/analytics.php:248
 msgid "Triggers, whenever the user hits the enter button in the search input field"
 msgstr ""
 
-#: backend/analytics.php:286
+#: backend/analytics.php:270
 msgid "Facet change event tracking"
 msgstr ""
 
-#: backend/analytics.php:292
-#: backend/analytics.php:320
+#: backend/analytics.php:276
+#: backend/analytics.php:304
 msgid "Triggers, whenever the user changes any option on the front-end settings"
 msgstr ""
 
-#: backend/analytics.php:314
+#: backend/analytics.php:298
 msgid "Results click event tracking"
 msgstr ""
 
-#: backend/analytics.php:345
+#: backend/analytics.php:329
 msgid "Restore defaults"
 msgstr ""
 
-#: backend/analytics.php:346
+#: backend/analytics.php:330
 msgid "Save options"
 msgstr ""
 
-#: backend/analytics.php:357
+#: backend/analytics.php:341
 msgid "Analytics options"
 msgstr ""
 

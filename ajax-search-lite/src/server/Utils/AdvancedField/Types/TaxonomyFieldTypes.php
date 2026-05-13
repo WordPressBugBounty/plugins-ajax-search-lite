@@ -81,9 +81,9 @@ class TaxonomyFieldTypes extends AbstractWooCommerceBase implements AdvancedFiel
 							return '';
 						}
 						$target = $this->clickable_new_tab ?'_new' :'_self';
-						return "<a class='asl__af-tt-link'$term_style href='$link' target='$target'>$term->name</a>";
+						return "<a class='asl__af-tt-link'$term_style href='" . esc_url($link) . "' target='" . esc_attr($target) . "'>" . esc_html($term->name) . "</a>";
 					} else {
-						return "<span class='asl__af-tt-nolink'$term_style>$term->name</span>";
+						return "<span class='asl__af-tt-nolink'$term_style>" . esc_html($term->name) . "</span>";
 					}
 				},
 				$terms

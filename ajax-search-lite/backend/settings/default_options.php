@@ -17,7 +17,6 @@ function asl_do_init_options() {
 	$options['asl_analytics_def'] = array(
 		'analytics'                => 0, // 0, ga, gtag
 		'analytics_tracking_id'    => '',
-		'analytics_string'         => '?ajax_search={asl_term}',
 		// Gtag on input focus
 		'gtag_focus'               => 1,
 		'gtag_focus_action'        => 'focus',

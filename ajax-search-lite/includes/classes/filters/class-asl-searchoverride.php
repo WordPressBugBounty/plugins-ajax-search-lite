@@ -53,12 +53,12 @@ if ( !class_exists('WD_ASL_SearchOverride_Filter') ) {
 			if ( $posts_per_page === 'auto' ) {
 				$posts_per_page = get_option( 'posts_per_page' );
 			}
-			$posts_per_page = intval($posts_per_page) === 0 ? 1 : $posts_per_page;
+			$posts_per_page = intval($posts_per_page) === 0 ? 1 : intval($posts_per_page);
 
 			if ( isset($_GET['paged']) ) { // phpcs:ignore: WordPress.Security.NonceVerification.Recommended
 				$paged = intval($_GET['paged']); // phpcs:ignore
 			} elseif ( isset($wp_query->query_vars['paged']) ) {
-				$paged = $wp_query->query_vars['paged'];
+				$paged = (int) $wp_query->query_vars['paged'];
 			} else {
 				$paged = 1;
 			}

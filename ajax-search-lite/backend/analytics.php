@@ -21,7 +21,6 @@ if ( isset($_POST, $_POST['analytics'], $_POST['submit'], $_POST['asl_analytics_
 		$values = array(
 			'analytics'                => sanitize_text_field(wp_unslash($_POST['analytics'])),
 			'analytics_tracking_id'    => sanitize_text_field(wp_unslash($_POST['analytics_tracking_id'] ?? '')),
-			'analytics_string'         => sanitize_text_field(wp_unslash($_POST['analytics_string'] ?? '')),
 			// Gtag on input focus
 			'gtag_focus'               => sanitize_text_field(wp_unslash($_POST['gtag_focus'] ?? 0)),
 			'gtag_focus_action'        => sanitize_text_field(wp_unslash($_POST['gtag_focus_action'] ?? '')),
@@ -95,10 +94,6 @@ $ana_options = wd_asl()->o['asl_analytics'];
 							'option' => esc_attr__('Event Tracking', 'ajax-search-lite'),
 							'value'  => 'event',
 						),
-						array(
-							'option' => esc_attr__('Tracking as pageview (legacy)', 'ajax-search-lite'),
-							'value'  => 'pageview',
-						),
 					),
 					'value'   => $ana_options['analytics'],
 				)
@@ -129,17 +124,6 @@ $ana_options = wd_asl()->o['asl_analytics'];
 					?>
 				</p>
 			</div>
-		</div>
-		<div class="asl_al_pageview hiddend">
-			<div class="item">
-				<?php $o = new wpdreamsText('analytics_string', __('Google analytics pageview string', 'ajax-search-lite'), $ana_options['analytics_string']); ?>
-				<p class='infoMsg'>
-					<?php echo esc_html__('This is how the pageview will look like on the google analytics website. Use the {asl_term} variable to add the search term to the pageview.', 'ajax-search-lite'); ?>
-				</p>
-			</div>
-			<p class='infoMsg'>
-				<?php echo esc_html__('After some time you should be able to see the hits on your analytics board.', 'ajax-search-lite'); ?>
-			</p>
 		</div>
 		<div class="asl_al_event hiddend">
 			<fieldset>

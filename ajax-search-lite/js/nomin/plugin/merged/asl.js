@@ -1871,37 +1871,6 @@ AslPlugin.prototype.setFilterStateInput = function(timeout) {
 
 "use strict";
 const ASL = window.ASL;
-AslPlugin.prototype.gaPageview = function(term) {
-  let $this = this;
-  let tracking_id = $this.gaGetTrackingID();
-  if (typeof ASL.analytics == "undefined" || ASL.analytics.method != "pageview")
-    return false;
-  if (ASL.analytics.string != "") {
-    let _ga = typeof window.__gaTracker == "function" ? window.__gaTracker : typeof window.ga == "function" ? window.ga : false;
-    let _gtag = typeof window.gtag == "function" ? window.gtag : false;
-    let url = $this.o.homeurl.replace(window.location.origin, "");
-    if (_gtag !== false) {
-      if (tracking_id !== false) {
-        tracking_id.forEach(function(id) {
-          _gtag("config", id, { "page_path": url + ASL.analytics.string.replace("{asl_term}", term) });
-        });
-      }
-    } else if (_ga !== false) {
-      let params = {
-        "page": url + ASL.analytics.string.replace("{asl_term}", term),
-        "title": "Ajax Search"
-      };
-      if (tracking_id !== false) {
-        tracking_id.forEach(function(id) {
-          _ga("create", id, "auto");
-          _ga("send", "pageview", params);
-        });
-      } else {
-        _ga("send", "pageview", params);
-      }
-    }
-  }
-};
 AslPlugin.prototype.gaEvent = function(which, d) {
   let $this = this;
   let tracking_id = $this.gaGetTrackingID();
@@ -2116,7 +2085,6 @@ AslPlugin.prototype.liveLoad = function(selector, url, updateLocation, forceAjax
     }
     $this.n("s").trigger("asl_search_end", [$this.o.id, $this.o.iid, $this.n("text").val(), data], true, true);
     $this.gaEvent?.("search_end", { "results_count": "unknown" });
-    $this.gaPageview?.($this.n("text").val());
     $this.hideLoader();
     $el.css("opacity", 1);
     $this.searching = false;
@@ -2614,7 +2582,6 @@ AslPlugin.prototype.search = function() {
           $this.nodes.items = $this.n("resultsDiv").find(".item");
           $this.addHighlightString();
           $this.gaEvent?.("search_end", { "results_count": $this.n("items").length });
-          $this.gaPageview?.($this.n("text").val());
           if ($this.isRedirectToFirstResult()) {
             $this.doRedirectToFirstResult();
             return false;

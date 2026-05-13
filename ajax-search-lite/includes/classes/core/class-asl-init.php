@@ -85,11 +85,10 @@ class WD_ASL_Init {
 			asl_save_option('asl_compatibility');
 		}
 
-		// 4.18.2
+		// 4.8.2: migrate old boolean true → 'event'; 4.14.1: migrate 'pageview' → 'event' (GA3 removed)
 		$ana = wd_asl()->o['asl_analytics'];
-		// Analytics Options fixes 4.8.2
-		if ( isset($ana['analytics']) && $ana['analytics'] ) {
-			wd_asl()->o['asl_analytics']['analytics'] = 'pageview';
+		if ( isset($ana['analytics']) && $ana['analytics'] !== '0' && $ana['analytics'] !== 0 && $ana['analytics'] !== 'event' ) {
+			wd_asl()->o['asl_analytics']['analytics'] = 'event';
 			asl_save_option('asl_analytics');
 		}
 
@@ -374,7 +373,6 @@ class WD_ASL_Init {
 				'analytics'             => array(
 					'method'      => $analytics['analytics'],
 					'tracking_id' => $analytics['analytics_tracking_id'],
-					'string'      => $analytics['analytics_string'],
 					'event'       => array(
 						'focus'        => array(
 							'active'   => boolval($analytics['gtag_focus']),

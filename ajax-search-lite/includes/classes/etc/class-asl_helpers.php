@@ -415,8 +415,8 @@ if ( !class_exists('ASL_Helpers') ) {
 					'post_primary_order'   => $sd['orderby_primary'],
 					'post_secondary_order' => $sd['orderby_secondary'],
 					'_db_force_case'       => $comp_options['db_force_case'],
-					'_db_force_utf8_like'  => $comp_options['db_force_utf8_like'],
-					'_db_force_unicode'    => $comp_options['db_force_unicode'],
+					'_db_force_utf8_like'  => (bool) $comp_options['db_force_utf8_like'],
+					'_db_force_unicode'    => (bool) $comp_options['db_force_unicode'],
 					// LIMITS
 					'posts_limit'          => intval($sd['maxresults']),
 				)
@@ -426,7 +426,7 @@ if ( !class_exists('ASL_Helpers') ) {
 			if ( $sd['polylang_compatibility'] ) {
 				$args['_polylang_lang'] = $o['polylang_lang'] ?? ( function_exists('pll_current_language') ? pll_current_language() : '' );
 			}
-			$args['_exact_matches']        = isset($o['asl_gen']) && is_array($o['asl_gen']) && in_array('exact', $o['asl_gen'], true) ? 1 : 0;
+			$args['_exact_matches']        = isset($o['asl_gen']) && is_array($o['asl_gen']) && in_array('exact', $o['asl_gen'], true);
 			$args['_exact_match_location'] = $sd['exact_match_location'];
 
 			/*----------------------- Meta key order ------------------------*/
@@ -463,7 +463,7 @@ if ( !class_exists('ASL_Helpers') ) {
 			$args['post_status'] = explode(',', str_replace(' ', '', $sd['post_status']));
 
 			/*--------------------- Password protected ----------------------*/
-			$args['has_password'] = $sd['show_password_protected_posts'];
+			$args['has_password'] = (bool) $sd['show_password_protected_posts'];
 
 			/*----------------------- Gather Types --------------------------*/
 			$args['post_type'] = array();
@@ -475,8 +475,8 @@ if ( !class_exists('ASL_Helpers') ) {
 			}
 
 			/*--------------------- OTHER FILTER RELATED --------------------*/
-			$args['filters_changed'] = $o['filters_changed'] ?? $args['filters_changed'];
-			$args['filters_initial'] = $o['filters_initial'] ?? $args['filters_initial'];
+			$args['filters_changed'] = $o['filters_changed'] ?? $args['filters_changed'] ?? false;
+			$args['filters_initial'] = $o['filters_initial'] ?? $args['filters_initial'] ?? true;
 
 			/*--------------------- GENERAL FIELDS --------------------------*/
 			$args['search_type'] = array();
@@ -549,7 +549,7 @@ if ( !class_exists('ASL_Helpers') ) {
 			}
 
 			/*-------------------- Content, Excerpt -------------------------*/
-			$args['_post_get_content'] = $sd['showdescription'];
+			$args['_post_get_content'] = (bool) $sd['showdescription'];
 			$args['_post_get_excerpt'] = (
 				$sd['primary_titlefield'] ||
 				$sd['secondary_titlefield'] ||
@@ -658,8 +658,11 @@ if ( !class_exists('ASL_Helpers') ) {
 					array(
 						'taxonomy' => 'category',
 						'fields'   => 'ids',
-					) 
+					)
 				);
+				if ( is_wp_error($_all_cat) ) {
+					$_all_cat = array();
+				}
 				$_needed_cat = array_diff( $_all_cat, $sd['selected-exsearchincategories'] );
 				$_needed_cat = ! is_array( $_needed_cat ) ? array() : $_needed_cat;
 
