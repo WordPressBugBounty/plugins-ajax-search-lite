@@ -1,5 +1,6 @@
 <?php
 
+use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
 use WPDRMS\Utils\Html;
 
 if ( !defined('ABSPATH') ) {
@@ -132,8 +133,7 @@ if ( !class_exists('WD_ASL_Search_Shortcode') ) {
 		 */
 		public function fonts() {
 			// If custom font loading is disabled, exit
-			$comp_options = wd_asl()->o['asl_compatibility'];
-			if ( !$comp_options['load_google_fonts'] ) {
+			if ( !CompatibilityOptions::instance()->load_google_fonts->value ) {
 				return false;
 			}
 

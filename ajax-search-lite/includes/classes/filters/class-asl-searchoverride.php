@@ -1,5 +1,6 @@
 <?php
 
+use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
 use WPDRMS\ASL\Search\SearchQuery;
 
 if ( !defined('ABSPATH') ) {
@@ -233,7 +234,7 @@ if ( !class_exists('WD_ASL_SearchOverride_Filter') ) {
 			$soft_check =
 				defined('ELEMENTOR_VERSION') || // Elementor
 				defined('ET_CORE') || // Divi
-				wd_asl()->o['asl_compatibility']['query_soft_check'];
+				CompatibilityOptions::instance()->query_soft_check->value;
 
 			// This can't be a search query if none of this is set
 			if ( !isset($wp_query, $wp_query->query_vars, $_GET['s']) ) { // phpcs:ignore

@@ -37,4 +37,14 @@ trait SingletonTrait {
 	final public function __wakeup() {}
 
 	final public function __clone() {}
+
+	/**
+	 * Resets the singleton instance — intended for use in unit tests only.
+	 *
+	 * @return void
+	 */
+	final public static function resetInstance(): void {
+		$class = get_called_class();
+		unset( static::$singleton__object_instances__array[ $class ] );
+	}
 }

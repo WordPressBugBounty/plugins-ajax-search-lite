@@ -75,99 +75,63 @@ external_global_namespaceObject.AslPlugin.prototype.setFilterStateInput = functi
 const ASL = window.ASL;
 external_global_namespaceObject.AslPlugin.prototype.gaEvent = function(which, d) {
   let $this = this;
-  let tracking_id = $this.gaGetTrackingID();
-  if (typeof ASL.analytics == "undefined" || ASL.analytics.method != "event")
-    return false;
+  if (typeof ASL.analytics == "undefined" || !ASL.analytics.method)
+    return;
   let _gtag = typeof window.gtag == "function" ? window.gtag : false;
-  let _ga = typeof window.__gaTracker == "function" ? window.__gaTracker : typeof window.ga == "function" ? window.ga : false;
-  if (_gtag === false && _ga === false && typeof window.dataLayer == "undefined")
-    return false;
-  if (typeof ASL.analytics.event[which] != "undefined" && ASL.analytics.event[which].active) {
-    let def_data = {
-      "search_id": $this.o.id,
-      "search_name": $this.o.name,
-      "phrase": $this.n("text").val(),
-      "option_name": "",
-      "option_value": "",
-      "result_title": "",
-      "result_url": "",
-      "results_count": ""
-    };
-    let event = {
-      "event_category": ASL.analytics.event[which].category,
-      "event_label": ASL.analytics.event[which].label,
-      "value": ASL.analytics.event[which].value,
-      "send_to": ""
-    };
-    const data = { ...def_data, ...d };
-    Object.keys(data).forEach(function(k) {
-      let v = data[k];
-      v = String(v).replace(/[\s\n\r]+/g, " ").trim();
-      Object.keys(event).forEach(function(kk) {
-        let regex = new RegExp("{" + k + "}", "gmi");
-        event[kk] = event[kk].replace(regex, v);
+  if (_gtag === false && typeof window.dataLayer == "undefined")
+    return;
+  let tracking_id = $this.gaGetTrackingID();
+  let def_data = {
+    "search_id": $this.o.id,
+    "search_name": $this.o.name,
+    "phrase": $this.n("text").val(),
+    "option_label": "",
+    "option_value": "",
+    "result_title": "",
+    "result_url": "",
+    "results_count": ""
+  };
+  const mergedData = { ...def_data, ...d };
+  const items = ASL.analytics.event[which]?.items ?? [];
+  for (const ev of items) {
+    if (!ev.active) continue;
+    const eventParams = { "send_to": "" };
+    for (const p of ev.params ?? []) {
+      if (!p.key) continue;
+      let val = p.value;
+      Object.keys(mergedData).forEach(function(k) {
+        const v = String(mergedData[k]).replace(/[\s\n\r]+/g, " ").trim();
+        val = val.replace(new RegExp("\\{" + k + "\\}", "gmi"), v);
       });
-    });
-    if (_ga !== false) {
+      eventParams[p.key] = val;
+    }
+    if (_gtag !== false) {
       if (tracking_id !== false) {
         tracking_id.forEach(function(id) {
-          _ga("create", id, "auto");
-          _ga(
-            "send",
-            "event",
-            event.event_category,
-            ASL.analytics.event[which].action,
-            event.event_label,
-            event.value
-          );
+          eventParams.send_to = id;
+          _gtag("event", ev.action, eventParams);
         });
       } else {
-        _ga(
-          "send",
-          "event",
-          event.event_category,
-          ASL.analytics.event[which].action,
-          event.event_label,
-          event.value
-        );
-      }
-    } else if (_gtag !== false) {
-      if (tracking_id !== false) {
-        tracking_id.forEach(function(id) {
-          event.send_to = id;
-          _gtag("event", ASL.analytics.event[which].action, event);
-        });
-      } else {
-        _gtag("event", ASL.analytics.event[which].action, event);
+        delete eventParams.send_to;
+        _gtag("event", ev.action, eventParams);
       }
     } else if (window?.dataLayer?.push !== void 0) {
       window.dataLayer.push({
         "event": "gaEvent",
-        "eventCategory": event.event_category,
-        "eventAction": ASL.analytics.event[which].action,
-        "eventLabel": event.event_label
+        "eventAction": ev.action,
+        ...eventParams
       });
     }
   }
 };
 external_global_namespaceObject.AslPlugin.prototype.gaGetTrackingID = function() {
-  let ret = false;
   if (typeof ASL.analytics == "undefined") {
-    return ret;
+    return false;
   }
-  if (typeof ASL.analytics.tracking_id != "undefined" && ASL.analytics.tracking_id != "") {
+  if (ASL.analytics.tracking_id) {
     return [ASL.analytics.tracking_id];
-  } else {
-    let _gtag = typeof window.gtag == "function" ? window.gtag : false;
-    if (_gtag === false && typeof window.ga != "undefined" && typeof window.ga.getAll != "undefined") {
-      let id = [];
-      window.ga.getAll().forEach(function(tracker) {
-        id.push(tracker.get("trackingId"));
-      });
-      return id.length > 0 ? id : false;
-    }
   }
-  return ret;
+  return false;
 };
 /* harmony default export */ var ga_events = ((/* unused pure expression or super */ null && (ga_events_AslPlugin)));
 

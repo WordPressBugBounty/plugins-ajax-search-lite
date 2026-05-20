@@ -1,6 +1,7 @@
 <?php
 /** @noinspection RegExpRedundantEscape */
 
+use WPDRMS\ASL\Analytics\ORM\AnalyticsOptions;
 use WPDRMS\ASL\Utils\Polylang\StringTranslations;
 use WPDRMS\Utils\Str;
 
@@ -183,7 +184,7 @@ if ( !function_exists('asl_get_unused_assets') ) {
 		$external_dependencies = array();
 
 		// --- Analytics
-		if ( wd_asl()->o['asl_analytics']['analytics'] !== '0' ) {
+		if ( AnalyticsOptions::instance()->method->value ) {
 			$dependencies = array_diff($dependencies, array( 'ga' ));
 		}
 

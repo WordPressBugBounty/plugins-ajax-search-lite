@@ -36,13 +36,6 @@ if ( !class_exists('WD_ASL_EtcFixes_Filter') ) {
 		}
 
 		public function switchToNewScriptsOnLiveLoader( $options ) {
-			if ( $options['res_live_search'] ) {
-				$com_options = wd_asl()->o['asl_compatibility'];
-				if ( strpos($com_options['js_source'], 'jqueryless') === false ) {
-					$com_options['js_source'] = 'jqueryless-min';
-					update_option('asl_compatibility', $com_options);
-				}
-			}
 			return $options;
 		}
 

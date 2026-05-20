@@ -52,7 +52,7 @@ abstract class AbstractOptionData implements OptionData, JsonSerializable {
 
 
 	/**
-	 * @param Array<string, string> $data
+	 * @param array<string, mixed> $data
 	 * @throws Exception
 	 */
 	public function __construct( array $data = array() ) {
@@ -62,6 +62,7 @@ abstract class AbstractOptionData implements OptionData, JsonSerializable {
 		$this->getAll();
 	}
 
+	/** @param array<string, mixed> $args */
 	public function setArgs( array $args, $merge = true ): self {
 		$this->args    = $merge ? array_merge($this->args ?? array(), $args) : $args;
 		$this->options = array();
@@ -89,7 +90,10 @@ abstract class AbstractOptionData implements OptionData, JsonSerializable {
 				$args = $this->args[ $option_name ];
 			}
 			if ( isset(static::OPTIONS[ $option_name ]['default_args']) ) {
-				$args = ArrayUtils::arrayMergeRecursiveDistinct(
+				// Only fill in default_args keys that are absent from stored args.
+				// Existing stored keys win entirely — this prevents numeric arrays
+				// (e.g. string_array 'value') from merging with default values.
+				$args = array_merge(
 					static::OPTIONS[ $option_name ]['default_args'],
 					$args
 				);
@@ -161,7 +165,12 @@ abstract class AbstractOptionData implements OptionData, JsonSerializable {
 
 	public function jsonSerialize(): array {
 		try {
-			return $this->getAll();
+			return array_map(
+				function ( Option $o ) {
+					return $o->jsonSerialize();
+				},
+				$this->getAll()
+			);
 		} catch ( Exception $e ) {
 			return array();
 		}

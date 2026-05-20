@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 6.9
-Stable tag: 4.14.1
+Stable tag: 4.14.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,14 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.14.2 =
+* New: Compatibility, Maintenance, and Help & Support settings submenus redesigned with a modern interface
+* New: Statistics page now includes area charts
+* New: Bulk delete option for recent search entries in the Statistics submenu
+* Improvement: Compatibility and Performance settings merged into a single submenu
+* Fix: Results pages are no longer limited to 50 items
+* Fix: A fatal error which was related to excluding hidden search/catalog WooCommerce products from the results
+
 = 4.14.1 =
 * Fix: Multiple potential TypeError exceptions on PHP 8+ (charcount, posts_per_page, search override filter, query args type coercion)
 * Fix: Undefined array key notice in search helper filters

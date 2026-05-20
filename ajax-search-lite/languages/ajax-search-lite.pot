@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Lite 4.14.1\n"
+"Project-Id-Version: Ajax Search Lite 4.14.2\n"
 "Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-lite\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-13T11:59:04+00:00\n"
+"POT-Creation-Date: 2026-05-20T14:15:44+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ajax-search-lite\n"
@@ -37,408 +37,65 @@ msgstr ""
 msgid "Ernest Marcinko"
 msgstr ""
 
-#: backend/analytics.php:12
-msgid "Analytics settings were reset to defaults!"
-msgstr ""
-
-#: backend/analytics.php:14
-msgid "ERROR Resetting: Invalid NONCE, please try again!"
-msgstr ""
-
-#: backend/analytics.php:69
-msgid "Analytics settings saved!"
-msgstr ""
-
-#: backend/analytics.php:71
-msgid "ERROR: Invalid NONCE, please try again!"
-msgstr ""
-
-#: backend/analytics.php:90
-msgid "Disabled"
-msgstr ""
-
-#: backend/analytics.php:94
-msgid "Event Tracking"
-msgstr ""
-
-#. translators: Analytics integration docs
-#: backend/analytics.php:107
-#, php-format
-msgid "To understand how this works, please read the <a href=\"%s\">Analytics Integration Documentation</a>"
-msgstr ""
-
-#: backend/analytics.php:115
-msgid "Google analytics Tracking ID (ex.: UA-XXXXXX-X)"
-msgstr ""
-
-#. translators: %s: GA docs url
-#: backend/analytics.php:121
-#, php-format
-msgid "Please read this <a href=\"%s\">google analytics documentation</a> to get your tracking ID."
-msgstr ""
-
-#: backend/analytics.php:130
-msgid "Search input focus event tracking"
-msgstr ""
-
-#: backend/analytics.php:133
-#: backend/analytics.php:161
-#: backend/analytics.php:189
-#: backend/analytics.php:217
-#: backend/analytics.php:245
-#: backend/analytics.php:273
-#: backend/analytics.php:301
-msgid "Enabled"
-msgstr ""
-
-#: backend/analytics.php:136
-msgid "Triggers, whenever the user clicks on the search input field."
-msgstr ""
-
-#. translators: %s: search term placeholder
-#: backend/analytics.php:144
-#: backend/analytics.php:172
-#: backend/analytics.php:200
-#: backend/analytics.php:228
-#: backend/analytics.php:256
-#: backend/analytics.php:284
-#: backend/analytics.php:312
-#, php-format
-msgid "Usable variables: %s"
-msgstr ""
-
-#: backend/analytics.php:150
-#: backend/analytics.php:178
-#: backend/analytics.php:206
-#: backend/analytics.php:234
-#: backend/analytics.php:262
-#: backend/analytics.php:290
-#: backend/analytics.php:318
-msgid "Event action"
-msgstr ""
-
-#: backend/analytics.php:151
-#: backend/analytics.php:179
-#: backend/analytics.php:207
-#: backend/analytics.php:235
-#: backend/analytics.php:263
-#: backend/analytics.php:291
-#: backend/analytics.php:319
-msgid "Event category"
-msgstr ""
-
-#: backend/analytics.php:152
-#: backend/analytics.php:180
-#: backend/analytics.php:208
-#: backend/analytics.php:236
-#: backend/analytics.php:264
-#: backend/analytics.php:292
-#: backend/analytics.php:320
-msgid "Event label"
-msgstr ""
-
-#: backend/analytics.php:153
-#: backend/analytics.php:181
-#: backend/analytics.php:209
-#: backend/analytics.php:237
-#: backend/analytics.php:265
-#: backend/analytics.php:293
-#: backend/analytics.php:321
-msgid "Event value"
-msgstr ""
-
-#: backend/analytics.php:158
-msgid "Live search start event tracking"
-msgstr ""
-
-#: backend/analytics.php:164
-msgid "Triggers, whenever the live search starts."
-msgstr ""
-
-#: backend/analytics.php:186
-msgid "Live search end event tracking"
-msgstr ""
-
-#: backend/analytics.php:192
-msgid "Triggers, whenever the live search ends."
-msgstr ""
-
-#: backend/analytics.php:214
-msgid "Magnifier click event tracking"
-msgstr ""
-
-#: backend/analytics.php:220
-msgid "Triggers, whenever the user clicks the magnifier icon"
-msgstr ""
-
-#: backend/analytics.php:242
-msgid "Return key event tracking"
-msgstr ""
-
-#: backend/analytics.php:248
-msgid "Triggers, whenever the user hits the enter button in the search input field"
-msgstr ""
-
-#: backend/analytics.php:270
-msgid "Facet change event tracking"
-msgstr ""
-
-#: backend/analytics.php:276
-#: backend/analytics.php:304
-msgid "Triggers, whenever the user changes any option on the front-end settings"
-msgstr ""
-
-#: backend/analytics.php:298
-msgid "Results click event tracking"
-msgstr ""
-
-#: backend/analytics.php:329
-msgid "Restore defaults"
-msgstr ""
-
-#: backend/analytics.php:330
-msgid "Save options"
-msgstr ""
-
-#: backend/analytics.php:341
-msgid "Analytics options"
-msgstr ""
-
-#: backend/compatibility.php:32
-msgid "Search compatibility settings successfuly updated!"
-msgstr ""
-
-#: backend/compatibility.php:34
-msgid "Something went wrong, pelase try again!"
-msgstr ""
-
-#: backend/compatibility.php:52
-msgid "CSS & JS compatibility"
-msgstr ""
-
-#: backend/compatibility.php:54
-msgid "Query compatibility"
-msgstr ""
-
-#: backend/compatibility.php:63
-msgid "CSS and JS compatibility"
-msgstr ""
-
-#: backend/compatibility.php:68
-msgid "Query compatibility options"
-msgstr ""
-
-#: backend/help_and_support.php:60
-msgid "Support"
-msgstr ""
-
-#: backend/help_and_support.php:61
-msgid "For support please visit the"
-msgstr ""
-
-#: backend/help_and_support.php:63
-msgid "Ajax Search Lite support forums"
-msgstr ""
-
-#: backend/help_and_support.php:64
-msgid "on wordpress.org"
-msgstr ""
-
-#: backend/help_and_support.php:66
-msgid "Before opening a ticket please:"
-msgstr ""
-
-#: backend/help_and_support.php:68
-msgid "Read"
-msgstr ""
-
-#: backend/help_and_support.php:68
-msgid "this thread"
-msgstr ""
-
-#: backend/help_and_support.php:69
-msgid "Search through the previous support threads, the problem might have been solved before"
-msgstr ""
-
-#: backend/maintenance.php:24
-msgid "Maintencance - Reset"
-msgstr ""
-
-#: backend/maintenance.php:25
-msgid "This option will reset all the plugin options to the defaults. Use this option if you want to keep using the plugin, but you need to reset the default options."
-msgstr ""
-
-#: backend/maintenance.php:27
-#: backend/maintenance.php:46
-msgid "All plugin options"
-msgstr ""
-
-#: backend/maintenance.php:27
-msgid "will"
-msgstr ""
-
-#: backend/maintenance.php:27
-msgid "reset to defaults (performance, compatibility, analytics)"
-msgstr ""
-
-#: backend/maintenance.php:28
-#: backend/maintenance.php:47
-msgid "The search instance options"
-msgstr ""
-
-#: backend/maintenance.php:28
-#: backend/maintenance.php:29
-msgid "will not"
-msgstr ""
-
-#: backend/maintenance.php:28
-msgid "be changed"
-msgstr ""
-
-#: backend/maintenance.php:29
-#: backend/maintenance.php:48
-msgid "The database tables, contents and the files"
-msgstr ""
-
-#: backend/maintenance.php:29
-msgid "be deleted either."
-msgstr ""
-
-#: backend/maintenance.php:36
-msgid "Reset all options to defaults"
-msgstr ""
-
-#: backend/maintenance.php:43
-msgid "Maintencance - Wipe & Deactivate"
-msgstr ""
-
-#: backend/maintenance.php:44
-msgid "This option will wipe everything related to Ajax Search Lite, as if it was never installed. Use this if you don't want to use the plugin anymore, or if you want to perform a clean installation."
-msgstr ""
-
-#: backend/maintenance.php:46
-#: backend/maintenance.php:47
-#: backend/maintenance.php:48
-msgid "will be deleted"
-msgstr ""
-
-#: backend/maintenance.php:49
-msgid "The plugin "
-msgstr ""
-
-#: backend/maintenance.php:49
-msgid "will deactivate"
-msgstr ""
-
-#: backend/maintenance.php:49
-msgid "and redirect to the plugin manager screen after, where you can delete it or re-install it again."
-msgstr ""
-
-#: backend/maintenance.php:55
-msgid "Wipe all plugin data & deactivate Ajax Search Lite"
-msgstr ""
-
-#: backend/performance_options.php:17
-msgid "Performance settings successfuly saved!"
-msgstr ""
-
-#: backend/performance_options.php:19
-msgid "<strong>ERROR Saving:</strong> Invalid NONCE, please try again!"
-msgstr ""
-
-#: backend/performance_options.php:29
-#: backend/settings.php:35
-msgid "AJAX SEARCH LITE NOTICE: The custom ajax handler is enabled. In case you experience issues, please "
-msgstr ""
-
-#: backend/performance_options.php:30
-#: backend/settings.php:36
-msgid "turn it off."
-msgstr ""
-
-#: backend/performance_options.php:36
-msgid "Turn it OFF if the search stops working correctly after enabling."
-msgstr ""
-
-#: backend/performance_options.php:37
-msgid "Use custom ajax handler"
-msgstr ""
-
-#: backend/performance_options.php:38
-msgid "The queries will be posted to a custom ajax handler file, which does not wait for whole WordPress loading process. Usually it has great performance impact."
-msgstr ""
-
-#: backend/performance_options.php:41
-msgid "Crop images for caching?"
-msgstr ""
-
-#: backend/performance_options.php:42
-msgid "When turned OFF, it disables thumbnail generator, and the full sized images are used as cover. Not much difference visually, but saves a lot of CPU."
-msgstr ""
-
-#: backend/performance_options.php:45
-msgid "Load JavaScript in site footer?"
-msgstr ""
-
-#: backend/performance_options.php:46
-msgid "Will load the JavaScript files in the site footer for better performance."
-msgstr ""
-
-#: backend/performance_options.php:58
-msgid "Performance Options"
-msgstr ""
-
-#: backend/settings.php:20
+#: backend/settings.php:22
 msgid "Search settings saved!"
 msgstr ""
 
-#: backend/settings.php:22
+#: backend/settings.php:24
 msgid "Error Saving: Invalid NONCE, please try again!"
 msgstr ""
 
-#: backend/settings.php:89
-msgid "Search shortcode:"
+#: backend/settings.php:37
+msgid "AJAX SEARCH LITE NOTICE: The custom ajax handler is enabled. In case you experience issues, please "
+msgstr ""
+
+#: backend/settings.php:38
+msgid "turn it off."
 msgstr ""
 
 #: backend/settings.php:91
-msgid "Ajax Search Lite Shortcode"
+msgid "Search shortcode:"
 msgstr ""
 
 #: backend/settings.php:93
-msgid "Search shortcode for templates:"
+msgid "Ajax Search Lite Shortcode"
 msgstr ""
 
 #: backend/settings.php:95
+msgid "Search shortcode for templates:"
+msgstr ""
+
+#: backend/settings.php:97
 msgid "Ajax Search Lite PHP Shortcode"
 msgstr ""
 
-#: backend/settings.php:107
+#: backend/settings.php:109
 msgid "General Options"
 msgstr ""
 
-#: backend/settings.php:108
-#: backend/settings.php:124
+#: backend/settings.php:110
+#: backend/settings.php:126
 msgid "Image Options"
 msgstr ""
 
-#: backend/settings.php:109
+#: backend/settings.php:111
 msgid "Frontend Filters"
 msgstr ""
 
-#: backend/settings.php:110
+#: backend/settings.php:112
 msgid "Layout options"
 msgstr ""
 
-#: backend/settings.php:111
+#: backend/settings.php:113
 msgid "Advanced"
 msgstr ""
 
-#: backend/settings.php:116
+#: backend/settings.php:118
 msgid "Genearal Options"
 msgstr ""
 
-#: backend/settings.php:127
-#: backend/settings.php:141
+#: backend/settings.php:129
+#: backend/settings.php:143
 #: backend/tabs/instance/advanced/content.php:42
 #: backend/tabs/instance/advanced/content.php:135
 #: backend/tabs/instance/advanced_options.php:30
@@ -454,20 +111,23 @@ msgstr ""
 #: backend/tabs/instance/layout/keyword_highlight.php:59
 #: backend/tabs/instance/layout_options.php:29
 #: backend/tabs/instance/layout_options.php:41
-#: build/js/cache.js:215
-#: build/js/statistics.js:259
+#: build/js/analytics.js:149
+#: build/js/cache.js:210
+#: build/js/compatibility.js:136
+#: build/js/maintenance.js:106
+#: build/js/statistics.js:262
 msgid "Documentation"
 msgstr ""
 
-#: backend/settings.php:138
+#: backend/settings.php:140
 msgid "Frontend Search Filters"
 msgstr ""
 
-#: backend/settings.php:152
+#: backend/settings.php:154
 msgid "Layout Options"
 msgstr ""
 
-#: backend/settings.php:160
+#: backend/settings.php:162
 msgid "Advanced Options"
 msgstr ""
 
@@ -510,124 +170,6 @@ msgstr ""
 
 #: backend/sidebar.php:20
 msgid "Try Now"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:18
-msgid "Javascript source"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:30
-msgid "Script loading method"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:34
-msgid "Classic (default)"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:38
-msgid "Optimized (recommended)"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:42
-msgid "Optimized asynchronous"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:52
-msgid "Classic - All scripts are loaded as blocking at the same time"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:53
-msgid "Optimized - Scripts are loaded separately, but only the required ones"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:54
-msgid "Optimized asnynchronous - Same as the Optimized, but the scripts load in the background"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:63
-msgid "Initialize search instances only when they get visible on the viewport?"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:68
-msgid "Lazy loader for the search initializer script. It can reduce the initial javascript thread work and increase the google lighthouse score."
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:75
-msgid "Try to re-initialize if the page was loaded via ajax?"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:80
-msgid "Will try to re-initialize the plugin in case an AJAX page loader is used, like Polylang language switcher etc.."
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:87
-msgid "Load the Google Fonts used in the search options?"
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:92
-msgid "When turned OFF, the google fonts will not be loaded via this plugin at all."
-msgstr ""
-
-#: backend/tabs/compatibility/cssjs_options.php:93
-msgid "Useful if you already have them loaded, to avoid mutliple loading times."
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:19
-msgid "Do a soft-check only on search override, when trying to check if the current query is the search?"
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:24
-msgid "Use this option, when the search override does not work on the search results page."
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:31
-msgid "Advanced Custom Fields: use the ACF get_field() function to get the metadata?"
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:39
-msgid "If you are experiencing issues with accent(diacritic) or case sensitiveness, you can force the search to try these tweaks."
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:40
-msgid "The search works according to your database collation settings, so please be aware that this is not an effective way of fixing database collation issues."
-msgstr ""
-
-#. translators: %s: sql docs url
-#: backend/tabs/compatibility/query_options.php:45
-#, php-format
-msgid "If you have case/diacritic issues then please read the <a href=\"%s\" target=\"_blank\">MySql manual on collations</a> or consult a <b>database expert</b> - those issues should be treated on database level!"
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:54
-msgid "Force case"
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:58
-msgid "None"
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:62
-msgid "Sensitivity"
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:66
-msgid "InSensitivity"
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:79
-msgid "Force unicode search"
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:84
-msgid "Will try to force unicode character conversion on the search phrase."
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:91
-msgid "Force utf8 on LIKE operations"
-msgstr ""
-
-#: backend/tabs/compatibility/query_options.php:96
-msgid "Will try to force utf8 conversion on all LIKE operations in the WHERE and HAVING clauses."
 msgstr ""
 
 #: backend/tabs/instance/advanced/accessibility.php:13
@@ -1270,7 +812,7 @@ msgstr ""
 
 #: backend/tabs/instance/general_options.php:16
 #: backend/tabs/instance/general_options.php:39
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Ordering"
 msgstr ""
 
@@ -1719,11 +1261,297 @@ msgid "Compatibility Settings"
 msgstr ""
 
 #: includes/classes/core/class-asl-menu.php:77
-msgid "Performance options"
+#: build/js/maintenance.js:106
+msgid "Maintenance"
 msgstr ""
 
-#: includes/classes/core/class-asl-menu.php:82
-msgid "Maintenance"
+#: build/js/analytics.js:109
+#: build/js/cache.js:210
+#: build/js/compatibility.js:121
+#: build/js/help-support.js:96
+#: build/js/statistics.js:257
+msgid "⭐ Upgrade to Pro"
+msgstr ""
+
+#: build/js/analytics.js:114
+#: build/js/cache.js:210
+#: build/js/statistics.js:257
+msgid "Ajax Search Pro is active"
+msgstr ""
+
+#: build/js/analytics.js:114
+#: build/js/cache.js:210
+#: build/js/statistics.js:257
+msgid "Please deactivate Ajax Search Lite to manage this feature from Ajax Search Pro."
+msgstr ""
+
+#: build/js/analytics.js:114
+#: build/js/cache.js:210
+#: build/js/statistics.js:257
+msgid "Go to Plugins page"
+msgstr ""
+
+#: build/js/analytics.js:119
+#: build/js/compatibility.js:126
+#: build/js/statistics.js:262
+msgid "Enjoying Ajax Search Lite?"
+msgstr ""
+
+#: build/js/analytics.js:119
+#: build/js/compatibility.js:126
+#: build/js/statistics.js:262
+msgid "A quick review on WordPress.org helps the plugin grow. It only takes a minute!"
+msgstr ""
+
+#: build/js/analytics.js:119
+#: build/js/compatibility.js:126
+#: build/js/statistics.js:262
+msgid "Leave a Review"
+msgstr ""
+
+#: build/js/analytics.js:119
+#: build/js/compatibility.js:126
+#: build/js/statistics.js:227
+#: build/js/statistics.js:242
+#: build/js/statistics.js:252
+#: build/js/statistics.js:262
+msgid "Maybe later"
+msgstr ""
+
+#: build/js/analytics.js:119
+#: build/js/compatibility.js:126
+#: build/js/statistics.js:262
+msgid "Never"
+msgstr ""
+
+#: build/js/analytics.js:124
+msgid "Event name is required."
+msgstr ""
+
+#: build/js/analytics.js:124
+msgid "Event action must start with a letter and contain only letters, numbers, and underscores (no spaces)."
+msgstr ""
+
+#: build/js/analytics.js:124
+msgid "Parameter name must start with a letter and contain only letters, numbers, and underscores."
+msgstr ""
+
+#: build/js/analytics.js:124
+msgid "Parameter value must not be empty."
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Event name (e.g. Track search phrase)"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Delete?"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Yes"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "No"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Delete event"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Event action"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Required. The GA4 event name — letters, numbers and underscores only, no spaces (e.g. search_start)."
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Parameters"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Available variables:"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Parameter name"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Value"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "Remove parameter"
+msgstr ""
+
+#: build/js/analytics.js:139
+msgid "+ Add parameter"
+msgstr ""
+
+#: build/js/analytics.js:144
+msgid "Add event"
+msgstr ""
+
+#: build/js/analytics.js:144
+msgid "No events configured. Click \"Add event\" to create one."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Input focus"
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Fires when the user clicks on the search input field."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Search start"
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Fires when the live search request begins."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Search end"
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Fires when the live search results are displayed."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Magnifier click"
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Fires when the user clicks the magnifier icon."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Enter / Return key"
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Fires when the user presses Enter in the search input."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Filter change"
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Fires when the user changes a front-end filter option."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Result click"
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Fires when the user clicks on a search result."
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/cache.js:150
+#: build/js/statistics.js:129
+msgid "There are unsaved changes, are you sure you want to leave?"
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/cache.js:150
+#: build/js/statistics.js:129
+msgid "Options saved successfully!"
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/cache.js:150
+#: build/js/statistics.js:129
+msgid "Options reset successfully!"
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/cache.js:150
+#: build/js/compatibility.js:136
+#: build/js/search-instance.js:87
+#: build/js/statistics.js:129
+msgid "Loading..."
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/cache.js:150
+#: build/js/compatibility.js:136
+#: build/js/statistics.js:129
+msgid "Error loading options, please reload the page."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Event tracking enabled"
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Send search interaction events to Google Analytics / GTM."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Tracking ID (optional)"
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Leave empty to use the globally installed GA/GTM tracker. Provide a UA-XXXXXX-X or G-XXXXXXXX ID to send events to a specific property."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Configure one or more GA events per trigger. Each event fires independently when its trigger occurs."
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Save!"
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/cache.js:150
+#: build/js/compatibility.js:136
+#: build/js/statistics.js:129
+msgid "Reset to defaults"
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/cache.js:150
+#: build/js/compatibility.js:136
+#: build/js/statistics.js:129
+msgid "Confirm"
+msgstr ""
+
+#: build/js/analytics.js:149
+msgid "Are you sure you want to reset all analytics settings to defaults? All configured events will be removed."
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/cache.js:150
+#: build/js/compatibility.js:136
+#: build/js/maintenance.js:106
+#: build/js/statistics.js:129
+msgid "Reset"
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/cache.js:150
+#: build/js/compatibility.js:136
+#: build/js/maintenance.js:106
+#: build/js/statistics.js:129
+#: build/js/statistics.js:197
+msgid "Cancel"
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/cache.js:210
+#: build/js/statistics.js:262
+msgid "Settings"
 msgstr ""
 
 #: build/js/block-editor.js:12
@@ -1734,229 +1562,181 @@ msgstr ""
 msgid "ajax"
 msgstr ""
 
-#: build/js/cache.js:145
-#: build/js/statistics.js:129
-msgid "Options saved successfully!"
-msgstr ""
-
-#: build/js/cache.js:145
-#: build/js/statistics.js:129
-msgid "Options reset successfully!"
-msgstr ""
-
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Successfully purged"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "items from the cache."
 msgstr ""
 
-#: build/js/cache.js:145
-#: build/js/statistics.js:129
-msgid "There are unsaved changes, are you sure you want to leave?"
-msgstr ""
-
-#: build/js/cache.js:145
-#: build/js/search-instance.js:87
-#: build/js/statistics.js:129
-msgid "Loading..."
-msgstr ""
-
-#: build/js/cache.js:145
-#: build/js/statistics.js:129
-msgid "Error loading options, please reload the page."
-msgstr ""
-
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Super File"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "File"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Database"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Results cache enabled"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Greatly improves repeated live search queries by storing the responses in a cache."
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Results cache method"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Super File is recommended for the fastest responses. In case of compatibility issues use File or Database instead."
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Default: Super File"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Purge the results cache when a post is created/updated?"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Great when content is not created or updated frequently."
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Results cache expiration"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Records older than this are considered stale and will be cleared automatically from the cache."
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Default: 7 days"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Cache images by cropping them"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Crops images and stores them in a cache folder for faster access."
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "The results and image cache is automatically purged when the search instance settings or these settings are saved."
 msgstr ""
 
-#: build/js/cache.js:145
-#: build/js/statistics.js:129
-msgid "Reset to defaults"
-msgstr ""
-
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Purge Cache"
 msgstr ""
 
-#: build/js/cache.js:145
-#: build/js/statistics.js:129
-#: build/js/statistics.js:194
-msgid "Confirm"
-msgstr ""
-
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Are you sure you want to purge the cache?"
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "This will clear the cache database and all the cached results and cached images."
 msgstr ""
 
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 msgid "Purge"
 msgstr ""
 
-#: build/js/cache.js:145
-#: build/js/statistics.js:129
-#: build/js/statistics.js:194
-msgid "Cancel"
-msgstr ""
-
-#: build/js/cache.js:145
+#: build/js/cache.js:150
 #: build/js/statistics.js:129
 msgid "Are you sure you want to reset the settings to defaults?"
 msgstr ""
 
-#: build/js/cache.js:145
-#: build/js/statistics.js:129
-msgid "Reset"
-msgstr ""
-
-#: build/js/cache.js:195
+#: build/js/cache.js:200
 msgid "Cache hits last 24 hours"
 msgstr ""
 
-#: build/js/cache.js:195
+#: build/js/cache.js:200
 msgid "of"
 msgstr ""
 
-#: build/js/cache.js:195
+#: build/js/cache.js:200
 msgid "total hits."
 msgstr ""
 
-#: build/js/cache.js:195
+#: build/js/cache.js:200
 msgid "Cache hits all time"
 msgstr ""
 
-#: build/js/cache.js:195
+#: build/js/cache.js:200
 msgid "Total items in cache:"
 msgstr ""
 
-#: build/js/cache.js:195
+#: build/js/cache.js:200
 msgid "Last 20 Cache Hits"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "Phrase"
 msgstr ""
 
-#: build/js/cache.js:195
+#: build/js/cache.js:200
 #: build/js/search-instance.js:87
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Type"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "Date"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "Device"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "User"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "Referer"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "Search ID"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "Blog ID"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "Language"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "Page"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "Results Displayed"
 msgstr ""
 
-#: build/js/cache.js:195
-#: build/js/statistics.js:194
+#: build/js/cache.js:200
+#: build/js/statistics.js:197
 msgid "Results Found"
 msgstr ""
 
@@ -1965,12 +1745,12 @@ msgid "Statistics are not recorded! This feature requires search statistics to b
 msgstr ""
 
 #: build/js/cache.js:200
-#: build/js/statistics.js:259
+#: build/js/statistics.js:262
 msgid "Click here"
 msgstr ""
 
 #: build/js/cache.js:200
-#: build/js/statistics.js:259
+#: build/js/statistics.js:262
 msgid "to enable."
 msgstr ""
 
@@ -1979,32 +1759,323 @@ msgid "Cache is turned off! "
 msgstr ""
 
 #: build/js/cache.js:210
-#: build/js/statistics.js:254
-msgid "⭐ Upgrade to Pro"
-msgstr ""
-
-#: build/js/cache.js:215
-#: build/js/statistics.js:259
-msgid "Ajax Search Pro is active"
-msgstr ""
-
-#: build/js/cache.js:215
-#: build/js/statistics.js:259
-msgid "Please deactivate Ajax Search Lite to manage this feature from Ajax Search Pro."
-msgstr ""
-
-#: build/js/cache.js:215
-#: build/js/statistics.js:259
-msgid "Go to Plugins page"
-msgstr ""
-
-#: build/js/cache.js:215
 msgid "Cache Statistics"
 msgstr ""
 
-#: build/js/cache.js:215
-#: build/js/statistics.js:259
-msgid "Settings"
+#: build/js/compatibility.js:126
+msgid "Compatibility settings saved!"
+msgstr ""
+
+#: build/js/compatibility.js:126
+msgid "Compatibility settings reset to defaults!"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Save"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Are you sure you want to reset all compatibility settings to defaults?"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "No jQuery (non-minified)"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "No jQuery (minified)"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Classic"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Optimized"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Optimized + Async"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "CSS & JS Compatibility"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "JavaScript source"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Choose the front-end JavaScript bundle variant."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Script loading method"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Optimized methods defer the script loading for better page performance."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Initialize instances only when in viewport"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Defers the search instance initialization until it scrolls into view."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Detect AJAX powered themes"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Enable if your theme loads pages via AJAX and the search stops working after navigation."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Load Google Fonts"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Loads the Google Fonts used by the search themes. Disable if you handle fonts yourself."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Use custom AJAX handler"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Posts queries to a custom handler that bypasses part of the WordPress loading process for faster responses. Turn off if the search stops working."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Load JavaScript in site footer"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Moves the search JavaScript files to the footer for better page load performance."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "None"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Force case sensitivity"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Force case insensitivity"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Query Compatibility"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Soft query check"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Use a less strict query validation. Try this if results are missing."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Use ACF get_field()"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Uses the ACF get_field() function for custom field values instead of direct database access."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Force database collation case"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Forces case sensitivity or insensitivity on the search queries to work around collation issues."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Force UNICODE on queries"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Forces the UNICODE charset on the search queries. May help with multibyte languages."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Force UTF8 on LIKE queries"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Forces the UTF8 charset on LIKE comparisons. May help with accented characters."
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Compatibility"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "CSS & JS"
+msgstr ""
+
+#: build/js/compatibility.js:136
+msgid "Query"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Support"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "For support please visit the "
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Ajax Search Lite support forums"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid " on wordpress.org."
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Before Opening a Ticket"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Read "
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "this thread"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Search through previous support threads — the problem may have been solved before."
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Need More Features?"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Advanced filtering by category, tag, date, price, and custom taxonomies"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "WooCommerce integration with live product search"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Custom fields and ACF support"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Live indexing for instant, always up-to-date results"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Multiple independent search instances with individual settings"
+msgstr ""
+
+#: build/js/help-support.js:96
+msgid "Help & Support"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Plugin data reset successfully. Reloading..."
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Plugin wiped. Redirecting to the plugin manager..."
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Maintenance - Reset"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "This option will reset all the plugin options to the defaults. Use this option if you want to keep using the plugin, but you need to reset the default options."
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "All plugin options will reset to defaults (performance, compatibility, analytics)"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "The search instance options will not be changed"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "The database tables, contents and the files will not be deleted either."
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Reset all options to defaults"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Maintenance - Wipe & Deactivate"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "This option will wipe everything related to Ajax Search Lite, as if it was never installed. Use this if you don't want to use the plugin anymore, or if you want to perform a clean installation."
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "All plugin options will be deleted"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "The search instance options will be deleted"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "The database tables, contents and the files will be deleted"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "The plugin will deactivate and redirect to the plugin manager screen after, where you can delete it or re-install it again."
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Wipe all plugin data & deactivate Ajax Search Lite"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Confirm Reset"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Are you sure you want to reset Ajax Search Lite to its default state?"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "This will reset all plugin options. Search instances and database tables will not be affected."
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Confirm Wipe & Deactivate"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Are you sure you want to completely remove Ajax Search Lite? (including instances, database content etc.)"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "This action cannot be undone. All data will be permanently deleted and the plugin will be deactivated."
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Wipe & Deactivate"
+msgstr ""
+
+#: build/js/maintenance.js:106
+msgid "Operations"
 msgstr ""
 
 #: build/js/search-instance.js:62
@@ -2244,7 +2315,7 @@ msgid "Open links in new tab?"
 msgstr ""
 
 #: build/js/search-instance.js:87
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Field"
 msgstr ""
 
@@ -2601,441 +2672,463 @@ msgid "This will remove all recorded data and it can't be reverted!"
 msgstr ""
 
 #: build/js/statistics.js:129
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Delete"
 msgstr ""
 
-#: build/js/statistics.js:186
+#: build/js/statistics.js:189
+msgid "Current period"
+msgstr ""
+
+#: build/js/statistics.js:189
+msgid "Previous period"
+msgstr ""
+
+#: build/js/statistics.js:189
 msgid "minutes"
 msgstr ""
 
-#: build/js/statistics.js:186
+#: build/js/statistics.js:189
 msgid "hours"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Searches in last 60 minutes"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Searches in last 24 hours"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by referer (type to search)"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Search Phrase"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Referer page"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Search Bar"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Search Type"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Device Type"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Compare to previous period?"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Export current page to CSV"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Export all pages to CSV"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by Device"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Desktop"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Tablet"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Mobile"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by Search Type"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Live"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Redirect"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by Results Status"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Returned at least 1 result"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Returned 0 results"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by User Interaction"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "User clicked a result"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "User did not interact"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by Users"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by Cache Status"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Cache hit"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Cache miss"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by Query Type"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Normal Search"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Suggested Predictive Search"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Include empty"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Most popular"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "from"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "to"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Total Searches"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "(vs prev. period)"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Avg. Results/Search"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Avg. Interactions/Search"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Total users"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by phrase (type to search)"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Export to CSV"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Results Status"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by Users (type to search)"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Display 0 search volume dates?"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Search volume"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Total searches"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Change"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Results Shown"
 msgstr ""
 
-#: build/js/statistics.js:194
-#: build/js/statistics.js:259
+#: build/js/statistics.js:197
+#: build/js/statistics.js:262
 msgid "Interactions"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Search instance ID"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "User name"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "There was an error."
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Latest searches"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
+msgid "selected"
+msgstr ""
+
+#: build/js/statistics.js:197
+msgid "Delete selected"
+msgstr ""
+
+#: build/js/statistics.js:197
+msgid "Clear selection"
+msgstr ""
+
+#: build/js/statistics.js:197
+msgid "Select all on this page"
+msgstr ""
+
+#: build/js/statistics.js:197
 msgid "ID"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Result Page Num."
 msgstr ""
 
-#: build/js/statistics.js:194
-msgid "Actions"
+#: build/js/statistics.js:197
+msgid "Confirm bulk delete"
 msgstr ""
 
-#: build/js/statistics.js:194
-msgid "Are you sure you want to delete this search statistic row?"
+#: build/js/statistics.js:197
+msgid "Are you sure you want to delete"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
+msgid "search statistic rows?"
+msgstr ""
+
+#: build/js/statistics.js:197
 msgid "Post Type"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Taxonomy Term"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Multisite blog"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Media File"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Comment"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "BuddyPress Group"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "BuddyPress Activity"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Views"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Criteria"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by Result Type"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Include empty searches"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Most popular results"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Result"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by Search ID"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Filter by Page"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Latest results"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "User interacted"
 msgstr ""
 
-#: build/js/statistics.js:194
+#: build/js/statistics.js:197
 msgid "Latest interactions (result clicks)"
 msgstr ""
 
-#: build/js/statistics.js:224
+#: build/js/statistics.js:227
 msgid "Top searched keywords ranked by volume & interaction rate"
 msgstr ""
 
-#: build/js/statistics.js:224
+#: build/js/statistics.js:227
 msgid "Period-over-period trend comparison to spot growth & decline"
 msgstr ""
 
-#: build/js/statistics.js:224
+#: build/js/statistics.js:227
 msgid "Filter by date range, device, language, referer & more"
 msgstr ""
 
-#: build/js/statistics.js:224
+#: build/js/statistics.js:227
 msgid "Full Results & Interactions analytics — see exactly what users click"
 msgstr ""
 
-#: build/js/statistics.js:224
-#: build/js/statistics.js:239
-#: build/js/statistics.js:249
+#: build/js/statistics.js:227
+#: build/js/statistics.js:242
+#: build/js/statistics.js:252
 msgid "Ajax Search Pro"
 msgstr ""
 
-#: build/js/statistics.js:224
+#: build/js/statistics.js:227
 msgid "Know exactly what your visitors are searching for"
 msgstr ""
 
-#: build/js/statistics.js:224
+#: build/js/statistics.js:227
 msgid "Popular Searches reveals the keywords driving your traffic — helping you close content gaps, improve findability, and turn more searches into conversions."
 msgstr ""
 
-#: build/js/statistics.js:224
-#: build/js/statistics.js:239
-#: build/js/statistics.js:249
+#: build/js/statistics.js:227
+#: build/js/statistics.js:242
+#: build/js/statistics.js:252
 msgid "Upgrade to Ajax Search Pro →"
 msgstr ""
 
-#: build/js/statistics.js:224
-#: build/js/statistics.js:239
-#: build/js/statistics.js:249
-msgid "Maybe later"
-msgstr ""
-
-#: build/js/statistics.js:239
+#: build/js/statistics.js:242
 msgid "See which posts, pages & products appear most in search results"
 msgstr ""
 
-#: build/js/statistics.js:239
+#: build/js/statistics.js:242
 msgid "Track click-through rates — spot high-impression content that needs better titles"
 msgstr ""
 
-#: build/js/statistics.js:239
+#: build/js/statistics.js:242
 msgid "Period-over-period comparison to measure content discoverability over time"
 msgstr ""
 
-#: build/js/statistics.js:239
+#: build/js/statistics.js:242
 msgid "Filter by content type, date range, device, language & more"
 msgstr ""
 
-#: build/js/statistics.js:239
+#: build/js/statistics.js:242
 msgid "Find out which content your visitors actually discover"
 msgstr ""
 
-#: build/js/statistics.js:239
+#: build/js/statistics.js:242
 msgid "Results analytics shows you what surfaces in searches and what gets clicked — so you can identify underperforming content and optimize it for better engagement."
 msgstr ""
 
-#: build/js/statistics.js:249
+#: build/js/statistics.js:252
 msgid "Every result click logged — know exactly what visitors engage with after searching"
 msgstr ""
 
-#: build/js/statistics.js:249
+#: build/js/statistics.js:252
 msgid "Tie interactions back to the originating search phrase for full journey context"
 msgstr ""
 
-#: build/js/statistics.js:249
+#: build/js/statistics.js:252
 msgid "Measure true search-to-click conversion rate across your entire content library"
 msgstr ""
 
-#: build/js/statistics.js:249
+#: build/js/statistics.js:252
 msgid "Filter by content type, device, language, referer & date range"
 msgstr ""
 
-#: build/js/statistics.js:249
+#: build/js/statistics.js:252
 msgid "Understand what visitors click after they search"
 msgstr ""
 
-#: build/js/statistics.js:249
+#: build/js/statistics.js:252
 msgid "Interactions tracking closes the loop between search and action — revealing which results earn clicks and which lose visitors, so you can focus on content that actually converts."
 msgstr ""
 
-#: build/js/statistics.js:259
+#: build/js/statistics.js:262
 msgid "Statistics are disabled! User searches are not recorded until enabled again!"
 msgstr ""
 
-#: build/js/statistics.js:259
+#: build/js/statistics.js:262
 msgid "Realtime"
 msgstr ""
 
-#: build/js/statistics.js:259
+#: build/js/statistics.js:262
 msgid "Searches"
 msgstr ""
 
-#: build/js/statistics.js:259
+#: build/js/statistics.js:262
 msgid "Volume"
 msgstr ""
 
-#: build/js/statistics.js:259
+#: build/js/statistics.js:262
 msgid "Popular"
 msgstr ""
 
-#: build/js/statistics.js:259
+#: build/js/statistics.js:262
 msgid "All Searches"
 msgstr ""
 
-#: build/js/statistics.js:259
+#: build/js/statistics.js:262
 msgid "Results"
 msgstr ""
 
-#: build/js/statistics.js:259
+#: build/js/statistics.js:262
 msgid "All Results"
 msgstr ""

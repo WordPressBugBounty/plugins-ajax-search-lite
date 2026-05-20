@@ -213,7 +213,7 @@ if ( !class_exists('WD_ASL_Manager') ) {
 		private function isReactPage(): bool {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$page = isset($_GET['page']) ? sanitize_key($_GET['page']) : '';
-			return in_array($page, array( 'asl_cache', 'asl_statistics' ), true);
+			return in_array($page, array( 'asl_cache', 'asl_statistics', 'asl_analytics', 'asl_compatibility', 'asl_maintenance', 'asl_help_and_support' ), true);
 		}
 
 		public function getContext() {

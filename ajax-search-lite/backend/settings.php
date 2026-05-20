@@ -3,6 +3,8 @@
  * @noinspection HtmlUnknownAttribute
  */
 
+use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
+
 if ( !defined('ABSPATH') ) {
 	die("You can't access this file directly.");
 }
@@ -30,10 +32,10 @@ $sd = wd_asl()->instances->get(0)['data'];
 <div id="wpdreams" class='wpdreams wrap<?php echo isset($_COOKIE['asl-accessibility']) ? ' wd-accessible' : ''; ?>'>
 	<h2 display="none"></h2>
 
-	<?php if ( wd_asl()->o['asl_performance']['use_custom_ajax_handler'] ) : ?>
+	<?php if ( CompatibilityOptions::instance()->use_custom_ajax_handler->value ) : ?>
 		<p class='noticeMsgBox'>
 			<?php echo esc_html__('AJAX SEARCH LITE NOTICE: The custom ajax handler is enabled. In case you experience issues, please ', 'ajax-search-lite'); ?>
-			<a href='<?php echo esc_attr( get_admin_url() . 'admin.php?page=ajax-search-lite/backend/performance_options.php' ); ?>'><?php echo esc_html__('turn it off.', 'ajax-search-lite'); ?></a></p>
+			<a href='<?php echo esc_attr( get_admin_url() . 'admin.php?page=asl_compatibility' ); ?>'><?php echo esc_html__('turn it off.', 'ajax-search-lite'); ?></a></p>
 	<?php endif; ?>
 
 	<style>

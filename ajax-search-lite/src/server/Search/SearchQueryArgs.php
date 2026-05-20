@@ -708,7 +708,7 @@ class SearchQueryArgs implements ArrayAccess {
 	 * @var int
 	 */
 	public int $posts_limit                  = 10;
-	public int $posts_limit_override         = 50;
+	public int $posts_limit_override         = 99999;
 	public bool $posts_limit_distribute      = false;
 	public int $taxonomies_limit             = 10;
 	public int $taxonomies_limit_override    = 20;

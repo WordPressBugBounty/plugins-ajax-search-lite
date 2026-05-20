@@ -427,12 +427,25 @@ class StatisticsRoute extends AbstractRest {
 
 	public function deleteStatisticsLatestSearch( WP_REST_Request $request ) {
 		try {
-			$id = $request->get_param('id') ?? null;
+			$ids = $request->get_param('ids') ?? null;
+			$id  = $request->get_param('id') ?? null;
+
+			if ( is_array($ids) && count($ids) > 0 ) {
+				$service = StatisticsService::instance();
+				$deleted = 0;
+				foreach ( $ids as $single_id ) {
+					if ( $service->deleteSearch( (int) $single_id ) ) {
+						$deleted++;
+					}
+				}
+				return new WP_REST_Response( array( 'deleted' => $deleted ), 200 );
+			}
+
 			if ( $id === null ) {
 				throw new Exception('Search ID is required.');
 			}
 			return new WP_REST_Response(
-				StatisticsService::instance()->deleteSearch( $id ),
+				StatisticsService::instance()->deleteSearch( (int) $id ),
 				200
 			);
 		} catch ( Exception $e ) {

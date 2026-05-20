@@ -9,6 +9,7 @@
 
 namespace WPDRMS\ASL\Search;
 
+use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
 use WPDRMS\ASL\Utils\AdvancedField\AdvancedFieldParser;
 use WPDRMS\Utils\Html;
 use WPDRMS\Utils\MB;
@@ -1291,7 +1292,7 @@ class SearchPostTypes extends AbstractSearch {
 		}
 
 		$sd          = $args['_sd'];
-		$com_options = wd_asl()->o['asl_compatibility'];
+		$orm = CompatibilityOptions::instance();
 
 		// --------------------- For Image Parser -----------------------//
 		// Do not select the content field, if it is not used at all
@@ -1448,7 +1449,7 @@ class SearchPostTypes extends AbstractSearch {
 						if ( $sd[ $tk . '_cf' ] === '' ) {
 							$r->title = get_the_title( $r->id );
 						} else {
-							$field_val = Post::getCFValue($sd[ $tk . '_cf' ], $r, $com_options['use_acf_getfield']);
+							$field_val = Post::getCFValue($sd[ $tk . '_cf' ], $r, $orm->use_acf_getfield->value);
 							if ( $field_val !== '' ) {
 								$r->title = wd_strip_tags_ws( $field_val, $sd['striptagsexclude'] );
 							} else {
@@ -1496,7 +1497,7 @@ class SearchPostTypes extends AbstractSearch {
 						break;
 					case 'c__f':
 						if ( $sd[ $tk . '_cf' ] !== '' ) {
-							$field_val = Post::getCFValue($sd[ $tk . '_cf' ], $r, $com_options['use_acf_getfield']);
+							$field_val = Post::getCFValue($sd[ $tk . '_cf' ], $r, $orm->use_acf_getfield->value);
 							if ( $field_val !== '' ) {
 								$_content = $field_val;
 							}

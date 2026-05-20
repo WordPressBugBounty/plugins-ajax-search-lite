@@ -1,4 +1,7 @@
 <?php
+
+use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
+
 if ( !defined('ABSPATH') ) {
 	die('-1');
 }
@@ -390,8 +393,8 @@ if ( !class_exists('ASL_Helpers') ) {
 			$search = wd_asl()->instances->get(0);
 			$sd     = $search['data'];
 
-			$comp_options = wd_asl()->o['asl_compatibility'];
-			
+			$orm = CompatibilityOptions::instance();
+
 			$exclude_post_ids = array_unique(explode(',', str_replace(' ', '', $sd['excludeposts'])));
 			foreach ( $exclude_post_ids as $k =>$v ) {
 				if ( $v === '' ) {
@@ -414,9 +417,9 @@ if ( !class_exists('ASL_Helpers') ) {
 					'post_in'              => array(),
 					'post_primary_order'   => $sd['orderby_primary'],
 					'post_secondary_order' => $sd['orderby_secondary'],
-					'_db_force_case'       => $comp_options['db_force_case'],
-					'_db_force_utf8_like'  => (bool) $comp_options['db_force_utf8_like'],
-					'_db_force_unicode'    => (bool) $comp_options['db_force_unicode'],
+					'_db_force_case'       => $orm->db_force_case->value,
+					'_db_force_utf8_like'  => $orm->db_force_utf8_like->value,
+					'_db_force_unicode'    => $orm->db_force_unicode->value,
 					// LIMITS
 					'posts_limit'          => intval($sd['maxresults']),
 				)
@@ -569,37 +572,6 @@ if ( !class_exists('ASL_Helpers') ) {
 
 			/*---------------------- Taxonomy Terms -------------------------*/
 			$args['post_tax_filter'] = self::toQueryArgs_Taxonomies($sd, $o);
-
-			// Woocommerce - Excluded catalogue or search products, when variations are selected
-			if (
-				in_array('product_variation', $args['post_type'], true) &&
-				wd_in_array_r('product_visibility', $args['post_tax_filter'])
-			) {
-				foreach ( $args['post_tax_filter'] as $filter => $items ) {
-					if ( $items['taxonomy'] === 'product_visibility' && count($items['exclude']) > 0 ) {
-						$product_ids = get_posts(
-							array(
-								'post_type'   => 'product',
-								'numberposts' => 250, // phpcs:ignore
-							// phpcs:ignore
-							'tax_query'     => array(
-								array(
-									'taxonomy' => 'product_visibility',
-									'field'    => 'id',
-									'terms'    => $items['exclude'],
-									'operator' => 'IN',
-								),
-							),
-								'fields'      => 'ids',  // Only get post IDs
-							)
-						);
-						if ( !is_wp_error($product_ids) && !empty($product_ids) ) {
-							$args['post_parent_exclude'] = array_unique( array_merge($args['post_parent_exclude'], $product_ids) );
-						}
-						break;
-					}
-				}
-			}
 
 			// ----------------------------------------------------------------
 			// X. MISC FIXES

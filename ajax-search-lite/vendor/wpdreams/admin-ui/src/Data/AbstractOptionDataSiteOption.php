@@ -35,11 +35,11 @@ abstract class AbstractOptionDataSiteOption extends AbstractOptionData implement
 		}
 
 		/**
-		 * Very important to reset the options array
-		 * This will trigger a new instantiation with ->get(), ->getAll() etc..
-		 * when manually called after construction.
+		 * Very important to reset the options array and re-populate typed properties
+		 * so that direct property access reflects the freshly loaded values.
 		 */
 		$this->options = array();
+		$this->getAll();
 
 		return $this;
 	}

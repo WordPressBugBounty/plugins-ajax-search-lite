@@ -5,7 +5,6 @@
  * @noinspection PhpUndefinedVariableInspection
  */
 
-$ana_options   = get_option('asl_analytics');
 $search_config = array(
 	'homeurl'             => is_admin() ? home_url('/') : ( function_exists('PLL') ? PLL()->links->get_home_url('', true) : home_url('/') ),
 	'resultstype'         => 'vertical',

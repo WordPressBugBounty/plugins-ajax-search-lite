@@ -1,7 +1,10 @@
 <?php
 
+use WPDRMS\ASL\Analytics\AnalyticsMigration;
+use WPDRMS\ASL\Analytics\ORM\AnalyticsOptions;
 use WPDRMS\ASL\Cache\ORM\CacheOptions;
 use WPDRMS\ASL\Cache\ResultsCacheService;
+use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
 use WPDRMS\ASL\Statistics\StatisticsService;
 
 if ( !defined('ABSPATH') ) {
@@ -62,35 +65,8 @@ class WD_ASL_Init {
 	 * Fix known backwards incompatibilities
 	 */
 	public function backwards_compatibility_fixes() {
-		$comp = wd_asl()->o['asl_compatibility'];
-
-		// 4.10
-		if ( isset( $comp['old_browser_compatibility']) ) {
-			unset( wd_asl()->o['asl_compatibility']['old_browser_compatibility'] );
-			asl_save_option('asl_compatibility');
-		}
-
-		// 4.10.1 - Turn off the jquery script versions
-		if ( $comp['js_source'] === 'min' || $comp['js_source'] === 'min-scoped' ) {
-			wd_asl()->o['asl_compatibility']['js_source'] = 'jqueryless-min';
-			asl_save_option('asl_compatibility');
-		} elseif ( $comp['js_source'] === 'nomin' || $comp['js_source'] === 'nomin-scoped' ) {
-			wd_asl()->o['asl_compatibility']['js_source'] = 'jqueryless-nomin';
-			asl_save_option('asl_compatibility');
-		}
-
-		// 4.10.4
-		if ( isset($comp['load_scroll_js']) ) {
-			unset( wd_asl()->o['asl_compatibility']['load_scroll_js']);
-			asl_save_option('asl_compatibility');
-		}
-
-		// 4.8.2: migrate old boolean true → 'event'; 4.14.1: migrate 'pageview' → 'event' (GA3 removed)
-		$ana = wd_asl()->o['asl_analytics'];
-		if ( isset($ana['analytics']) && $ana['analytics'] !== '0' && $ana['analytics'] !== 0 && $ana['analytics'] !== 'event' ) {
-			wd_asl()->o['asl_analytics']['analytics'] = 'event';
-			asl_save_option('asl_analytics');
-		}
+		AnalyticsMigration::run();
+		\WPDRMS\ASL\Compatibility\CompatibilityMigration::run();
 
 		/*
 		 * - Get instances
@@ -270,19 +246,17 @@ class WD_ASL_Init {
 			return false;
 		}
 
-		$performance_options = wd_asl()->o['asl_performance'];
-		$analytics           = wd_asl()->o['asl_analytics'];
-		$comp_settings       = wd_asl()->o['asl_compatibility'];
-		$load_in_footer      = boolval($performance_options['load_in_footer']);
+		$opts           = CompatibilityOptions::instance();
+		$load_in_footer = $opts->load_in_footer->value;
 		$media_query         = ASL_DEBUG ? asl_gen_rnd_str() : ASL_CURRENT_VERSION;
 		if ( wd_asl()->manager->getContext() === 'backend' ) {
 			$js_minified   = false;
 			$js_optimized  = true;
 			$js_async_load = false;
 		} else {
-			$js_minified   = $comp_settings['js_source'] === 'jqueryless-min';
-			$js_optimized  = $comp_settings['script_loading_method'] !== 'classic';
-			$js_async_load = $comp_settings['script_loading_method'] === 'optimized_async';
+			$js_minified   = $opts->js_source->value === 'jqueryless-min';
+			$js_optimized  = $opts->script_loading_method->value !== 'classic';
+			$js_async_load = $opts->script_loading_method->value === 'optimized_async';
 		}
 
 		$single_highlight     = false;
@@ -305,7 +279,7 @@ class WD_ASL_Init {
 		}
 
 		$ajax_url = admin_url('admin-ajax.php');
-		if ( $performance_options['use_custom_ajax_handler'] ) {
+		if ( $opts->use_custom_ajax_handler->value ) {
 			$ajax_url = ASL_URL . 'ajax_search.php';
 		}
 
@@ -358,73 +332,34 @@ class WD_ASL_Init {
 				'backend_ajaxurl'       => admin_url('admin-ajax.php'),
 				'asl_url'               => ASL_URL,
 				'rest_url'              => apply_filters('asl/rest/base_url/', rest_url()),
-				'detect_ajax'           => w_isset_def($comp_settings['detect_ajax'], 0),
+				'detect_ajax'           => $opts->detect_ajax->value,
 				'media_query'           => ASL_CURRENT_VERSION,
 				'version'               => ASL_CURRENT_VERSION,
 				'pageHTML'              => '',
 				'additional_scripts'    => $additional_scripts,
 				'script_async_load'     => $js_async_load,
-				'init_only_in_viewport' => boolval($comp_settings['init_instances_inviewport_only']),
+				'init_only_in_viewport' => $opts->init_instances_inviewport_only->value,
 				'font_url'              => str_replace('http:', '', plugins_url()) . '/ajax-search-lite/css/fonts/icons2.woff2',
 				'highlight'             => array(
 					'enabled' => $single_highlight,
 					'data'    => $single_highlight_arr,
 				),
-				'analytics'             => array(
-					'method'      => $analytics['analytics'],
-					'tracking_id' => $analytics['analytics_tracking_id'],
-					'event'       => array(
-						'focus'        => array(
-							'active'   => boolval($analytics['gtag_focus']),
-							'action'   => $analytics['gtag_focus_action'],
-							'category' => $analytics['gtag_focus_ec'],
-							'label'    => $analytics['gtag_focus_el'],
-							'value'    => $analytics['gtag_focus_value'],
+				'analytics'             => ( function () {
+					$ao = AnalyticsOptions::instance();
+					return array(
+						'method'      => $ao->method->value,
+						'tracking_id' => $ao->tracking_id->value,
+						'event'       => array(
+							'focus'        => array( 'items' => $ao->focus->items ),
+							'search_start' => array( 'items' => $ao->search_start->items ),
+							'search_end'   => array( 'items' => $ao->search_end->items ),
+							'magnifier'    => array( 'items' => $ao->magnifier->items ),
+							'return'       => array( 'items' => $ao->return->items ),
+							'facet_change' => array( 'items' => $ao->facet_change->items ),
+							'result_click' => array( 'items' => $ao->result_click->items ),
 						),
-						'search_start' => array(
-							'active'   => boolval($analytics['gtag_search_start']),
-							'action'   => $analytics['gtag_search_start_action'],
-							'category' => $analytics['gtag_search_start_ec'],
-							'label'    => $analytics['gtag_search_start_el'],
-							'value'    => $analytics['gtag_search_start_value'],
-						),
-						'search_end'   => array(
-							'active'   => boolval($analytics['gtag_search_end']),
-							'action'   => $analytics['gtag_search_end_action'],
-							'category' => $analytics['gtag_search_end_ec'],
-							'label'    => $analytics['gtag_search_end_el'],
-							'value'    => $analytics['gtag_search_end_value'],
-						),
-						'magnifier'    => array(
-							'active'   => boolval($analytics['gtag_magnifier']),
-							'action'   => $analytics['gtag_magnifier_action'],
-							'category' => $analytics['gtag_magnifier_ec'],
-							'label'    => $analytics['gtag_magnifier_el'],
-							'value'    => $analytics['gtag_magnifier_value'],
-						),
-						'return'       => array(
-							'active'   => boolval($analytics['gtag_return']),
-							'action'   => $analytics['gtag_return_action'],
-							'category' => $analytics['gtag_return_ec'],
-							'label'    => $analytics['gtag_return_el'],
-							'value'    => $analytics['gtag_return_value'],
-						),
-						'facet_change' => array(
-							'active'   => boolval($analytics['gtag_facet_change']),
-							'action'   => $analytics['gtag_facet_change_action'],
-							'category' => $analytics['gtag_facet_change_ec'],
-							'label'    => $analytics['gtag_facet_change_el'],
-							'value'    => $analytics['gtag_facet_change_value'],
-						),
-						'result_click' => array(
-							'active'   => boolval($analytics['gtag_result_click']),
-							'action'   => $analytics['gtag_result_click_action'],
-							'category' => $analytics['gtag_result_click_ec'],
-							'label'    => $analytics['gtag_result_click_el'],
-							'value'    => $analytics['gtag_result_click_value'],
-						),
-					),
-				),
+					);
+				} )(),
 				'statistics'            => array(
 					'enabled' => StatisticsService::instance()->options->status->value,
 					'uid'     => get_current_user_id(),
@@ -468,6 +403,7 @@ class WD_ASL_Init {
 			'asl_caching',
 			'asl_compatibility_def',
 			'asl_compatibility',
+			'asl_compatibility_options',
 			'asl_defaults',
 			'asl_st_override',
 			'asl_woo_override',

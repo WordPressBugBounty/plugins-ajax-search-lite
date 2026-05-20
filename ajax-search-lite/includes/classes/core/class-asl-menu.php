@@ -74,11 +74,6 @@ if ( !class_exists('WD_ASL_Menu') ) {
 						'slug'  => 'asl_compatibility',
 					),
 					array(
-						'title' => __('Performance options', 'ajax-search-lite'),
-						'file'  => '/backend/performance_options.php',
-						'slug'  => 'asl_performance_options',
-					),
-					array(
 						'title' => __('Maintenance', 'ajax-search-lite'),
 						'file'  => '/backend/maintenance.php',
 						'slug'  => 'asl_maintenance',
