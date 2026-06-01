@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Lite 4.14.2\n"
+"Project-Id-Version: Ajax Search Lite 4.14.3\n"
 "Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-lite\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-05-20T14:15:44+00:00\n"
+"POT-Creation-Date: 2026-06-01T09:23:27+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ajax-search-lite\n"
@@ -111,9 +111,9 @@ msgstr ""
 #: backend/tabs/instance/layout/keyword_highlight.php:59
 #: backend/tabs/instance/layout_options.php:29
 #: backend/tabs/instance/layout_options.php:41
-#: build/js/analytics.js:149
-#: build/js/cache.js:210
-#: build/js/compatibility.js:136
+#: build/js/analytics.js:179
+#: build/js/cache.js:240
+#: build/js/compatibility.js:161
 #: build/js/maintenance.js:106
 #: build/js/statistics.js:262
 msgid "Documentation"
@@ -1266,8 +1266,11 @@ msgid "Maintenance"
 msgstr ""
 
 #: build/js/analytics.js:109
+#: build/js/analytics.js:144
 #: build/js/cache.js:210
+#: build/js/cache.js:240
 #: build/js/compatibility.js:121
+#: build/js/compatibility.js:146
 #: build/js/help-support.js:96
 #: build/js/statistics.js:257
 msgid "⭐ Upgrade to Pro"
@@ -1291,26 +1294,38 @@ msgstr ""
 msgid "Go to Plugins page"
 msgstr ""
 
-#: build/js/analytics.js:119
-#: build/js/compatibility.js:126
+#: build/js/analytics.js:144
+#: build/js/cache.js:240
+#: build/js/compatibility.js:146
+msgid "Unlock more with Ajax Search Pro"
+msgstr ""
+
+#: build/js/analytics.js:144
+#: build/js/cache.js:240
+#: build/js/compatibility.js:146
+msgid "Powerful features not available in the free version"
+msgstr ""
+
+#: build/js/analytics.js:149
+#: build/js/compatibility.js:151
 #: build/js/statistics.js:262
 msgid "Enjoying Ajax Search Lite?"
 msgstr ""
 
-#: build/js/analytics.js:119
-#: build/js/compatibility.js:126
+#: build/js/analytics.js:149
+#: build/js/compatibility.js:151
 #: build/js/statistics.js:262
 msgid "A quick review on WordPress.org helps the plugin grow. It only takes a minute!"
 msgstr ""
 
-#: build/js/analytics.js:119
-#: build/js/compatibility.js:126
+#: build/js/analytics.js:149
+#: build/js/compatibility.js:151
 #: build/js/statistics.js:262
 msgid "Leave a Review"
 msgstr ""
 
-#: build/js/analytics.js:119
-#: build/js/compatibility.js:126
+#: build/js/analytics.js:149
+#: build/js/compatibility.js:151
 #: build/js/statistics.js:227
 #: build/js/statistics.js:242
 #: build/js/statistics.js:252
@@ -1318,238 +1333,238 @@ msgstr ""
 msgid "Maybe later"
 msgstr ""
 
-#: build/js/analytics.js:119
-#: build/js/compatibility.js:126
+#: build/js/analytics.js:149
+#: build/js/compatibility.js:151
 #: build/js/statistics.js:262
 msgid "Never"
 msgstr ""
 
-#: build/js/analytics.js:124
+#: build/js/analytics.js:154
 msgid "Event name is required."
 msgstr ""
 
-#: build/js/analytics.js:124
+#: build/js/analytics.js:154
 msgid "Event action must start with a letter and contain only letters, numbers, and underscores (no spaces)."
 msgstr ""
 
-#: build/js/analytics.js:124
+#: build/js/analytics.js:154
 msgid "Parameter name must start with a letter and contain only letters, numbers, and underscores."
 msgstr ""
 
-#: build/js/analytics.js:124
+#: build/js/analytics.js:154
 msgid "Parameter value must not be empty."
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Event name (e.g. Track search phrase)"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Delete?"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Yes"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "No"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Delete event"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Event action"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Required. The GA4 event name — letters, numbers and underscores only, no spaces (e.g. search_start)."
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Parameters"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Available variables:"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Parameter name"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Value"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "Remove parameter"
 msgstr ""
 
-#: build/js/analytics.js:139
+#: build/js/analytics.js:169
 msgid "+ Add parameter"
 msgstr ""
 
-#: build/js/analytics.js:144
+#: build/js/analytics.js:174
 msgid "Add event"
 msgstr ""
 
-#: build/js/analytics.js:144
+#: build/js/analytics.js:174
 msgid "No events configured. Click \"Add event\" to create one."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Input focus"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Fires when the user clicks on the search input field."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Search start"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Fires when the live search request begins."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Search end"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Fires when the live search results are displayed."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Magnifier click"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Fires when the user clicks the magnifier icon."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Enter / Return key"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Fires when the user presses Enter in the search input."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Filter change"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Fires when the user changes a front-end filter option."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Result click"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Fires when the user clicks on a search result."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 #: build/js/cache.js:150
 #: build/js/statistics.js:129
 msgid "There are unsaved changes, are you sure you want to leave?"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 #: build/js/cache.js:150
 #: build/js/statistics.js:129
 msgid "Options saved successfully!"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 #: build/js/cache.js:150
 #: build/js/statistics.js:129
 msgid "Options reset successfully!"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 #: build/js/cache.js:150
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 #: build/js/search-instance.js:87
 #: build/js/statistics.js:129
 msgid "Loading..."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 #: build/js/cache.js:150
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 #: build/js/statistics.js:129
 msgid "Error loading options, please reload the page."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Event tracking enabled"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Send search interaction events to Google Analytics / GTM."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Tracking ID (optional)"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Leave empty to use the globally installed GA/GTM tracker. Provide a UA-XXXXXX-X or G-XXXXXXXX ID to send events to a specific property."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Configure one or more GA events per trigger. Each event fires independently when its trigger occurs."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Save!"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 #: build/js/cache.js:150
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 #: build/js/statistics.js:129
 msgid "Reset to defaults"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 #: build/js/cache.js:150
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 #: build/js/statistics.js:129
 msgid "Confirm"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 msgid "Are you sure you want to reset all analytics settings to defaults? All configured events will be removed."
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 #: build/js/cache.js:150
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 #: build/js/maintenance.js:106
 #: build/js/statistics.js:129
 msgid "Reset"
 msgstr ""
 
-#: build/js/analytics.js:149
+#: build/js/analytics.js:179
 #: build/js/cache.js:150
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 #: build/js/maintenance.js:106
 #: build/js/statistics.js:129
 #: build/js/statistics.js:197
 msgid "Cancel"
 msgstr ""
 
-#: build/js/analytics.js:149
-#: build/js/cache.js:210
+#: build/js/analytics.js:179
+#: build/js/cache.js:240
 #: build/js/statistics.js:262
 msgid "Settings"
 msgstr ""
@@ -1758,171 +1773,171 @@ msgstr ""
 msgid "Cache is turned off! "
 msgstr ""
 
-#: build/js/cache.js:210
+#: build/js/cache.js:240
 msgid "Cache Statistics"
 msgstr ""
 
-#: build/js/compatibility.js:126
+#: build/js/compatibility.js:151
 msgid "Compatibility settings saved!"
 msgstr ""
 
-#: build/js/compatibility.js:126
+#: build/js/compatibility.js:151
 msgid "Compatibility settings reset to defaults!"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Save"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Are you sure you want to reset all compatibility settings to defaults?"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "No jQuery (non-minified)"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "No jQuery (minified)"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Classic"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Optimized"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Optimized + Async"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "CSS & JS Compatibility"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "JavaScript source"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Choose the front-end JavaScript bundle variant."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Script loading method"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Optimized methods defer the script loading for better page performance."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Initialize instances only when in viewport"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Defers the search instance initialization until it scrolls into view."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Detect AJAX powered themes"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Enable if your theme loads pages via AJAX and the search stops working after navigation."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Load Google Fonts"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Loads the Google Fonts used by the search themes. Disable if you handle fonts yourself."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Use custom AJAX handler"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Posts queries to a custom handler that bypasses part of the WordPress loading process for faster responses. Turn off if the search stops working."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Load JavaScript in site footer"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Moves the search JavaScript files to the footer for better page load performance."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "None"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Force case sensitivity"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Force case insensitivity"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Query Compatibility"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Soft query check"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Use a less strict query validation. Try this if results are missing."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Use ACF get_field()"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Uses the ACF get_field() function for custom field values instead of direct database access."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Force database collation case"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Forces case sensitivity or insensitivity on the search queries to work around collation issues."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Force UNICODE on queries"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Forces the UNICODE charset on the search queries. May help with multibyte languages."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Force UTF8 on LIKE queries"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Forces the UTF8 charset on LIKE comparisons. May help with accented characters."
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Compatibility"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "CSS & JS"
 msgstr ""
 
-#: build/js/compatibility.js:136
+#: build/js/compatibility.js:161
 msgid "Query"
 msgstr ""
 

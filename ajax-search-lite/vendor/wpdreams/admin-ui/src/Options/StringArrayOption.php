@@ -24,9 +24,12 @@ class StringArrayOption extends AbstractOption {
 
 	public function __construct( array $args ) {
 		parent::__construct($args);
-		$this->value = array_map(
-			fn ( $v ) => Str::anyToString($v),
-			$this->args['value']
-		);
+		$raw = $this->args['value'];
+		if ( is_string( $raw ) ) {
+			$raw = array_values( array_filter( array_map( 'trim', explode( ',', $raw ) ) ) );
+		} elseif ( ! is_array( $raw ) ) {
+			$raw = array();
+		}
+		$this->value = array_map( fn ( $v ) => Str::anyToString( $v ), $raw );
 	}
 }

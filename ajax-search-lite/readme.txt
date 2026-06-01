@@ -4,8 +4,8 @@ Donate link: http://wp-dreams.com
 Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
-Tested up to: 6.9
-Stable tag: 4.14.2
+Tested up to: 7.0
+Stable tag: 4.14.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,10 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.14.3 =
+* Fix: Taxonomy term exclusions incorrectly excluded posts not assigned to the filtered category
+* Fix: Admin font (Inter) not loading due to misplaced @import; body font-family no longer overrides the WordPress admin globally
+
 = 4.14.2 =
 * New: Compatibility, Maintenance, and Help & Support settings submenus redesigned with a modern interface
 * New: Statistics page now includes area charts

@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "wpdreams/admin-ui",
-            "version": "v0.0.18",
-            "version_normalized": "0.0.18.0",
+            "version": "v0.0.20",
+            "version_normalized": "0.0.20.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpdreams/admin-ui.git",
-                "reference": "a431f52e84d970ce1b742cf8e4396484dc7c0909"
+                "reference": "985d291ff92e5c002e349f0935dbc948cb062de4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpdreams/admin-ui/zipball/a431f52e84d970ce1b742cf8e4396484dc7c0909",
-                "reference": "a431f52e84d970ce1b742cf8e4396484dc7c0909",
+                "url": "https://api.github.com/repos/wpdreams/admin-ui/zipball/985d291ff92e5c002e349f0935dbc948cb062de4",
+                "reference": "985d291ff92e5c002e349f0935dbc948cb062de4",
                 "shasum": ""
             },
             "require": {
@@ -31,7 +31,7 @@
                 "yoast/phpunit-polyfills": "*",
                 "zircote/swagger-php": "*"
             },
-            "time": "2026-05-18T14:59:37+00:00",
+            "time": "2026-05-25T07:56:52+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {

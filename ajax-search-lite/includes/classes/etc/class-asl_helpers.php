@@ -656,6 +656,7 @@ if ( !class_exists('ASL_Helpers') ) {
 					'logic'        => $term_logic,
 					'_termset'     => isset($o['categoryset']) ? $o['categoryset'] : array(),
 					'_is_checkbox' => true,
+					'allow_empty'  => true,
 				);
 			}
 
