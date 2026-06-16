@@ -25,7 +25,7 @@ if ( !class_exists('wpdreamsColorPickerDummy') ) {
 			}
 			echo "<input 
             type='text' 
-            class='color' 
+            class='asp-color' 
             id='" . esc_attr($this->name) . "' id='wpdreamscolorpicker_" . esc_attr(self::$_instancenumber) . "'  
             name='" . esc_attr($this->name) . "' id='wpdreamscolorpicker_" . esc_attr(self::$_instancenumber) . "' 
             value='" . esc_attr($this->data) . "' />";

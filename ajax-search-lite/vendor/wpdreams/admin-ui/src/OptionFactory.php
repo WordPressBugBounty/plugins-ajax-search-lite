@@ -12,6 +12,7 @@ use WPDRMS\AdminUI\Options\PriorityGroupsArrayOption;
 use WPDRMS\AdminUI\Options\TaxonomyExclusionRuleArrayOption;
 use WPDRMS\AdminUI\Options\IntArrayOption;
 use WPDRMS\AdminUI\Options\IntOption;
+use WPDRMS\AdminUI\Options\LanguageSelectOption;
 use WPDRMS\AdminUI\Options\Option;
 use WPDRMS\AdminUI\Options\SelectOption;
 use WPDRMS\AdminUI\Options\StringArrayOption;
@@ -26,17 +27,18 @@ class OptionFactory {
 	 * @var array<string, class-string>
 	 */
 	private const TYPES = array(
-		'bool'                    => BoolOption::class,
-		'int'                     => IntOption::class,
-		'string'                  => StringOption::class,
-		'select'                  => SelectOption::class,
-		'border'                  => BorderOption::class,
-		'box_shadow'              => BoxShadowOption::class,
-		'directory_list'          => DirectoryListOption::class,
-		'string_array'            => StringArrayOption::class,
-		'int_array'               => IntArrayOption::class,
-		'event_config_array'      => EventConfigArrayOption::class,
-		'custom_field_rule_array'      => CustomFieldRuleArrayOption::class,
+		'bool'                          => BoolOption::class,
+		'int'                           => IntOption::class,
+		'string'                        => StringOption::class,
+		'select'                        => SelectOption::class,
+		'language_select'               => LanguageSelectOption::class,
+		'border'                        => BorderOption::class,
+		'box_shadow'                    => BoxShadowOption::class,
+		'directory_list'                => DirectoryListOption::class,
+		'string_array'                  => StringArrayOption::class,
+		'int_array'                     => IntArrayOption::class,
+		'event_config_array'            => EventConfigArrayOption::class,
+		'custom_field_rule_array'       => CustomFieldRuleArrayOption::class,
 		'taxonomy_exclusion_rule_array' => TaxonomyExclusionRuleArrayOption::class,
 		'priority_groups_array'         => PriorityGroupsArrayOption::class,
 	);

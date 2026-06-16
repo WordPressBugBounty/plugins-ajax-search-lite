@@ -1451,12 +1451,19 @@ jQuery(function($){
     /**
      * Spectrum: color chooser
      */
-    $(".wpdreamsColorPicker .color").spectrum({
+    $(".wpdreamsColorPicker .asp-color").spectrum({
+        type: 'color',
+        preferredFormat: 'rgb',
         showInput: true,
         showAlpha: true,
         showPalette: true,
         showSelectionPalette: true
     });
+    // Guard against legacy jscolor (bundled by some themes' mega-menu, e.g. "theblog")
+    // hijacking these inputs on window.load and resetting their values. jscolor's
+    // bind() skips any <input> whose DOM `color` property is already truthy. The
+    // .asp-color rename already prevents the match; this is defense-in-depth.
+    $(".wpdreamsColorPicker .asp-color").each(function () { this.color = this.color || true; });
     $('.wpdreamsColorPicker .triggerer').bind('click', function () {
         function hex2rgb(hex, opacity) {
             var rgb = hex.replace('#', '').match(/(.{2})/g);
@@ -1474,7 +1481,7 @@ jQuery(function($){
         }
 
         var parent = $(this).parent();
-        var input = $('input.color', parent);
+        var input = $('input.asp-color', parent);
         var val = input.val();
         if (val.length <= 7) val = hex2rgb(val, 1);
         input.spectrum("set", val);
@@ -1483,13 +1490,13 @@ jQuery(function($){
     /**
      * Gradient chooser
      */
-    $(".wpdreamsGradient .color, .wpdreamsGradient .grad_type, .wpdreamsGradient .dslider").change(function () {
+    $(".wpdreamsGradient .asp-color, .wpdreamsGradient .grad_type, .wpdreamsGradient .dslider").change(function () {
         var $parent = $(this);
         while (!$parent.hasClass('wpdreamsGradient')) {
             $parent = $parent.parent();
         }
         var $hidden = $('input.gradient', $parent);
-        var $colors = $('input.color', $parent);
+        var $colors = $('input.asp-color', $parent);
         var $type = $('select.grad_type', $parent);
         var $dslider = $('div.dslider', $parent);
         var $grad_ex = $('div.grad_ex', $parent);
@@ -1516,7 +1523,7 @@ jQuery(function($){
     $(".wpdreamsGradient>.triggerer").click(function () {
         var $parent = $(this).parent();
         var $hidden = $('input.gradient', $parent);
-        var $colors = $('input.color', $parent);
+        var $colors = $('input.asp-color', $parent);
         var $dslider = $('div.dslider', $parent);
         var $type = $('select.grad_type', $parent);
         var colors = $hidden.val().match(/(.*?)-(.*?)-(.*?)-(.*)/);
@@ -1628,7 +1635,7 @@ jQuery(function($){
 
         var w = $.trim( parent.find('input._xx_width_xx_').val() ) + "px ";
         var s = $.trim( parent.find('select._xx_style_xx_').val() ) + " ";
-        var c = $.trim( parent.find('input.color').val() ) + ";";
+        var c = $.trim( parent.find('input.asp-color').val() ) + ";";
         var border = "border:" + w + s + c;
 
         var tl = $.trim( parent.find('input._xx_topleft_xx_').val() ) + "px ";
@@ -1656,7 +1663,7 @@ jQuery(function($){
 
         var border = hidden.val().replace(/(\r\n|\n|\r)/gm, "").match(/border:(.*?)px (.*?) (.*?);/);
         parent.find('input._xx_width_xx_').val(border[1]);
-        parent.find('input.color').val(border[3]);
+        parent.find('input.asp-color').val(border[3]);
 
         var borderradius = hidden.val().replace(/(\r\n|\n|\r)/gm, "").match(/border-radius:(.*?)px(.*?)px(.*?)px(.*?)px;/);
         parent.find('input._xx_topleft_xx_').val(borderradius[1]);
@@ -1664,7 +1671,7 @@ jQuery(function($){
         parent.find('input._xx_bottomright_xx_').val(borderradius[3]);
         parent.find('input._xx_bottomleft_xx_').val(borderradius[4]);
         parent.find('select._xx_style_xx_').val(border[2]);
-        parent.find('input.color').spectrum('set', border[3]);
+        parent.find('input.asp-color').spectrum('set', border[3]);
 
         // Separate trigger! otherwise the loaded value is overridden
         parent.find('select._xx_style_xx_').trigger('change');

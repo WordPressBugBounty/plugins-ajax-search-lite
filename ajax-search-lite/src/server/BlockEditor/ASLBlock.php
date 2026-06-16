@@ -34,6 +34,7 @@ class ASLBlock implements BlockInterface {
 		register_block_type(
 			'ajax-search-lite/block-asl-main',
 			array(
+				'api_version'     => 3,
 				'editor_script'   => 'wdo-asl-block-editor',
 				'render_callback' => array( $this, 'render' ),
 			)

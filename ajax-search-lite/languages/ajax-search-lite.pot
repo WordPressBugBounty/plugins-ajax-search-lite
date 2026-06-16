@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Lite 4.14.3\n"
+"Project-Id-Version: Ajax Search Lite 4.14.4\n"
 "Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-lite\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-01T09:23:27+00:00\n"
+"POT-Creation-Date: 2026-06-16T14:57:34+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ajax-search-lite\n"
@@ -1265,13 +1265,21 @@ msgstr ""
 msgid "Maintenance"
 msgstr ""
 
+#: src/server/Utils/AdvancedField/Types/WooCommerceAddToCart.php:53
+msgid "Add to cart"
+msgstr ""
+
+#: src/server/Utils/AdvancedField/Types/WooCommerceAddToCart.php:53
+msgid "Choose variation"
+msgstr ""
+
 #: build/js/analytics.js:109
 #: build/js/analytics.js:144
 #: build/js/cache.js:210
 #: build/js/cache.js:240
 #: build/js/compatibility.js:121
 #: build/js/compatibility.js:146
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 #: build/js/statistics.js:257
 msgid "⭐ Upgrade to Pro"
 msgstr ""
@@ -1941,64 +1949,68 @@ msgstr ""
 msgid "Query"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Support"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "For support please visit the "
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Ajax Search Lite support forums"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid " on wordpress.org."
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Before Opening a Ticket"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Read "
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "this thread"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Search through previous support threads — the problem may have been solved before."
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Need More Features?"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Advanced filtering by category, tag, date, price, and custom taxonomies"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "WooCommerce integration with live product search"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Custom fields and ACF support"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Live indexing for instant, always up-to-date results"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Multiple independent search instances with individual settings"
 msgstr ""
 
-#: build/js/help-support.js:96
+#: build/js/help-support.js:106
 msgid "Help & Support"
+msgstr ""
+
+#: build/js/help-support.js:106
+msgid "Suggest a Feature"
 msgstr ""
 
 #: build/js/maintenance.js:106

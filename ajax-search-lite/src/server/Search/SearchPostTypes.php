@@ -781,20 +781,19 @@ class SearchPostTypes extends AbstractSearch {
 				$tax_term_query = " (
 					$empty_terms_query
 
-					$post_id_field IN (
-						SELECT DISTINCT(tr.object_id)
-							FROM $wpdb->term_relationships AS tr
-							LEFT JOIN $wpdb->term_taxonomy as tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = '$taxonomy')
-											WHERE
-												tt.term_id NOT IN ($words)
-												AND tr.object_id NOT IN (
-													SELECT DISTINCT(trs.object_id)
-													FROM $wpdb->term_relationships AS trs
-								LEFT JOIN $wpdb->term_taxonomy as tts ON (trs.term_taxonomy_id = tts.term_taxonomy_id AND tts.taxonomy = '$taxonomy')
-													WHERE tts.term_id IN ($words)
-												)
-									)
-								)";
+					EXISTS (
+						SELECT 1
+						FROM $wpdb->term_relationships AS tr
+						LEFT JOIN $wpdb->term_taxonomy AS tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = '$taxonomy')
+						WHERE tr.object_id = $post_id_field
+					)
+					AND NOT EXISTS (
+						SELECT 1
+						FROM $wpdb->term_relationships AS trs
+						LEFT JOIN $wpdb->term_taxonomy AS tts ON (trs.term_taxonomy_id = tts.term_taxonomy_id AND tts.taxonomy = '$taxonomy')
+						WHERE tts.term_id IN ($words) AND trs.object_id = $post_id_field
+					)
+				)";
 			}
 			if ( !empty($item['include']) ) {
 				$words = implode( ',', $item['include'] );
@@ -814,11 +813,13 @@ class SearchPostTypes extends AbstractSearch {
 					$tax_term_query .= "(
 						$empty_terms_query
 
-						$post_id_field IN ( SELECT DISTINCT(tr.object_id)
+						EXISTS (
+							SELECT 1
 							FROM $wpdb->term_relationships AS tr
-							LEFT JOIN $wpdb->term_taxonomy as tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = '$taxonomy')
-							WHERE tt.term_id IN ($words)
-					  ) )";
+							LEFT JOIN $wpdb->term_taxonomy AS tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id AND tt.taxonomy = '$taxonomy')
+							WHERE tt.term_id IN ($words) AND tr.object_id = $post_id_field
+						)
+					)";
 				}
 			}
 

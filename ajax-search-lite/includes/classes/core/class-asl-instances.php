@@ -138,12 +138,20 @@ class WD_ASL_Instances {
 		return $params;
 	}
 
+	/**
+	 * Records that a search instance has been printed on the current page request.
+	 *
+	 * The instance configuration itself is no longer persisted: the front-end runtime
+	 * reads it straight from the .asl_init_data div's data-settings attribute (see
+	 * asl.shortcode.script.php and src/client/plugin/wrapper/ASL.ts). This only tracks
+	 * which instance IDs rendered. See wpdreams/ajax-search-lite#127.
+	 *
+	 * @param int|string $id   The search instance ID.
+	 * @param array      $data Kept for signature/BC; no longer stored.
+	 */
+	// phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter -- $data kept for BC; config is read client-side from the div, not persisted.
 	public function add_script_data( $id, array $data ) {
-		$this->script_data[ $id ] = wp_json_encode($data);
-	}
-
-	public function get_script_data() {
-		return $this->script_data;
+		$this->script_data[ $id ] = true;
 	}
 
 	// ------------------------------------------------------------

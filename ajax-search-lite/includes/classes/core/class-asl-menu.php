@@ -26,7 +26,7 @@ if ( !class_exists('WD_ASL_Menu') ) {
 			'title'    => 'Ajax Search Lite',
 			'slug'     => 'asl_settings',
 			'file'     => '/backend/settings.php',
-			'position' => '206.5',
+			'position' => '59.436',
 			'icon_url' => 'icon.png',
 		);
 
@@ -49,8 +49,8 @@ if ( !class_exists('WD_ASL_Menu') ) {
 					'title'    => __('Ajax Search Lite', 'ajax-search-lite'),
 					'slug'     => 'asl_settings',
 					'file'     => '/backend/settings.php',
-					'position' => '206.5',
-					'icon_url' => 'icon.png',
+					'position' => '59.436',
+					'icon_url' => 'img/svg/asl-menu-icon.svg',
 				);
 				$submenu_items = array(
 					array(
@@ -96,6 +96,32 @@ if ( !class_exists('WD_ASL_Menu') ) {
 		}
 
 		/**
+		 * Resolves a menu icon path to a value usable by add_menu_page().
+		 *
+		 * SVG files are inlined as a base64 data URI so the WordPress sidebar renders a
+		 * crisp vector that wp-admin/js/svg-painter.js can recolour for the admin colour
+		 * scheme. Anything else — or an unreadable SVG — falls back to a plain plugin URL.
+		 *
+		 * @param string $rel Plugin-relative icon path (e.g. 'img/svg/asl-menu-icon.svg').
+		 * @return string A data URI or a plugin URL.
+		 */
+		public static function menuIcon( $rel ) {
+			if ( substr( $rel, -4 ) === '.svg' ) {
+				$file = ASL_PATH . ltrim( $rel, '/' );
+				if ( is_readable( $file ) ) {
+					// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading a small SVG bundled with the plugin; wp_remote_get() is for remote URLs.
+					$svg = file_get_contents( $file );
+					if ( $svg !== false ) {
+						// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode -- Building a standard data:image/svg+xml;base64 URI for the admin menu icon.
+						return 'data:image/svg+xml;base64,' . base64_encode( $svg );
+					}
+				}
+			}
+
+			return ASL_URL . $rel;
+		}
+
+		/**
 		 * Runs the menu registration process
 		 */
 		public static function register() {
@@ -113,7 +139,7 @@ if ( !class_exists('WD_ASL_Menu') ) {
 				$capability,
 				self::$main_menu['slug'],
 				array( 'WD_ASL_Menu', 'route' ),
-				ASL_URL . self::$main_menu['icon_url'],
+				self::menuIcon( self::$main_menu['icon_url'] ),
 				self::$main_menu['position']
 			);
 			self::$hooks[ $h ] = self::$main_menu['slug'];

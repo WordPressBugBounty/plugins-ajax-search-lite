@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 4.14.3
+Stable tag: 4.14.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,14 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.14.4 =                                                                                                                 
+* Fixed: the search block now uses the current Gutenberg block API (v3), resolving the WordPress 6.9 deprecation notice and rendering correctly inside the new iframe block editor                                                                 
+* Fixed: optimized taxonomy filtering in search queries (EXISTS / NOT EXISTS instead of nested IN/NOT IN sub-queries) to prevent oversized queries being killed on some managed hosts                                                               
+* Fixed: a possible fatal error during plugin updates caused by a stale class reference held in memory                     
+* Fixed: prevented theme-bundled jscolor scripts from hijacking the admin colour pickers and resetting values after save   
+* Fixed: the admin menu icon is now a crisp vector (SVG) instead of a blurry raster image                                  
+* Changed: upgraded the back-end colour picker (spectrum) from v1.1.1 to v2.0.10, fixing a Safari white-swatch bug         
+
 = 4.14.3 =
 * Fix: Taxonomy term exclusions incorrectly excluded posts not assigned to the filtered category
 * Fix: Admin font (Inter) not loading due to misplaced @import; body font-family no longer overrides the WordPress admin globally

@@ -12,19 +12,41 @@ if ( !defined('ABSPATH') ) {
  */
 class Server {
 	/**
+	 * Returns the official WordPress environment type.
+	 *
+	 * Thin, testable wrapper over wp_get_environment_type() that normalises the result to one of
+	 * the four canonical values and defaults to 'production' (matching WordPress' own default).
+	 * Used by license activation to let the server classify a production vs development slot.
+	 *
+	 * @param string|null $wp_environment_type Optional. wp_get_environment_type() value. Default null.
+	 *
+	 * @return string One of 'local', 'development', 'staging' or 'production'.
+	 */
+	public static function getEnvironmentType( ?string $wp_environment_type = null ): string {
+		if ( $wp_environment_type === null && function_exists('wp_get_environment_type') ) {
+			$wp_environment_type = wp_get_environment_type();
+		}
+		return in_array( $wp_environment_type, array( 'local', 'development', 'staging', 'production' ), true )
+			? $wp_environment_type
+			: 'production';
+	}
+
+	/**
 	 * Determines if the current environment is a local development environment.
 	 *
 	 * This method checks multiple indicators to ascertain if the environment
 	 * is local. It checks:
-	 * 1. If WP_DEBUG is defined and true.
-	 * 2. If the site URL contains common local development domains.
-	 * 3. If the server name is localhost or a loopback address.
-	 * 4. If an environment variable (e.g., WP_ENV) is set to 'development'.
+	 * 1. The official wp_get_environment_type() (local/development/staging).
+	 * 2. If WP_DEBUG is defined and true.
+	 * 3. If the site URL contains common local development domains.
+	 * 4. If the server name is localhost or a loopback address.
+	 * 5. If an environment variable (e.g., WP_ENV) is set to 'development'.
 	 *
-	 * @param bool|null                  $wp_debug Optional. WP_DEBUG value. Default null.
-	 * @param string|null                $site_url Optional. Site URL. Default null.
-	 * @param array<string, string>|null $server   Optional. Server variables. Default null.
-	 * @param string|null                $wp_env   Optional. WP_ENV value. Default null.
+	 * @param bool|null                  $wp_debug             Optional. WP_DEBUG value. Default null.
+	 * @param string|null                $site_url             Optional. Site URL. Default null.
+	 * @param array<string, string>|null $server               Optional. Server variables. Default null.
+	 * @param string|null                $wp_env               Optional. WP_ENV value. Default null.
+	 * @param string|null                $wp_environment_type  Optional. wp_get_environment_type() value. Default null.
 	 *
 	 * @return bool True if it's a local development environment, false otherwise.
 	 * @noinspection HttpUrlsUsage
@@ -33,9 +55,19 @@ class Server {
 		?bool $wp_debug = null,
 		?string $site_url = null,
 		?array $server = null,
-		?string $wp_env = null
+		?string $wp_env = null,
+		?string $wp_environment_type = null
 	): bool {
-		// 1. Check WP_DEBUG
+		// 1. Official WordPress signal: the site can explicitly declare its environment
+		// via the WP_ENVIRONMENT_TYPE constant/variable (defaults to 'production').
+		if ( $wp_environment_type === null && function_exists('wp_get_environment_type') ) {
+			$wp_environment_type = wp_get_environment_type();
+		}
+		if ( in_array( $wp_environment_type, array( 'local', 'development', 'staging' ), true ) ) {
+			return true;
+		}
+
+		// 2. Check WP_DEBUG
 		if ( $wp_debug === null ) {
 			$wp_debug = defined('WP_DEBUG') && WP_DEBUG;
 		}
@@ -133,6 +165,7 @@ class Server {
 				'.kinsta.cloud',
 				'.local/',
 				'.test/',
+				'.lan/',
 			);
 			foreach ( $known_test_domains as $domain ) {
 				if ( strpos($site_url, $domain) !== false ) {
@@ -146,6 +179,7 @@ class Server {
 			$domain_endings = array(
 				'.test',
 				'.local',
+				'.lan',
 			);
 			foreach ( $domain_endings as $domain ) {
 				if ( str_ends_with($site_url, $domain) ) {

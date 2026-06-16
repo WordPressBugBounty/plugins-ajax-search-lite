@@ -374,21 +374,6 @@ class WD_ASL_Init {
 			'before',
 			true
 		);
-
-		add_action(
-			'wp_print_footer_scripts',
-			function () use ( $handle ) {
-				$script_data = wd_asl()->instances->get_script_data();
-				if ( count($script_data) > 0 ) {
-					$script = 'window.ASL_INSTANCES = [];';
-					foreach ( $script_data as $id => $data ) {
-						$script .= "window.ASL_INSTANCES[$id] = $data;";
-					}
-					wp_add_inline_script($handle, $script, 'before');
-				}
-			},
-			0
-		);
 	}
 
 	public function pluginReset( $trigger_activate = true ) {

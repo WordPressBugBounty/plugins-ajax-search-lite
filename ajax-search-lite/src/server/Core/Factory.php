@@ -49,23 +49,38 @@ class Factory {
 		if ( !isset(self::SUPPORTED_INTERFACES[ $interface_name ]) ) {
 			return array();
 		}
-		$classes = self::SUPPORTED_INTERFACES[ $interface_name ];
-		return array_map(
-			function ( $class_name ) use ( $args ) {
-				if ( method_exists($class_name, 'instance') ) {
-					if ( is_array($args) ) {
-						return $class_name::instance(...$args);
-					} else {
-						return $class_name::instance();
-					}
+		return self::instantiate( self::SUPPORTED_INTERFACES[ $interface_name ], $args );
+	}
+
+	/**
+	 * Instantiates a list of classes, skipping any that no longer exist.
+	 *
+	 * A listed class may be missing if it was removed in a newer version while
+	 * an older Factory (still referencing it) is in memory during the plugin
+	 * file-swap on an update. Skipping it degrades gracefully (one hook/route
+	 * not registered for that request) instead of fataling the whole admin /
+	 * REST request in that narrow window.
+	 *
+	 * @param string[]     $classes
+	 * @param mixed[]|null $args
+	 * @return object[]
+	 */
+	public static function instantiate( array $classes, ?array $args = null ): array {
+		$objects = array();
+		foreach ( $classes as $class_name ) {
+			if ( !class_exists($class_name) ) {
+				if ( defined('WP_DEBUG') && WP_DEBUG ) {
+					// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+					error_log(sprintf('Ajax Search Lite: skipped missing class "%s" during Factory instantiation.', $class_name));
 				}
-				if ( is_array($args) ) {
-					return new $class_name(...$args); // @phpstan-ignore-line
-				} else {
-					return new $class_name(); // @phpstan-ignore-line
-				}
-			},
-			$classes
-		);
+				continue;
+			}
+			if ( method_exists($class_name, 'instance') ) {
+				$objects[] = is_array($args) ? $class_name::instance(...$args) : $class_name::instance();
+			} else {
+				$objects[] = is_array($args) ? new $class_name(...$args) : new $class_name(); // @phpstan-ignore-line
+			}
+		}
+		return $objects;
 	}
 }

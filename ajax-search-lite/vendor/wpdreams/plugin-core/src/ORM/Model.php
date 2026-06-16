@@ -46,6 +46,14 @@ abstract class Model {
 	protected static bool $global = true;
 
 	/**
+	 * Per-request cache of table existence, keyed by full (prefixed) table name.
+	 * Shared across all Model subclasses; the table name keeps entries distinct.
+	 *
+	 * @var array<string, bool>
+	 */
+	private static array $table_exists_cache = array();
+
+	/**
 	 * Creates the descendant Model tables
 	 *
 	 * Should be called on activation only.
@@ -126,6 +134,8 @@ abstract class Model {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 			dbDelta($sql);
 		}
+
+		self::$table_exists_cache[ $table ] = true;
 	}
 
 	/**
@@ -145,6 +155,8 @@ abstract class Model {
 		$table = static::getTableName();
 		$q     = "DROP TABLE IF EXISTS `$table`;";
 		$wpdb->query($q); // @phpcs:ignore
+
+		self::$table_exists_cache[ $table ] = false;
 	}
 
 	/**
@@ -182,6 +194,37 @@ abstract class Model {
 		} else {
 			return $wpdb->prefix . static::$table_name;
 		}
+	}
+
+	/**
+	 * Whether the descendant Model table currently exists in the database.
+	 *
+	 * Result is cached per request (keyed by the full table name) and kept in
+	 * sync by createTable()/dropTable(). Use this to guard raw queries that may
+	 * run before the table is created — e.g. action hooks like delete_post that
+	 * can fire on an upgrade before the table-creation migration has run.
+	 *
+	 * @return bool
+	 */
+	public static function tableExists(): bool {
+		if ( static::$table_name === '' ) {
+			return false;
+		}
+
+		/**
+		 * @var wpdb $wpdb
+		 */
+		global $wpdb;
+		$table = static::getTableName();
+
+		if ( !isset(self::$table_exists_cache[ $table ]) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching
+			self::$table_exists_cache[ $table ] = $wpdb->get_var(
+				$wpdb->prepare('SHOW TABLES LIKE %s', $table)
+			) === $table;
+		}
+
+		return self::$table_exists_cache[ $table ];
 	}
 
 	/**

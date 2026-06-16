@@ -23,7 +23,7 @@ if ( !class_exists('wpdreamsColorPicker') ) {
 				echo "<label for='wpdreamscolorpicker_" . esc_attr(self::$_instancenumber) . "'>" . esc_attr($this->label) . '</label>';
 			}
 			echo "<input isparam=1 type='text' 
-                    class='color' 
+                    class='asp-color' 
                     name='" . esc_attr($this->name) . "' 
                     id='wpdreamscolorpicker_" . esc_attr(self::$_instancenumber) . "' 
                     value='" . esc_attr($this->data) . "' />";
