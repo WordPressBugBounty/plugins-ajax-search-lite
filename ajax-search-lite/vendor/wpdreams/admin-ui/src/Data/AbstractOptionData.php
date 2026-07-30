@@ -12,7 +12,7 @@ use WPDRMS\Utils\ArrayUtils;
  * Handles option generation on the fly from DB stored values.
  *
  * This class does not communicate options to the DB, it is only a container.
- * For data storage handling use AbstractOptionDataORM
+ * For auto-persisted site-wide option groups use AbstractOptionDataSiteOption.
  *
  * @see .phpstorm.meta.php to specify Option types for get() method
  */

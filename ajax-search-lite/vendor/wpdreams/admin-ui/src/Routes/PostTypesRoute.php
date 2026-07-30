@@ -16,9 +16,10 @@ use WPDRMS\PluginCore\Rest\AbstractRest;
  * are included as well.
  */
 class PostTypesRoute extends AbstractRest {
-	public function registerRoutes( string $route_namespace ): void {
+	public function registerRoutes( string $route_namespace = self::ROUTE_NAMESPACE ): void {
+		$this->route_namespace = $this->sanitizeNamespace( $route_namespace );
 		register_rest_route(
-			self::ROUTE_NAMESPACE,
+			$this->route_namespace,
 			'options/post-types/get',
 			array(
 				'methods'             => 'GET',
@@ -55,7 +56,7 @@ class PostTypesRoute extends AbstractRest {
 			 *
 			 * @param array<int,array{slug:string,name:string}> $result Normalized post type list.
 			 */
-			$result = apply_filters( 'wpdrms_admin_ui_post_types', $result );
+			$result = apply_filters( $this->vendorToken() . '_admin_ui_post_types', $result );
 
 			return new WP_REST_Response( $result, 200 );
 		} catch ( Exception $e ) {

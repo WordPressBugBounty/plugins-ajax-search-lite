@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 7.0
-Stable tag: 4.14.4
+Stable tag: 4.14.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,9 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.14.5 = 
+* Fixed: A security issue, discovered by Jakub Herman, [CVE-2026-16258](https://wpscan.com/vulnerability/8487a2ce-cb4d-46b8-942e-334ac94cf115)
+
 = 4.14.4 =                                                                                                                 
 * Fixed: the search block now uses the current Gutenberg block API (v3), resolving the WordPress 6.9 deprecation notice and rendering correctly inside the new iframe block editor                                                                 
 * Fixed: optimized taxonomy filtering in search queries (EXISTS / NOT EXISTS instead of nested IN/NOT IN sub-queries) to prevent oversized queries being killed on some managed hosts                                                               

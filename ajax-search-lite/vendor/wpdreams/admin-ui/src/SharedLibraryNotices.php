@@ -48,8 +48,10 @@ class SharedLibraryNotices {
 
 		if ( ! empty( $conflict['source_name'] ) ) {
 			return sprintf(
-				/* translators: 1: consumer plugin, 2: library name, 3: required version, 4: loaded version, 5: provider plugin */
-				__( '%1$s needs the shared "%2$s" library version %3$s or newer, but version %4$s is loaded, provided by the "%5$s" plugin. Update "%5$s" to its latest version so the newest shared library loads.', 'wpdrms-admin-ui' ),
+				// Plain string, no __(): a shared library cannot know its consumer's text domain, and any
+				// literal domain here mismatches the plugin slug (Plugin Check TextDomainMismatch, an ERROR).
+				// No translations were ever shipped for the library domain, so nothing is lost.
+				'%1$s needs the shared "%2$s" library version %3$s or newer, but version %4$s is loaded, provided by the "%5$s" plugin. Update "%5$s" to its latest version so the newest shared library loads.',
 				$plugin,
 				$lib,
 				$min,
@@ -59,8 +61,8 @@ class SharedLibraryNotices {
 		}
 
 		return sprintf(
-			/* translators: 1: consumer plugin, 2: library name, 3: required version, 4: loaded version */
-			__( '%1$s needs the shared "%2$s" library version %3$s or newer, but version %4$s is loaded (bundled by another active WPDreams plugin). Update that plugin to its latest version so the newest shared library loads.', 'wpdrms-admin-ui' ),
+			// See above: shared-library strings carry no text domain.
+			'%1$s needs the shared "%2$s" library version %3$s or newer, but version %4$s is loaded (bundled by another active WPDreams plugin). Update that plugin to its latest version so the newest shared library loads.',
 			$plugin,
 			$lib,
 			$min,
@@ -69,15 +71,18 @@ class SharedLibraryNotices {
 	}
 
 	/**
-	 * Registers the footer printer that exposes the conflicts to the React layer. Idempotent, so it
-	 * is safe for several active WPDreams plugins to call it (the class loads once, newest-wins).
+	 * Registers the footer printer that exposes the conflicts to the React layer.
+	 *
+	 * Uses a fixed $GLOBALS key as the dedup guard rather than a class-static, so the
+	 * registration fires exactly once per site even when each active WPDreams plugin runs
+	 * its own build-time-scoped copy of this class (scoping gives each plugin an independent
+	 * class identity, so a class-static would fire once per plugin instead of once per site).
 	 */
 	public static function register(): void {
-		static $registered = false;
-		if ( $registered ) {
+		if ( ! empty( $GLOBALS['wpdrms_admin_ui_shared_notices_registered'] ) ) {
 			return;
 		}
-		$registered = true;
+		$GLOBALS['wpdrms_admin_ui_shared_notices_registered'] = true;
 		add_action( 'admin_print_footer_scripts', array( __CLASS__, 'printData' ), 9 );
 	}
 

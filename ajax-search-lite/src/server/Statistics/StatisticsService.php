@@ -14,7 +14,6 @@ use WPDRMS\ASL\Statistics\Queries\ResultQuery;
 use WPDRMS\ASL\Statistics\Queries\SearchQuery;
 use WPDRMS\Utils\MB;
 use WPDRMS\Utils\Server;
-use WPDRMS\Utils\Str;
 
 /**
  * @phpstan-type Searches array<array{
@@ -241,7 +240,15 @@ class StatisticsService {
 		}
 
 		foreach ( $searches as $search_data ) {
-			$phrase = Str::anyToString($search_data['phrase'] ?? '');
+			/**
+			 * A search phrase is plain user input arriving on an unauthenticated route.
+			 * Coerce it to a string WITHOUT deserializing: never route untrusted input
+			 * through Str::anyToString(), which unserializes/JSON-decodes and would expose
+			 * a PHP Object Injection vector (php-utils#25). Non-scalar values (arrays or
+			 * objects from malformed JSON) are not valid phrases and are dropped.
+			 */
+			$raw_phrase = $search_data['phrase'] ?? '';
+			$phrase     = is_scalar($raw_phrase) ? (string) $raw_phrase : '';
 			/**
 			 * Excluded keywords
 			 */

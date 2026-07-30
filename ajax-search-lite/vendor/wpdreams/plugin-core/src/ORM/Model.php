@@ -306,6 +306,49 @@ abstract class Model {
 	}
 
 	/**
+	 * Every record in the table, ordered. The "fetch everything" counterpart
+	 * of findBy() -- callers previously faked this with
+	 * findBy(array(), <huge-limit>, ...) magic numbers.
+	 *
+	 * Deliberately UNBOUNDED (no LIMIT): consumers hold the full result in
+	 * memory anyway, and the consuming tables (experiences, synonyms) are
+	 * hundreds-to-thousands of rows. Do not point this at unbounded-growth
+	 * tables (interactions/logs) -- those keep paging via findBy().
+	 *
+	 * @param string $order_by Column to order by.
+	 * @param string $order    ASC|DESC.
+	 * @return static[]
+	 */
+	public static function findAll( string $order_by = 'id', string $order = 'ASC' ): array {
+		/**
+		 * @var wpdb $wpdb
+		 */
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching
+		$results = $wpdb->get_results(
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
+			'SELECT * FROM ' . static::getTableName() . " ORDER BY $order_by $order",
+			ARRAY_A
+		);
+
+		if ( !is_array($results) ) {
+			return array();
+		}
+
+		return array_map(
+			function ( $data ) {
+				$model = new static();
+				foreach ( $data as $key => $value ) {
+					$model->$key = $value;
+				}
+				return $model;
+			},
+			$results
+		);
+	}
+
+	/**
 	 * Find records by WHERE conditions
 	 *
 	 * @param Conditions $conditions  e.g., ['phrase' => 'test'] (=), ['date' => ['operator' => '>', 'value' => '2024-01-01']], ['id' => ['operator' => 'IN', 'value' => [1,2,3]]]

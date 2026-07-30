@@ -179,7 +179,23 @@ class Str {
 	public static function anyToString( $any, string $separator = ' ', int $level = 0 ): string {
 		$str = '';
 		if ( is_string($any) && $level === 0 ) {
-			$any = maybe_unserialize($any);
+			/**
+			 * Deserialize serialized input WITHOUT instantiating objects.
+			 *
+			 * This mirrors maybe_unserialize() but passes allowed_classes => false, so any
+			 * serialized object becomes a harmless __PHP_Incomplete_Class instead of a live
+			 * object whose __wakeup()/__destruct() magic methods run. Instantiating those is
+			 * an unauthenticated PHP Object Injection vector when untrusted input reaches this
+			 * method (php-utils#25 / WPScan). Arrays and scalars still unserialize, so the
+			 * flattening of PHP-serialized post/user meta during indexing is preserved.
+			 *
+			 * The @ mirrors core maybe_unserialize(): is_serialized() is a heuristic, not a
+			 * full validator, so a malformed-but-matching string can still emit a harmless
+			 * unserialize() warning here that we intentionally ignore.
+			 */
+			if ( is_serialized( $any ) ) {
+				$any = @unserialize( trim( $any ), array( 'allowed_classes' => false ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize, WordPress.PHP.NoSilencedErrors.Discouraged
+			}
 
 			/**
 			 * String check is required again, as only string is accepted for json_validate

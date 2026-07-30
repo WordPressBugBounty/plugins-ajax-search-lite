@@ -13,5 +13,11 @@
  * 1.2.1 — wpdrms_shared_get_conflicts() collapses conflicts per library (keeps the strictest
  *         required version), so several plugins requiring the same library show one notice, not one
  *         per consuming plugin.
+ * 1.3.0 — per-plugin REST namespace + token-derived auth filters; AbstractRest gains
+ *         sanitizeNamespace(), vendorToken(), and $route_namespace; all admin-ui routes
+ *         accept an optional $route_namespace defaulting to self::ROUTE_NAMESPACE.
+ * 1.3.1 — add GPL-2.0-or-later LICENSE file (WordPress.org g1 compliance); no API change.
+ * 1.4.0 — ORM Model gains findAll( $order_by, $order ) — the unbounded
+ *         "fetch every row" counterpart of findBy() (plugin-core #18).
  */
-return '1.2.1';
+return '1.4.0';

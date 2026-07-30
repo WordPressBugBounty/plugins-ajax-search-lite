@@ -1,6 +1,7 @@
 {
 	"name": "wpdreams/plugin-core",
 	"type": "library",
+	"license": "GPL-2.0-or-later",
 	"autoload": {
 		"psr-4": {
 			"WPDRMS\\PluginCore\\": "src/"

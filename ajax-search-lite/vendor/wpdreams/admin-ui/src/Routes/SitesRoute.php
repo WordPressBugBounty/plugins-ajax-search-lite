@@ -7,9 +7,10 @@ use WP_REST_Response;
 use WPDRMS\PluginCore\Rest\AbstractRest;
 
 class SitesRoute extends AbstractRest {
-	public function registerRoutes( string $route_namespace ): void {
+	public function registerRoutes( string $route_namespace = self::ROUTE_NAMESPACE ): void {
+		$this->route_namespace = $this->sanitizeNamespace( $route_namespace );
 		register_rest_route(
-			self::ROUTE_NAMESPACE,
+			$this->route_namespace,
 			'options/sites/get',
 			array(
 				'methods'             => 'GET',

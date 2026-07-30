@@ -17,6 +17,20 @@ abstract class AbstractRest implements RestInterface {
 
 	const ROUTE_NAMESPACE = 'wpdrms_plugin_core';
 
+	/** Per-instance REST namespace, set by the route's registerRoutes(); drives the per-plugin filter tags. */
+	protected string $route_namespace = self::ROUTE_NAMESPACE;
+
+	/** A passed namespace is honoured only if it is a clean token; otherwise fall back (callers historically pass garbage, e.g. a directory path). */
+	protected function sanitizeNamespace( string $namespace ): string {
+		return preg_match( '/^[a-z0-9_-]+$/', $namespace ) ? $namespace : self::ROUTE_NAMESPACE;
+	}
+
+	/** The per-plugin token ('snipcraft' / default 'wpdrms') derived from the route namespace. */
+	protected function vendorToken(): string {
+		$token = (string) preg_replace( '/_plugin_core$/', '', $this->route_namespace );
+		return $token !== '' ? $token : 'wpdrms';
+	}
+
 	/**
 	 * A permission callback to restrict rest request to logged in users only
 	 *
@@ -34,7 +48,7 @@ abstract class AbstractRest implements RestInterface {
 		 * @param bool                 $allow   Whether to bypass the restriction. Default false.
 		 * @param WP_REST_Request|null $request The current request.
 		 */
-		if ( apply_filters( 'wpdrms/core/rest/allow_only_logged_in', false, $request ) ) {
+		if ( apply_filters( $this->vendorToken() . '/core/rest/allow_only_logged_in', false, $request ) ) {
 			return true;
 		}
 		if ( !is_user_logged_in() ) {
@@ -61,7 +75,7 @@ abstract class AbstractRest implements RestInterface {
 		 * @param bool                 $allow   Whether to bypass the restriction. Default false.
 		 * @param WP_REST_Request|null $request The current request.
 		 */
-		if ( apply_filters( 'wpdrms/core/rest/allow_only_admins', false, $request ) ) {
+		if ( apply_filters( $this->vendorToken() . '/core/rest/allow_only_admins', false, $request ) ) {
 			return true;
 		}
 		if ( ! current_user_can( 'manage_options' ) ) {

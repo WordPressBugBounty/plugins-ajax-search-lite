@@ -7,9 +7,10 @@ use WPDRMS\PluginCore\Rest\AbstractRest;
 use WPDRMS\Utils\Languages;
 
 class PluginLanguagesRoute extends AbstractRest {
-	public function registerRoutes( string $route_namespace ): void {
+	public function registerRoutes( string $route_namespace = self::ROUTE_NAMESPACE ): void {
+		$this->route_namespace = $this->sanitizeNamespace( $route_namespace );
 		register_rest_route(
-			self::ROUTE_NAMESPACE,
+			$this->route_namespace,
 			'options/languages/get',
 			array(
 				'methods'             => 'GET',
