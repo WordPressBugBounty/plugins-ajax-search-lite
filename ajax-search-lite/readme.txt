@@ -4,8 +4,8 @@ Donate link: http://wp-dreams.com
 Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
-Tested up to: 7.0
-Stable tag: 4.14.5
+Tested up to: 7.1
+Stable tag: 4.14.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,11 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.14.6 =
+* Fixed: Security issues, including non-public post types being searchable by unauthenticated visitors [CVE-2026-110360](https://www.cve.org/CVERecord?id=CVE-2026-110360)
+* Fixed: Hardened search filters, password-protected and private content, the results cache, statistics and multisite settings
+* Changed: Logged-in users get their own results cache entries (new option, on by default)
+
 = 4.14.5 = 
 * Fixed: A security issue, discovered by Jakub Herman, [CVE-2026-16258](https://wpscan.com/vulnerability/8487a2ce-cb4d-46b8-942e-334ac94cf115)
 

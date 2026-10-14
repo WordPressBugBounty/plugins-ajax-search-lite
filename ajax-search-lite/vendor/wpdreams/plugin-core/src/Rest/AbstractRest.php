@@ -52,7 +52,9 @@ abstract class AbstractRest implements RestInterface {
 			return true;
 		}
 		if ( !is_user_logged_in() ) {
-			return new WP_Error( 'rest_forbidden', esc_html__( 'Only logged in users can access this resource.' ), array( 'status' => 401 ) );
+			// Plain string, not esc_html__(): a shared library cannot know its consumer's text domain,
+			// and any literal domain we pass mismatches the plugin slug (Plugin Check TextDomainMismatch).
+			return new WP_Error( 'rest_forbidden', 'Only logged in users can access this resource.', array( 'status' => 401 ) );
 		}
 		return true;
 	}
@@ -79,7 +81,8 @@ abstract class AbstractRest implements RestInterface {
 			return true;
 		}
 		if ( ! current_user_can( 'manage_options' ) ) {
-			return new WP_Error( 'rest_forbidden', esc_html__( 'Only administrators can access this resource.' ), array( 'status' => 401 ) );
+			// See above: shared-library strings carry no text domain.
+			return new WP_Error( 'rest_forbidden', 'Only administrators can access this resource.', array( 'status' => 401 ) );
 		}
 		return true;
 	}

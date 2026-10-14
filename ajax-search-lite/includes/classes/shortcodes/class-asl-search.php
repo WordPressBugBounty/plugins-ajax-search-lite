@@ -57,15 +57,25 @@ if ( !class_exists('WD_ASL_Search_Shortcode') ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( isset($_POST['p_asl_data']) || isset($_POST['np_asl_data']) ) {
 				// phpcs:ignore WordPress.Security.NonceVerification.Missing
-				$_p_data = isset($_POST['p_asl_data']) ? sanitize_text_field(wp_unslash($_POST['p_asl_data'])) : sanitize_text_field(wp_unslash($_POST['np_asl_data']));
-				parse_str($_p_data, $style['_fo']);
+				$_p_data = wp_unslash($_POST['p_asl_data'] ?? $_POST['np_asl_data']); // phpcs:ignore
+				// A serialized form (sanitize_text_field() would strip its encoded "[]"), values are only compared.
+				// Anything else is not a form: the settings stay as the admin set them.
+				if ( is_string($_p_data) ) {
+					$_fo = array();
+					parse_str($_p_data, $_fo);
+					foreach ( array( 'asl_gen', 'categoryset' ) as $_fo_list ) {
+						$_fo[ $_fo_list ] = isset($_fo[ $_fo_list ]) && is_array($_fo[ $_fo_list ]) ?
+							array_filter($_fo[ $_fo_list ], 'is_scalar') : array();
+					}
+					$style['_fo'] = $_fo;
+				}
 			}
 
 			$settings_hidden = !$style['show_frontend_search_settings'];
 
 			// Triggered by URL
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			if ( isset($_GET['asl_s']) ) {
+			if ( isset($_GET['asl_s']) && is_string($_GET['asl_s']) ) {
 				$style['auto_populate'] = 'phrase';
 				// This is sanitized later on
 				$style['auto_populate_phrase'] = wp_unslash($_GET['asl_s']); // phpcs:ignore

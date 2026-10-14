@@ -6,8 +6,11 @@ use Exception;
 use WP_Error;
 use WP_REST_Response;
 use WPDRMS\PluginCore\Rest\AbstractRest;
+use WPDRMS\ASL\Utils\NetworkAdminOnly;
 
 class MaintenanceRoute extends AbstractRest {
+	use NetworkAdminOnly;
+
 
 	public function registerRoutes( string $route_namespace ): void {
 		register_rest_route(
@@ -26,7 +29,7 @@ class MaintenanceRoute extends AbstractRest {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'wipe' ),
-				'permission_callback' => array( $this, 'allowOnlyAdmins' ),
+				'permission_callback' => array( $this, 'allowOnlyNetworkAdmins' ),
 			)
 		);
 	}

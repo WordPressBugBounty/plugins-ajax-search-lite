@@ -1,6 +1,7 @@
 <?php
 
 use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
+use WPDRMS\ASL\Utils\RequestLanguage;
 
 if ( !defined('ABSPATH') ) {
 	die('-1');
@@ -59,6 +60,18 @@ if ( !class_exists('ASL_Helpers') ) {
 			if ( !headers_sent() ) {
 				header('Content-Type: ' . $content_type);
 			}
+		}
+
+		/**
+		 * The home URL the front-end search redirects and live loader requests build on
+		 *
+		 * @return string
+		 */
+		public static function getHomeUrl(): string {
+			if ( is_admin() || !function_exists('PLL') ) {
+				return home_url('/');
+			}
+			return PLL()->links->get_home_url('', true);
 		}
 
 		/**
@@ -424,10 +437,13 @@ if ( !class_exists('ASL_Helpers') ) {
 					'posts_limit'          => intval($sd['maxresults']),
 				)
 			);
-			$args['posts_limit']      = $args['posts_limit'] <= 0 ? 10 : $args['posts_limit'];
-			$args['_qtranslate_lang'] = isset($o['qtranslate_lang']) ?$o['qtranslate_lang'] :'';
+			$args['posts_limit'] = $args['posts_limit'] <= 0 ? 10 : $args['posts_limit'];
+			// A request language only counts when its plugin is active and it is one of its languages
+			$args['_qtranslate_lang'] = RequestLanguage::qtranslate($o['qtranslate_lang'] ?? '');
 			if ( $sd['polylang_compatibility'] ) {
-				$args['_polylang_lang'] = $o['polylang_lang'] ?? ( function_exists('pll_current_language') ? pll_current_language() : '' );
+				$polylang_lang          = RequestLanguage::polylang($o['polylang_lang'] ?? '');
+				$args['_polylang_lang'] = $polylang_lang !== '' ?
+					$polylang_lang : ( function_exists('pll_current_language') ? (string) pll_current_language() : '' );
 			}
 			$args['_exact_matches']        = isset($o['asl_gen']) && is_array($o['asl_gen']) && in_array('exact', $o['asl_gen'], true);
 			$args['_exact_match_location'] = $sd['exact_match_location'];
@@ -446,22 +462,6 @@ if ( !class_exists('ASL_Helpers') ) {
 				}
 			}
 
-			/*----------------------- Auto populate -------------------------*/
-			if ( isset($o['force_count']) ) {
-				// Set the advanced limit parameter to be distributed later
-				$args['limit']       = $o['force_count'] + 0;
-				$args['force_count'] = $o['force_count'] + 0;
-			}
-			if ( isset($o['force_order']) ) {
-				if ( $o['force_order'] == 1 ) { // phpcs:ignore
-					$args['post_primary_order'] = 'post_date DESC';
-					$args['force_order']        = 1;
-				} elseif ( $o['force_order'] == 2 ) { // phpcs:ignore
-					$args['post_primary_order'] = 'RAND()';
-					$args['force_order']        = 2;
-				}
-			}
-
 			/*------------------------- Statuses ----------------------------*/
 			$args['post_status'] = explode(',', str_replace(' ', '', $sd['post_status']));
 
@@ -469,17 +469,28 @@ if ( !class_exists('ASL_Helpers') ) {
 			$args['has_password'] = (bool) $sd['show_password_protected_posts'];
 
 			/*----------------------- Gather Types --------------------------*/
+			// The front-end can only pick from the configured types and the front-end selector types
+			$allowed_types = isset( $sd['customtypes'] ) && is_array($sd['customtypes']) ? $sd['customtypes'] : array();
+			if ( isset( $sd['selected-showcustomtypes'] ) && is_array($sd['selected-showcustomtypes']) ) {
+				$allowed_types = array_merge($allowed_types, array_column($sd['selected-showcustomtypes'], 0));
+			}
+			$customset = array();
+			if ( isset( $o['customset'] ) && is_array($o['customset']) ) {
+				$customset = array_values(array_intersect(array_filter($o['customset'], 'is_string'), $allowed_types));
+			}
+
 			$args['post_type'] = array();
-			if ( isset( $o['customset'] ) && is_array($o['customset']) && count( $o['customset'] ) > 0 ) {
-				$o['customset']    = self::escape( $o['customset'], true, ' ;:.,(){}@[]!?&|#^=' );
-				$args['post_type'] = array_merge($args['post_type'], $o['customset']);
+			if ( count( $customset ) > 0 ) {
+				$args['post_type'] = $customset;
 			} elseif ( isset( $sd['customtypes'] ) && is_array($sd['customtypes']) && count( $sd['customtypes'] ) > 0 ) {
 				$args['post_type'] = array_merge( $args['post_type'], $sd['customtypes'] );
 			}
 
 			/*--------------------- OTHER FILTER RELATED --------------------*/
-			$args['filters_changed'] = $o['filters_changed'] ?? $args['filters_changed'] ?? false;
-			$args['filters_initial'] = $o['filters_initial'] ?? $args['filters_initial'] ?? true;
+			$args['filters_changed'] = isset($o['filters_changed']) && is_scalar($o['filters_changed']) ?
+				$o['filters_changed'] : ( $args['filters_changed'] ?? false );
+			$args['filters_initial'] = isset($o['filters_initial']) && is_scalar($o['filters_initial']) ?
+				$o['filters_initial'] : ( $args['filters_initial'] ?? true );
 
 			/*--------------------- GENERAL FIELDS --------------------------*/
 			$args['search_type'] = array();
@@ -488,14 +499,13 @@ if ( !class_exists('ASL_Helpers') ) {
 				$args['post_fields'][] = 'terms';
 			}
 			if ( isset($o['asl_gen']) && is_array($o['asl_gen']) ) {
-				if ( in_array('title', $o['asl_gen'], true) ) {
-					$args['post_fields'][] = 'title';
-				}
-				if ( in_array('content', $o['asl_gen'], true) ) {
-					$args['post_fields'][] = 'content';
-				}
-				if ( in_array('excerpt', $o['asl_gen'], true) ) {
-					$args['post_fields'][] = 'excerpt';
+				foreach ( array( 'title', 'content', 'excerpt' ) as $field ) {
+					// Only a field the admin enabled, or the visitor sees the checkbox of, can be searched
+					$tickable = $sd[ 'searchin' . $field ] ||
+						( $sd['show_frontend_search_settings'] && $sd[ 'showsearchin' . $field ] );
+					if ( $tickable && in_array($field, $o['asl_gen'], true) ) {
+						$args['post_fields'][] = $field;
+					}
 				}
 			} else {
 				if ( $sd['searchintitle'] ) {
@@ -529,8 +539,9 @@ if ( !class_exists('ASL_Helpers') ) {
 
 			/*-------------------------- WPML -------------------------------*/
 			if ( $sd['wpml_compatibility'] ) {
-				if ( isset( $o['wpml_lang'] ) && $args['_ajax_search'] ) {
-					$args['_wpml_lang'] = $o['wpml_lang'];
+				$wpml_lang = RequestLanguage::wpml($o['wpml_lang'] ?? '');
+				if ( $wpml_lang !== '' && $args['_ajax_search'] ) {
+					$args['_wpml_lang'] = $wpml_lang;
 				} elseif (
 					defined('ICL_LANGUAGE_CODE')
 					&& ICL_LANGUAGE_CODE !== ''
@@ -576,8 +587,10 @@ if ( !class_exists('ASL_Helpers') ) {
 			// ----------------------------------------------------------------
 			// X. MISC FIXES
 			// ----------------------------------------------------------------
-			$args['woo_currency'] = $o['woo_currency'] ?? ( function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : '' );
-			$args['_page_id']     = intval($o['current_page_id'] ?? ( $args['_page_id'] ?? 0 ));
+			$args['woo_currency'] = isset($o['woo_currency']) && is_string($o['woo_currency']) ?
+				$o['woo_currency'] : ( function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : '' );
+			$args['_page_id']     = isset($o['current_page_id']) && is_scalar($o['current_page_id']) ?
+				intval($o['current_page_id']) : intval($args['_page_id'] ?? 0);
 			// Reset search type and post types for WooCommerce search results page
 			if ( isset($_GET['post_type']) && $_GET['post_type'] === 'product' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$old_ptype         = $args['post_type'];
@@ -612,12 +625,14 @@ if ( !class_exists('ASL_Helpers') ) {
 			$term_logic = 'and';
 
 			$exclude_categories                  = array();
+			$categoryset                         = isset($o['categoryset']) && is_array($o['categoryset']) ?
+				array_map('intval', array_filter($o['categoryset'], 'is_scalar')) : array();
 			$sd['selected-exsearchincategories'] = w_isset_def( $sd['selected-exsearchincategories'], array() );
 			$sd['selected-excludecategories']    = w_isset_def( $sd['selected-excludecategories'], array() );
 
 			if ( count( $sd['selected-exsearchincategories'] ) > 0 ||
 				count( $sd['selected-excludecategories'] ) > 0 ||
-				( isset($o['categoryset']) && count( $o['categoryset'] ) ) > 0 ||
+				count( $categoryset ) > 0 ||
 				$sd['showsearchincategories']
 			) {
 
@@ -639,7 +654,9 @@ if ( !class_exists('ASL_Helpers') ) {
 				$_needed_cat = ! is_array( $_needed_cat ) ? array() : $_needed_cat;
 
 				if ( $sd['showsearchincategories'] && isset($o['categoryset']) ) {
-					$exclude_categories = array_diff( array_merge( $_needed_cat, $sd['selected-excludecategories'] ), $o['categoryset'] );
+					// Only the categories the front-end filter shows can be ticked, a hidden category stays as the admin set it
+					$categoryset        = array_intersect($categoryset, $_needed_cat);
+					$exclude_categories = array_diff( array_merge( $_needed_cat, $sd['selected-excludecategories'] ), $categoryset );
 				} else // ..if the settings is not visible, then only the excluded categories count
 				{
 					$exclude_categories = $sd['selected-excludecategories'];
@@ -654,7 +671,7 @@ if ( !class_exists('ASL_Helpers') ) {
 					// phpcs:ignore
 					'exclude' => array_map('intval', $exclude_terms),
 					'logic'        => $term_logic,
-					'_termset'     => isset($o['categoryset']) ? $o['categoryset'] : array(),
+					'_termset'     => $categoryset,
 					'_is_checkbox' => true,
 					'allow_empty'  => true,
 				);

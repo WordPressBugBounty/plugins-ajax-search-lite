@@ -14,6 +14,7 @@ final class CacheOptions extends AbstractOptionDataSiteOption {
 	public BoolOption $status;
 	public SelectOption $cache_type;
 	public BoolOption $clear_on_save;
+	public BoolOption $logged_in_users;
 	public IntOption $results_max_age;
 	public BoolOption $crop_images;
 	public IntOption $images_max_age;
@@ -39,6 +40,13 @@ final class CacheOptions extends AbstractOptionDataSiteOption {
 			),
 		),
 		'clear_on_save'   => array(
+			'type'         => 'bool',
+			'default_args' => array(
+				'value' => true,
+			),
+		),
+		// Logged-in users use the cache too, each with their own entries (ResultsCacheService::scope())
+		'logged_in_users' => array(
 			'type'         => 'bool',
 			'default_args' => array(
 				'value' => true,

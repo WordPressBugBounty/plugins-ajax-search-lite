@@ -637,10 +637,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   formData: function() { return /* binding */ formData; },
 /* harmony export */   isSafari: function() { return /* binding */ isSafari; },
+/* harmony export */   isSafeUrl: function() { return /* binding */ isSafeUrl; },
+/* harmony export */   navigateTo: function() { return /* binding */ navigateTo; },
 /* harmony export */   openInNewTab: function() { return /* binding */ openInNewTab; },
 /* harmony export */   recursiveCheckVisibility: function() { return /* binding */ recursiveCheckVisibility; },
 /* harmony export */   scrollToFirstVisibleElement: function() { return /* binding */ scrollToFirstVisibleElement; },
 /* harmony export */   submitToUrl: function() { return /* binding */ submitToUrl; },
+/* harmony export */   trustedHomeUrl: function() { return /* binding */ trustedHomeUrl; },
 /* harmony export */   whichjQuery: function() { return /* binding */ whichjQuery; }
 /* harmony export */ });
 /* harmony import */ var domini__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(993);
@@ -745,6 +748,9 @@ const formData = function(form, d) {
   }
 };
 const submitToUrl = function(action, method, input, target = "self") {
+  if (!isSafeUrl(action)) {
+    return;
+  }
   let form;
   form = domini__WEBPACK_IMPORTED_MODULE_0___default()('<form style="display: none;" />');
   form.attr("action", action);
@@ -765,6 +771,9 @@ const submitToUrl = function(action, method, input, target = "self") {
   form.get(0).submit();
 };
 const openInNewTab = function(url) {
+  if (!isSafeUrl(url)) {
+    return;
+  }
   Object.assign(document.createElement("a"), { target: "_blank", href: url }).click();
 };
 const recursiveCheckVisibility = function(element) {
@@ -796,6 +805,52 @@ const scrollToFirstVisibleElement = function(elements, offset = 0) {
     }
   }
   return false;
+};
+const isSafeUrl = function(url, sameOrigin = false) {
+  let parsed;
+  try {
+    parsed = new URL(url, location.href);
+  } catch (e) {
+    return false;
+  }
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    return false;
+  }
+  return !sameOrigin || parsed.origin === location.origin;
+};
+const navigateTo = function(url) {
+  if (isSafeUrl(url)) {
+    location.href = url;
+  }
+};
+const trustedHomeUrl = function(domValue) {
+  if (typeof window.ASL.homeurl === "string" && window.ASL.homeurl !== "") {
+    return window.ASL.homeurl;
+  }
+  return isSafeUrl(domValue, true) ? domValue : location.origin + "/";
+};
+
+
+/***/ }),
+
+/***/ 155:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   hasPostPasswordCookie: function() { return /* binding */ hasPostPasswordCookie; },
+/* harmony export */   superFileCacheKey: function() { return /* binding */ superFileCacheKey; }
+/* harmony export */ });
+/* harmony import */ var _other__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(627);
+
+
+const superFileCacheKey = function(phrase, options) {
+  const scope = window.ASL.cache.scope ?? "";
+  return (0,_other__WEBPACK_IMPORTED_MODULE_0__.md5)(0 + phrase + JSON.stringify(options) + "0|" + window.ASL.cache.blog + (scope !== "" ? "|" + scope : "")).slice(0, 14);
+};
+const hasPostPasswordCookie = function() {
+  return document.cookie.split(";").some((cookie) => cookie.trim().startsWith("wp-postpass_"));
 };
 
 
@@ -1132,6 +1187,7 @@ function isNumeric(input) {
 var map = {
 	"./base64.ts": 806,
 	"./browser.ts": 665,
+	"./cache.ts": 155,
 	"./device.ts": 451,
 	"./hooks-filters.ts": 91,
 	"./index.ts": 685,
@@ -1437,7 +1493,18 @@ const onSafeDocumentReady = (callback) => {
 var browser = __webpack_require__(665);
 // EXTERNAL MODULE: ./src/client/global/utils/other.ts
 var other = __webpack_require__(627);
+;// ./src/client/plugin/wrapper/settings.ts
+
+const readInstanceSettings = function(search) {
+  const data = search.closest(".asl_w_container")?.querySelector(":scope > .asl_data_container > .asl_init_data");
+  if (!data || typeof data.dataset["settings"] === "undefined") {
+    return null;
+  }
+  return JSON.parse(data.dataset["settings"]);
+};
+
 ;// ./src/client/plugin/wrapper/ASL.ts
+
 
 
 
@@ -1460,8 +1527,13 @@ window.ASL = { ...window.ASL, ...{
     if (!ASL.cache.enabled || ASL.cache.type !== "super_file") {
       return;
     }
+    const headers = {};
+    if (ASL.cache.nonce) {
+      headers["X-WP-Nonce"] = ASL.cache.nonce;
+    }
     fetch((0,other.buildRestUrl)(ASL.rest_url, "ajax-search-lite/results_cache/keyset", { t: ASL.cache.timestamp }), {
-      method: "GET"
+      method: "GET",
+      headers
     }).then((r) => r.json()).then((r) => {
       ASL.cache.list = new Set(r);
     }).catch((e) => {
@@ -1469,22 +1541,26 @@ window.ASL = { ...window.ASL, ...{
     });
   },
   initializeAllSearches: function() {
-    const instances = this.getInstances();
-    instances.forEach(function(data, i) {
-      domini_default().fn._(".asl_m_" + i).forEach(function(el) {
-        if (typeof el.hasAsp != "undefined") {
-          return true;
-        }
-        el.hasAsp = true;
-        return domini_default()(el).ajaxsearchlite(data);
-      });
+    domini_default().fn._(".asl_m").forEach(function(el) {
+      if (typeof el.hasAsp != "undefined") {
+        return true;
+      }
+      const data = readInstanceSettings(el);
+      if (data === null) {
+        return true;
+      }
+      el.hasAsp = true;
+      return domini_default()(el).ajaxsearchlite(data);
     });
   },
   initializeSearchByID: function(id, instance = 0) {
-    const data = this.getInstance(id);
     const selector = instance === 0 ? ".asl_m_" + id : ".asl_m_" + id + "_" + instance;
     domini_default().fn._(selector).forEach(function(el) {
       if (typeof el.hasAsp != "undefined") {
+        return true;
+      }
+      const data = readInstanceSettings(el);
+      if (data === null) {
         return true;
       }
       el.hasAsp = true;
@@ -1675,6 +1751,7 @@ class AslPlugin {
   searching = false;
   post = void 0;
   postAuto = void 0;
+  autocompleteTimeout = void 0;
   // Holding the last phrase that returned results
   lastSuccesfulSearch = "";
   // Store the last search information

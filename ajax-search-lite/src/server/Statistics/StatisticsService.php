@@ -239,6 +239,9 @@ class StatisticsService {
 			return;
 		}
 
+		// A public route: never more than one front-end batch worth of searches, array items only
+		$searches = array_slice(array_values(array_filter($searches, 'is_array')), 0, 20);
+
 		foreach ( $searches as $search_data ) {
 			/**
 			 * A search phrase is plain user input arriving on an unauthenticated route.
@@ -248,7 +251,7 @@ class StatisticsService {
 			 * objects from malformed JSON) are not valid phrases and are dropped.
 			 */
 			$raw_phrase = $search_data['phrase'] ?? '';
-			$phrase     = is_scalar($raw_phrase) ? (string) $raw_phrase : '';
+			$phrase     = is_scalar($raw_phrase) ? sanitize_text_field( (string) $raw_phrase) : '';
 			/**
 			 * Excluded keywords
 			 */
@@ -264,13 +267,14 @@ class StatisticsService {
 				}
 			}
 
-			$search            = new Search();
-			$search->phrase    = MB::substr($phrase, 0, $this->options->max_phrase_length->value);
-			$search->type      = 1;
-			$search->user_id   = isset($search_data['user_id']) ? intval($search_data['user_id']) : get_current_user_id();
+			$search         = new Search();
+			$search->phrase = MB::substr($phrase, 0, $this->options->max_phrase_length->value);
+			$search->type   = 1;
+			// The requester, never a posted user ID
+			$search->user_id   = get_current_user_id();
 			$search->page      = isset($search_data['page']) ? intval($search_data['page']) : 1;
-			$search->asp_id    = isset($search_data['asp_id']) && $search_data['asp_id'] > 0 ? intval($search_data['asp_id']) : null;
-			$search->cached    = isset($search_data['cached']) ? intval($search_data['cached']) : 0;
+			$search->asp_id    = isset($search_data['asp_id']) && is_numeric($search_data['asp_id']) && intval($search_data['asp_id']) > 0 ? intval($search_data['asp_id']) : null;
+			$search->cached    = empty($search_data['cached']) ? 0 : 1;
 			$search->suggested = isset($search_data['suggested']) ? intval($search_data['suggested']) : 0;
 
 			if ( !$this->options->record_suggested_searches->value && $search->suggested !== 0 ) {
@@ -301,11 +305,16 @@ class StatisticsService {
 				$search->device_type = 1;
 			}
 
-			if ( isset($search_data['lang']) && $search_data['lang'] !== '' ) {
+			// A language code that fits the column (VARCHAR(5)), anything else would fail the insert
+			if (
+				isset($search_data['lang']) && is_string($search_data['lang']) && strlen($search_data['lang']) <= 5 &&
+				preg_match('/^[a-z]{2,3}([_-][A-Za-z]{2,4})?$/D', $search_data['lang'])
+			) {
 				$search->lang = $search_data['lang'];
 			}
 
-			$search->found_results = isset($search_data['found_results']) ? intval($search_data['found_results']) : 0;
+			$search->found_results = isset($search_data['found_results']) && is_scalar($search_data['found_results']) ?
+				max(0, min(1000000, intval($search_data['found_results']))) : 0;
 			$search->referer       = $referer;
 
 			$search->save();

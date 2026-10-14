@@ -30,7 +30,18 @@ class Html {
 	}
 
 	public static function escCSS( string $css ): string {
-		return preg_replace('/<\s*\/?\s*style\s*>/i', '', $css);
+		// Pasted <style> wrappers, until none is left (a single pass would rebuild "</sty</style>le>")
+		do {
+			$previous = $css;
+			$css      = (string) preg_replace('#<\s*/?\s*style\b[^>]*>#i', '', $css);
+		} while ( $css !== $previous );
+
+		/*
+		 * SECURITY: the HTML parser ends a <style> element at "</style" followed by a space, "/" or ">", whatever the
+		 * CSS around it. "</" is not valid CSS outside a string, and in a string "<\/" is the same text: with no "</"
+		 * left, nothing in the CSS can end the element.
+		 */
+		return str_replace('</', '<\\/', $css);
 	}
 
 	public static function toTxt( string $document ) {

@@ -291,10 +291,12 @@ abstract class AbstractSearch {
 		$exact_query    = '';
 		$like_query_arr = array();
 		foreach ( $parts as $k =>$part ) {
+			// No field to search in (e.g. the visitor unticked every one): the word matches nothing
+			$word_query = count($part[0]) > 0 ? '(' . implode(' OR ', $part[0]) . ')' : '(0)';
 			if ( $k === 0 ) {
-				$exact_query = '(' . implode(' OR ', $part[0]) . ')';
+				$exact_query = $word_query;
 			} else {
-				$like_query_arr[] = '(' . implode(' OR ', $part[0]) . ')';
+				$like_query_arr[] = $word_query;
 			}
 		}
 		$like_query = implode(' ' . strtoupper($kw_logic) . ' ', $like_query_arr);

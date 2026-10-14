@@ -198,6 +198,9 @@ external_global_namespaceObject.AslPlugin.prototype.liveLoad = function(selector
     console.log("Ajax Search Pro: Do not use html or body as the live loader selector.");
     return false;
   }
+  if (!(0,external_utils_namespaceObject.isSafeUrl)(url, true)) {
+    return false;
+  }
   if (live_ASL.pageHTML == "") {
     if (!live_ASL._ajax_page_html) {
       live_ASL._ajax_page_html = true;
@@ -453,7 +456,7 @@ external_global_namespaceObject.AslPlugin.prototype.doRedirectToFirstResult = fu
   }
   if (url !== "") {
     if (_loc == "same") {
-      window.location.href = url;
+      (0,external_utils_namespaceObject.navigateTo)(url);
     } else {
       (0,external_utils_namespaceObject.openInNewTab)(url);
     }
@@ -484,7 +487,7 @@ external_global_namespaceObject.AslPlugin.prototype.doRedirectToResults = functi
       }, _loc);
     } else {
       if (_loc == "same") {
-        location.href = url;
+        (0,external_utils_namespaceObject.navigateTo)(url);
       } else {
         (0,external_utils_namespaceObject.openInNewTab)(url);
       }
@@ -643,8 +646,12 @@ function registerLiveSearchStatistics(phrase, aspId, deviceType, foundResults, u
   _timer = setTimeout(() => {
     const items = [..._queue];
     _queue.length = 0;
+    const headers = { "Content-Type": "application/json" };
+    if (statistics_ASL.statistics?.nonce) {
+      headers["X-WP-Nonce"] = statistics_ASL.statistics.nonce;
+    }
     fetch((0,external_utils_namespaceObject.buildRestUrl)(statistics_ASL.rest_url, "ajax-search-lite/statistics/searches/add"), {
-      headers: { "Content-Type": "application/json" },
+      headers,
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(items)
@@ -655,6 +662,7 @@ function registerLiveSearchStatistics(phrase, aspId, deviceType, foundResults, u
 
 ;// ./src/client/plugin/core/actions/search.ts
 /* unused harmony import specifier */ var search_AslPlugin;
+
 
 
 
@@ -779,7 +787,7 @@ external_global_namespaceObject.AslPlugin.prototype.search = function() {
                       p_asl_data: $this.n("searchsettings").find("form").serialize()
                     });
                   } else {
-                    location.href = $this.o.homeurl + url + "&asl_active=1&p_asid=" + $this.o.id + "&p_asl_data=1&" + $this.n("searchsettings").find("form").serialize();
+                    (0,external_utils_namespaceObject.navigateTo)($this.o.homeurl + url + "&asl_active=1&p_asid=" + $this.o.id + "&p_asl_data=1&" + $this.n("searchsettings").find("form").serialize());
                   }
                 } else {
                   (0,external_utils_namespaceObject.submitToUrl)($this.o.homeurl + url, "post", {
@@ -801,9 +809,9 @@ external_global_namespaceObject.AslPlugin.prototype.search = function() {
         }
       });
     };
-    if (window.ASL.cache.enabled && window.ASL.cache.type === "super_file") {
+    if (window.ASL.cache.enabled && window.ASL.cache.type === "super_file" && !(0,external_utils_namespaceObject.hasPostPasswordCookie)()) {
       const _opts = (0,external_utils_namespaceObject.parse_str)(data.options);
-      const _hash = (0,external_utils_namespaceObject.md5)(0 + $this.n("text").val() + JSON.stringify(_opts) + "0").slice(0, 14);
+      const _hash = (0,external_utils_namespaceObject.superFileCacheKey)($this.n("text").val(), _opts);
       if (window.ASL.cache.list.has(_hash)) {
         fetch(window.ASL.cache.url + _hash + ".json?t=" + search_ASL.cache.timestamp).then((response) => {
           if (!response.ok) throw new Error("Cache response not ok");
@@ -1417,8 +1425,10 @@ external_global_namespaceObject.AslPlugin.prototype.monitorTouchMove = function(
 
 
 
+
 external_global_namespaceObject.AslPlugin.prototype.init = function(options, elem) {
   this.o = { ...this.o, ...options };
+  this.o.homeurl = (0,external_utils_namespaceObject.trustedHomeUrl)(this.o.homeurl);
   this.nodes = {};
   this.nodes.search = external_DoMini_default()(elem);
   this.initNodeVariables();

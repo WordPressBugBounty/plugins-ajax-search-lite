@@ -637,10 +637,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   formData: function() { return /* binding */ formData; },
 /* harmony export */   isSafari: function() { return /* binding */ isSafari; },
+/* harmony export */   isSafeUrl: function() { return /* binding */ isSafeUrl; },
+/* harmony export */   navigateTo: function() { return /* binding */ navigateTo; },
 /* harmony export */   openInNewTab: function() { return /* binding */ openInNewTab; },
 /* harmony export */   recursiveCheckVisibility: function() { return /* binding */ recursiveCheckVisibility; },
 /* harmony export */   scrollToFirstVisibleElement: function() { return /* binding */ scrollToFirstVisibleElement; },
 /* harmony export */   submitToUrl: function() { return /* binding */ submitToUrl; },
+/* harmony export */   trustedHomeUrl: function() { return /* binding */ trustedHomeUrl; },
 /* harmony export */   whichjQuery: function() { return /* binding */ whichjQuery; }
 /* harmony export */ });
 /* harmony import */ var domini__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(993);
@@ -745,6 +748,9 @@ const formData = function(form, d) {
   }
 };
 const submitToUrl = function(action, method, input, target = "self") {
+  if (!isSafeUrl(action)) {
+    return;
+  }
   let form;
   form = domini__WEBPACK_IMPORTED_MODULE_0___default()('<form style="display: none;" />');
   form.attr("action", action);
@@ -765,6 +771,9 @@ const submitToUrl = function(action, method, input, target = "self") {
   form.get(0).submit();
 };
 const openInNewTab = function(url) {
+  if (!isSafeUrl(url)) {
+    return;
+  }
   Object.assign(document.createElement("a"), { target: "_blank", href: url }).click();
 };
 const recursiveCheckVisibility = function(element) {
@@ -796,6 +805,52 @@ const scrollToFirstVisibleElement = function(elements, offset = 0) {
     }
   }
   return false;
+};
+const isSafeUrl = function(url, sameOrigin = false) {
+  let parsed;
+  try {
+    parsed = new URL(url, location.href);
+  } catch (e) {
+    return false;
+  }
+  if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+    return false;
+  }
+  return !sameOrigin || parsed.origin === location.origin;
+};
+const navigateTo = function(url) {
+  if (isSafeUrl(url)) {
+    location.href = url;
+  }
+};
+const trustedHomeUrl = function(domValue) {
+  if (typeof window.ASL.homeurl === "string" && window.ASL.homeurl !== "") {
+    return window.ASL.homeurl;
+  }
+  return isSafeUrl(domValue, true) ? domValue : location.origin + "/";
+};
+
+
+/***/ }),
+
+/***/ 155:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   hasPostPasswordCookie: function() { return /* binding */ hasPostPasswordCookie; },
+/* harmony export */   superFileCacheKey: function() { return /* binding */ superFileCacheKey; }
+/* harmony export */ });
+/* harmony import */ var _other__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(627);
+
+
+const superFileCacheKey = function(phrase, options) {
+  const scope = window.ASL.cache.scope ?? "";
+  return (0,_other__WEBPACK_IMPORTED_MODULE_0__.md5)(0 + phrase + JSON.stringify(options) + "0|" + window.ASL.cache.blog + (scope !== "" ? "|" + scope : "")).slice(0, 14);
+};
+const hasPostPasswordCookie = function() {
+  return document.cookie.split(";").some((cookie) => cookie.trim().startsWith("wp-postpass_"));
 };
 
 
@@ -1132,6 +1187,7 @@ function isNumeric(input) {
 var map = {
 	"./base64.ts": 806,
 	"./browser.ts": 665,
+	"./cache.ts": 155,
 	"./device.ts": 451,
 	"./hooks-filters.ts": 91,
 	"./index.ts": 685,
@@ -1437,7 +1493,18 @@ const onSafeDocumentReady = (callback) => {
 var browser = __webpack_require__(665);
 // EXTERNAL MODULE: ./src/client/global/utils/other.ts
 var other = __webpack_require__(627);
+;// ./src/client/plugin/wrapper/settings.ts
+
+const readInstanceSettings = function(search) {
+  const data = search.closest(".asl_w_container")?.querySelector(":scope > .asl_data_container > .asl_init_data");
+  if (!data || typeof data.dataset["settings"] === "undefined") {
+    return null;
+  }
+  return JSON.parse(data.dataset["settings"]);
+};
+
 ;// ./src/client/plugin/wrapper/ASL.ts
+
 
 
 
@@ -1460,8 +1527,13 @@ window.ASL = { ...window.ASL, ...{
     if (!ASL.cache.enabled || ASL.cache.type !== "super_file") {
       return;
     }
+    const headers = {};
+    if (ASL.cache.nonce) {
+      headers["X-WP-Nonce"] = ASL.cache.nonce;
+    }
     fetch((0,other.buildRestUrl)(ASL.rest_url, "ajax-search-lite/results_cache/keyset", { t: ASL.cache.timestamp }), {
-      method: "GET"
+      method: "GET",
+      headers
     }).then((r) => r.json()).then((r) => {
       ASL.cache.list = new Set(r);
     }).catch((e) => {
@@ -1469,22 +1541,26 @@ window.ASL = { ...window.ASL, ...{
     });
   },
   initializeAllSearches: function() {
-    const instances = this.getInstances();
-    instances.forEach(function(data, i) {
-      domini_default().fn._(".asl_m_" + i).forEach(function(el) {
-        if (typeof el.hasAsp != "undefined") {
-          return true;
-        }
-        el.hasAsp = true;
-        return domini_default()(el).ajaxsearchlite(data);
-      });
+    domini_default().fn._(".asl_m").forEach(function(el) {
+      if (typeof el.hasAsp != "undefined") {
+        return true;
+      }
+      const data = readInstanceSettings(el);
+      if (data === null) {
+        return true;
+      }
+      el.hasAsp = true;
+      return domini_default()(el).ajaxsearchlite(data);
     });
   },
   initializeSearchByID: function(id, instance = 0) {
-    const data = this.getInstance(id);
     const selector = instance === 0 ? ".asl_m_" + id : ".asl_m_" + id + "_" + instance;
     domini_default().fn._(selector).forEach(function(el) {
       if (typeof el.hasAsp != "undefined") {
+        return true;
+      }
+      const data = readInstanceSettings(el);
+      if (data === null) {
         return true;
       }
       el.hasAsp = true;
@@ -1675,6 +1751,7 @@ class AslPlugin {
   searching = false;
   post = void 0;
   postAuto = void 0;
+  autocompleteTimeout = void 0;
   // Holding the last phrase that returned results
   lastSuccesfulSearch = "";
   // Store the last search information
@@ -1997,6 +2074,9 @@ AslPlugin.prototype.liveLoad = function(selector, url, updateLocation, forceAjax
     console.log("Ajax Search Pro: Do not use html or body as the live loader selector.");
     return false;
   }
+  if (!(0,browser.isSafeUrl)(url, true)) {
+    return false;
+  }
   if (live_ASL.pageHTML == "") {
     if (!live_ASL._ajax_page_html) {
       live_ASL._ajax_page_html = true;
@@ -2252,7 +2332,7 @@ AslPlugin.prototype.doRedirectToFirstResult = function() {
   }
   if (url !== "") {
     if (_loc == "same") {
-      window.location.href = url;
+      (0,browser.navigateTo)(url);
     } else {
       (0,browser.openInNewTab)(url);
     }
@@ -2283,7 +2363,7 @@ AslPlugin.prototype.doRedirectToResults = function(ktype) {
       }, _loc);
     } else {
       if (_loc == "same") {
-        location.href = url;
+        (0,browser.navigateTo)(url);
       } else {
         (0,browser.openInNewTab)(url);
       }
@@ -2422,6 +2502,8 @@ AslPlugin.prototype.scrollToResults = function() {
 };
 /* harmony default export */ var results = ((/* unused pure expression or super */ null && (results_AslPlugin)));
 
+// EXTERNAL MODULE: ./src/client/global/utils/cache.ts
+var cache = __webpack_require__(155);
 ;// ./src/client/plugin/core/actions/statistics.ts
 
 
@@ -2444,8 +2526,12 @@ function registerLiveSearchStatistics(phrase, aspId, deviceType, foundResults, u
   _timer = setTimeout(() => {
     const items = [..._queue];
     _queue.length = 0;
+    const headers = { "Content-Type": "application/json" };
+    if (statistics_ASL.statistics?.nonce) {
+      headers["X-WP-Nonce"] = statistics_ASL.statistics.nonce;
+    }
     fetch((0,other.buildRestUrl)(statistics_ASL.rest_url, "ajax-search-lite/statistics/searches/add"), {
-      headers: { "Content-Type": "application/json" },
+      headers,
       method: "POST",
       credentials: "same-origin",
       body: JSON.stringify(items)
@@ -2456,6 +2542,7 @@ function registerLiveSearchStatistics(phrase, aspId, deviceType, foundResults, u
 
 ;// ./src/client/plugin/core/actions/search.ts
 /* unused harmony import specifier */ var search_AslPlugin;
+
 
 
 
@@ -2580,7 +2667,7 @@ AslPlugin.prototype.search = function() {
                       p_asl_data: $this.n("searchsettings").find("form").serialize()
                     });
                   } else {
-                    location.href = $this.o.homeurl + url + "&asl_active=1&p_asid=" + $this.o.id + "&p_asl_data=1&" + $this.n("searchsettings").find("form").serialize();
+                    (0,browser.navigateTo)($this.o.homeurl + url + "&asl_active=1&p_asid=" + $this.o.id + "&p_asl_data=1&" + $this.n("searchsettings").find("form").serialize());
                   }
                 } else {
                   (0,browser.submitToUrl)($this.o.homeurl + url, "post", {
@@ -2602,9 +2689,9 @@ AslPlugin.prototype.search = function() {
         }
       });
     };
-    if (window.ASL.cache.enabled && window.ASL.cache.type === "super_file") {
+    if (window.ASL.cache.enabled && window.ASL.cache.type === "super_file" && !(0,cache.hasPostPasswordCookie)()) {
       const _opts = (0,other.parse_str)(data.options);
-      const _hash = (0,other.md5)(0 + $this.n("text").val() + JSON.stringify(_opts) + "0").slice(0, 14);
+      const _hash = (0,cache.superFileCacheKey)($this.n("text").val(), _opts);
       if (window.ASL.cache.list.has(_hash)) {
         fetch(window.ASL.cache.url + _hash + ".json?t=" + search_ASL.cache.timestamp).then((response) => {
           if (!response.ok) throw new Error("Cache response not ok");
@@ -3218,8 +3305,10 @@ AslPlugin.prototype.monitorTouchMove = function() {
 
 
 
+
 AslPlugin.prototype.init = function(options, elem) {
   this.o = { ...this.o, ...options };
+  this.o.homeurl = (0,browser.trustedHomeUrl)(this.o.homeurl);
   this.nodes = {};
   this.nodes.search = domini_default()(elem);
   this.initNodeVariables();
@@ -3492,7 +3581,8 @@ AslPlugin.prototype.initAutocompleteEvent = function() {
       $this.search();
     } else {
       if ($this.postAuto != null) $this.postAuto.abort();
-      $this.autocompleteGoogleOnly();
+      clearTimeout($this.autocompleteTimeout);
+      $this.autocompleteTimeout = setTimeout(() => $this.autocompleteGoogleOnly(), 250);
     }
   });
   $this.n("text").on("keyup mouseup input blur select", function() {

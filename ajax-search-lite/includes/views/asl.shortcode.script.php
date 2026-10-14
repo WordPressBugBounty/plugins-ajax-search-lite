@@ -6,7 +6,7 @@
  */
 
 $search_config = array(
-	'homeurl'             => is_admin() ? home_url('/') : ( function_exists('PLL') ? PLL()->links->get_home_url('', true) : home_url('/') ),
+	'homeurl'             => ASL_Helpers::getHomeUrl(),
 	'resultstype'         => 'vertical',
 	'resultsposition'     => $style['resultsposition'] === 'hover' ? 'hover' : 'block',
 	'itemscount'          => max(1, intval($style['itemscount'])),
@@ -22,7 +22,9 @@ $search_config = array(
 	'resultareaclickable' => $style['resultareaclickable'] ? 1 : 0,
 	'autocomplete'        => array(
 		'enabled'           => boolval(w_isset_def($style['autocomplete'], 1)),
-		'lang'              => w_isset_def($style['kw_google_lang'], 'en'),
+		// The browser sends it to Google as a URL parameter: a language code only
+		'lang'              => \WPDRMS\ASL\Utils\RequestLanguage::isLanguageCode(w_isset_def($style['kw_google_lang'], 'en')) ?
+			$style['kw_google_lang'] : 'en',
 		'trigger_charcount' => 0,
 	),
 	'mobile'              => array(

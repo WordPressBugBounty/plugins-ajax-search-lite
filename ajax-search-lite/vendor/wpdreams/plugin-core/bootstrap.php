@@ -15,6 +15,9 @@
  * @package WPDRMS\PluginCore
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Direct file access (WP.org Plugin Check: missing_direct_file_access_protection).
+}
 if ( ! function_exists( 'wpdrms_shared_version_class' ) ) {
 
 	/**

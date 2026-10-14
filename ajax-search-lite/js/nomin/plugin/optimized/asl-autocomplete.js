@@ -120,7 +120,8 @@ external_global_namespaceObject.AslPlugin.prototype.initAutocompleteEvent = func
       $this.search();
     } else {
       if ($this.postAuto != null) $this.postAuto.abort();
-      $this.autocompleteGoogleOnly();
+      clearTimeout($this.autocompleteTimeout);
+      $this.autocompleteTimeout = setTimeout(() => $this.autocompleteGoogleOnly(), 250);
     }
   });
   $this.n("text").on("keyup mouseup input blur select", function() {

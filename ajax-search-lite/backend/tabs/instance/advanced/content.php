@@ -34,6 +34,9 @@ if ( !defined('ABSPATH') ) {
 	<p class="descMsg">
 		<?php esc_html_e('Removing shortcode is usually much faster, especially if you have many of them within posts.', 'ajax-search-lite'); ?>
 	</p>
+	<p class="descMsg">
+		<?php esc_html_e('Removing keeps the text between opening and closing shortcode tags, including the text of members-only or other access-control shortcodes: it may show in the results content. If your posts hide content that way, choose to execute the shortcodes, so the results content shows what the visitor is allowed to see.', 'ajax-search-lite'); ?>
+	</p>
 </div>
 <fieldset>
 	<legend><?php esc_html_e('Title and Content fields', 'ajax-search-lite'); ?>

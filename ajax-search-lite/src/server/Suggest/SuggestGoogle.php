@@ -3,6 +3,7 @@
 namespace WPDRMS\ASL\Suggest;
 
 use Exception;
+use WPDRMS\ASL\Utils\RequestLanguage;
 use WPDRMS\Utils\MB;
 
 if ( !defined('ABSPATH') ) {
@@ -28,7 +29,9 @@ class SuggestGoogle extends AbstractSuggest {
 		if ( $args['overrideUrl'] !== '' ) {
 			$this->url = $args['overrideUrl'];
 		} else {
-			$this->url = 'https://suggestqueries.google.com/complete/search?output=toolbar&oe=utf-8&client=toolbar&hl=' . $args['lang'] . '&q=';
+			// Only a language code, it can't add parameters to the request
+			$lang      = RequestLanguage::isLanguageCode($args['lang']) ? $args['lang'] : 'en';
+			$this->url = 'https://suggestqueries.google.com/complete/search?output=toolbar&oe=utf-8&client=toolbar&hl=' . rawurlencode($lang) . '&q=';
 		}
 
 		$this->url = apply_filters('asl/suggestions/google/url', $this->url, $args);

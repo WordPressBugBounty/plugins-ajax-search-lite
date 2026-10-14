@@ -62,10 +62,11 @@ class FileHybridCache implements Cache {
 	/**
 	 * @param string $key Max 14 characters
 	 * @param string $content Max 16MB
+	 * @param string $scope '' for the visitors' entries, a logged-in user's own scope otherwise
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function set( string $key, string $content ): bool {
+	public function set( string $key, string $content, string $scope = '' ): bool {
 		$this->checkKey($key);
 		$file_path = $this->cache_path . $key . self::EXTENSION;
 
@@ -77,6 +78,11 @@ class FileHybridCache implements Cache {
 			}
 		}
 
+		// The super file cache serves the files directly, but the folder must not be listable
+		if ( !$this->file_manager->isFile($this->cache_path . 'index.php') ) {
+			$this->file_manager->write($this->cache_path . 'index.php', "<?php\n// Silence is golden.\n");
+		}
+
 		$this->delete($key);
 
 		$is_written = $this->file_manager->write($file_path, $content);
@@ -86,7 +92,8 @@ class FileHybridCache implements Cache {
 
 		CacheData::create(
 			array(
-				'hash' => $key,
+				'hash'  => $key,
+				'scope' => $scope,
 			)
 		);
 		return true;
@@ -112,12 +119,13 @@ class FileHybridCache implements Cache {
 	}
 
 	/**
-	 * Return the list of cached files names from the database (fast)
+	 * Return the list of cached files names from the database (fast): the visitors' and the scope's own
 	 *
+	 * @param string $scope
 	 * @return string[]
 	 */
-	public function keySet(): array {
-		return CacheData::listHashes();
+	public function keySet( string $scope = '' ): array {
+		return CacheData::listHashes($scope);
 	}
 
 	/**

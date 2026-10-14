@@ -8,8 +8,11 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WPDRMS\ASL\Analytics\ORM\AnalyticsOptions;
 use WPDRMS\PluginCore\Rest\AbstractRest;
+use WPDRMS\ASL\Utils\NetworkAdminOnly;
 
 class AnalyticsRoute extends AbstractRest {
+	use NetworkAdminOnly;
+
 	public function registerRoutes( string $route_namespace ): void {
 		register_rest_route(
 			$route_namespace,
@@ -23,7 +26,7 @@ class AnalyticsRoute extends AbstractRest {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'saveOptions' ),
-					'permission_callback' => array( $this, 'allowOnlyAdmins' ),
+					'permission_callback' => array( $this, 'allowOnlyNetworkAdmins' ),
 				),
 			),
 		);
@@ -34,7 +37,7 @@ class AnalyticsRoute extends AbstractRest {
 			array(
 				'methods'             => 'POST',
 				'callback'            => array( $this, 'resetOptions' ),
-				'permission_callback' => array( $this, 'allowOnlyAdmins' ),
+				'permission_callback' => array( $this, 'allowOnlyNetworkAdmins' ),
 			),
 		);
 	}

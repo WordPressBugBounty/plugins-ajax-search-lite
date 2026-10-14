@@ -119,7 +119,7 @@ class SearchPostTypes extends AbstractSearch {
 
 		$args = &$this->args;
 
-		$sd = $args['_sd'] ?? array();
+		$sd = $this->validatedInstanceOptions($args['_sd'] ?? array());
 
 		// Prefixes and suffixes
 		$pre_field = $this->pre_field;
@@ -163,8 +163,11 @@ class SearchPostTypes extends AbstractSearch {
 		$post_statuses    = '';
 		$allowed_statuses = "'publish'"; // used later!
 		if ( count($args['post_status']) > 0 ) {
-			$allowed_statuses = "'" . implode( "','", $args['post_status'] ) . "'";
+			$allowed_statuses = "'" . implode( "','", array_map('esc_sql', $args['post_status']) ) . "'";
 			$post_statuses    = 'AND (' . $pre_field . $wpdb->posts . '.post_status' . $suf_field . " IN ($allowed_statuses) )";
+		} else {
+			// No status this user may see (not "any status")
+			$post_statuses = 'AND 1 = 0';
 		}
 		/*---------------------------------------------------------------*/
 
@@ -188,12 +191,12 @@ class SearchPostTypes extends AbstractSearch {
 		if ( count( $args['post_type'] ) < 1 && $page_q === '' ) {
 			return;
 		} else {
-			$words = implode( "','", $args['post_type'] );
+			$words = implode( "','", array_map('esc_sql', $args['post_type']) );
 			if ( in_array('product_variation', $args['post_type'], true) ) {
 				$_post_types = $args['post_type'];
 				$_post_types = array_diff($_post_types, array( 'product_variation' ));
 				if ( count($_post_types) > 0 ) {
-					$or_ptypes = "OR $wpdb->posts.post_type IN ('" . implode("', '", $_post_types) . "')";
+					$or_ptypes = "OR $wpdb->posts.post_type IN ('" . implode("', '", array_map('esc_sql', $_post_types)) . "')";
 				} else {
 					$or_ptypes = '';
 				}
@@ -495,7 +498,7 @@ class SearchPostTypes extends AbstractSearch {
 			'pagepost' as `content_type`,
 			'post_page_cpt' as `g_content_type`,
 			(SELECT
-				$wpdb->users." . w_isset_def( $sd['author_field'], 'display_name' ) . " as `author`
+				$wpdb->users." . $sd['author_field'] . " as `author`
 				FROM $wpdb->users
 				WHERE $wpdb->users.ID = $wpdb->posts.post_author
 			) as `author`,
@@ -567,6 +570,8 @@ class SearchPostTypes extends AbstractSearch {
 			$words = !in_array($s, $words, true) ? array_merge(array( $s ), $words) : $words;
 		}
 
+		// Like in WordPress core, the body of a password protected post is not searchable (nor shown, see postProcess())
+		$password_guard  = $args['has_password'] ? "$wpdb->posts.post_password = '' AND " : '';
 		$relevance_added = false;
 		foreach ( $words as $k => $word ) {
 			$parts           = array();
@@ -611,7 +616,7 @@ class SearchPostTypes extends AbstractSearch {
 			/*---------------------- Content query --------------------------*/
 			if ( in_array('content', $args['post_fields'], true) ) {
 				if ( $kw_logic === 'or' || $kw_logic === 'and' || $is_exact ) {
-					$parts[] = '( ' . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
+					$parts[] = '( ' . $password_guard . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
 					/**
 					 * Exact matching multi line + word boundary with REGEXP
 					 *
@@ -619,20 +624,20 @@ class SearchPostTypes extends AbstractSearch {
 					 */
 				} else {
 					$parts[] = '
-					   (' . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE $pre_like'% " . $word . " %'$suf_like
+					   (' . $password_guard . '(' . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE $pre_like'% " . $word . " %'$suf_like
 					OR  " . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE $pre_like'" . $word . " %'$suf_like
 					OR  " . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE $pre_like'% " . $word . "'$suf_like
-					OR  " . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " = '" . $word . "')";
+					OR  " . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " = '" . $word . "'))";
 				}
 				if ( !$relevance_added ) {
 					if ( isset($_s[0]) ) {
 						$relevance_parts[] = '(case when
-						(' . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE '%" . $_s[0] . "%')
+						(' . $password_guard . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE '%" . $_s[0] . "%')
 						 then " . w_isset_def($sd['contentweight'], 10) . ' else 0 end)';
 					}
 
 					$relevance_parts[] = '(case when
-				(' . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE '%$s%')
+				(' . $password_guard . $pre_field . $wpdb->posts . '.post_content' . $suf_field . " LIKE '%$s%')
 				 then " . w_isset_def($sd['econtentweight'], 10) . ' else 0 end)';
 				}
 			}
@@ -647,23 +652,23 @@ class SearchPostTypes extends AbstractSearch {
 			/*---------------------- Excerpt query --------------------------*/
 			if ( in_array('excerpt', $args['post_fields'], true) ) {
 				if ( $kw_logic === 'or' || $kw_logic === 'and' || $is_exact ) {
-					$parts[] = '( ' . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
+					$parts[] = '( ' . $password_guard . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
 				} else {
 					$parts[] = '
-					   (' . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE $pre_like'% " . $word . " %'$suf_like
+					   (' . $password_guard . '(' . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE $pre_like'% " . $word . " %'$suf_like
 					OR  " . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE $pre_like'" . $word . " %'$suf_like
 					OR  " . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE $pre_like'% " . $word . "'$suf_like
-					OR  " . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " = '" . $word . "')";
+					OR  " . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " = '" . $word . "'))";
 				}
 				if ( !$relevance_added ) {
 					if ( isset($_s[0]) ) {
 						$relevance_parts[] = '(case when
-						(' . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE '%" . $_s[0] . "%')
+						(' . $password_guard . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE '%" . $_s[0] . "%')
 						 then " . w_isset_def($sd['excerptweight'], 10) . ' else 0 end)';
 					}
 
 					$relevance_parts[] = '(case when
-				(' . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE '%$s%')
+				(' . $password_guard . $pre_field . $wpdb->posts . '.post_excerpt' . $suf_field . " LIKE '%$s%')
 				 then " . w_isset_def($sd['eexcerptweight'], 10) . ' else 0 end)';
 				}
 			}
@@ -697,7 +702,7 @@ class SearchPostTypes extends AbstractSearch {
 			if ( count($args['post_custom_fields']) > 0 ) {
 				$cf_parts = array();
 				foreach ( $args['post_custom_fields'] as $cfield ) {
-					$key_part = $args['post_custom_fields_all'] ? '' : "$wpdb->postmeta.meta_key='$cfield' AND ";
+					$key_part = $args['post_custom_fields_all'] ? '' : "$wpdb->postmeta.meta_key='" . esc_sql($cfield) . "' AND ";
 
 					if ( $kw_logic === 'or' || $kw_logic === 'and' || $is_exact ) {
 						$cf_parts[] = "( $key_part " . $pre_field . $wpdb->postmeta . '.meta_value' . $suf_field . " LIKE $pre_like'$wcl" . $word . "$wcr'$suf_like )";
@@ -741,13 +746,62 @@ class SearchPostTypes extends AbstractSearch {
 		$this->return_count = count($this->results);
 	}
 
+	/**
+	 * SECURITY: instance options reach the search query as SQL. They are admin input, but not every admin may
+	 * run SQL (a sub-site admin on a network) and they can come from an import: each value is validated here,
+	 * an invalid one is dropped or replaced by its default. Values that stay strings are escaped where used.
+	 *
+	 * @param array<string, mixed> $sd
+	 * @return array<string, mixed>
+	 */
+	private function validatedInstanceOptions( array $sd ): array {
+		$args = &$this->args;
+
+		$args['post_type']          = array_values(
+			array_filter($args['post_type'], fn( $type ) => is_string($type) && post_type_exists($type))
+		);
+		$args['post_status']        = array_values(
+			array_filter($args['post_status'], fn( $status ) => is_string($status) && get_post_status_object($status) !== null)
+		);
+		$args['post_custom_fields'] = array_values(array_filter($args['post_custom_fields'], 'is_string'));
+		foreach ( array( '_exclude_page_parent_child', 'post_not_in', 'post_not_in2', 'post_in', 'post_parent', 'post_parent_exclude' ) as $ids ) {
+			$args[ $ids ] = array_map('intval', $args[ $ids ]);
+		}
+		$user_filter = $args['post_user_filter'];
+		foreach ( array( 'include', 'exclude' ) as $users ) {
+			if ( isset($user_filter[ $users ]) ) {
+				$user_filter[ $users ] = array_map('intval', (array) $user_filter[ $users ]);
+			}
+		}
+		$args['post_user_filter'] = $user_filter;
+
+		$orders = array(
+			'post_primary_order'   => 'relevance DESC',
+			'post_secondary_order' => 'post_date DESC',
+		);
+		foreach ( $orders as $order => $default ) {
+			if (
+				!is_string($args[ $order ]) ||
+				!preg_match('/^(?:(?:relevance|post_title|post_date|menu_order|customfp|customfs|id) (?:ASC|DESC)|RAND\(\))$/D', $args[ $order ])
+			) {
+				$args[ $order ] = $default;
+			}
+		}
+
+		$weights = array( 'titleweight', 'etitleweight', 'contentweight', 'econtentweight', 'excerptweight', 'eexcerptweight', 'etermsweight' );
+		foreach ( $weights as $weight ) {
+			$sd[ $weight ] = isset($sd[ $weight ]) && is_numeric($sd[ $weight ]) ? intval($sd[ $weight ]) : 10;
+		}
+
+		$sd['author_field'] = isset($sd['author_field']) && in_array($sd['author_field'], array( 'display_name', 'user_nicename', 'user_login' ), true) ?
+			$sd['author_field'] : 'display_name';
+
+		return $sd;
+	}
+
 	protected function buildTermQuery( string $post_id_field, string $post_type_field ): string {
 		global $wpdb;
 		$args = $this->args;
-
-		if ( isset($_GET['ignore_op']) ) { // @phpcs:ignore
-			return '';
-		}
 
 		$term_query       = '';
 		$term_query_parts = array();
@@ -1327,6 +1381,11 @@ class SearchPostTypes extends AbstractSearch {
 
 		for ( $k = $start; $k <$end; $k++ ) {
 			$r = &$pageposts[ $k ];
+			// Like in WordPress core, the body of a password protected post is only shown once the visitor entered the password
+			if ( $args['has_password'] && post_password_required($r->id) ) {
+				$r->content = '';
+				$r->excerpt = '';
+			}
 			// Attachment post-process uses this section, but it has a separate image parser, so skip that
 			if ( $r->post_type === 'attachment' ) {
 				continue;

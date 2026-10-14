@@ -185,11 +185,18 @@ if ( !class_exists('WD_ASL_SearchOverride_Filter') ) {
 		 * @return array|bool
 		 */
 		public function checkSearchOverride( $check_only, $wp_query ) {
-			// Check the search query
-			if ( !$this->isSearch($wp_query) ) {
+			// Check the search query, its phrase must be a string (not ?s[]=)
+			if ( !$this->isSearch($wp_query) || ( isset($_GET['s']) && !is_string($_GET['s']) ) ) { // phpcs:ignore
 				return false;
 			}
 
+			// Neither the URL nor the cookie can switch the override on, only the admin
+			$sd = wd_asl()->instances->get(0)['data'];
+			if ( !$sd['override_default_results'] ) {
+				return false;
+			}
+
+			$s_data = array();
 			// If get method is used, then the cookies are not present
 			if ( isset($_GET['p_asl_data']) || isset($_GET['np_asl_data']) ) { // phpcs:ignore
 				if ( $check_only ) {
@@ -208,22 +215,18 @@ if ( !class_exists('WD_ASL_SearchOverride_Filter') ) {
 				 */
 			} elseif (
 				isset($_COOKIE['asl_data'], $_COOKIE['asl_phrase']) &&
+				is_string($_COOKIE['asl_data']) &&
 				$_COOKIE['asl_phrase'] === $_GET['s'] // phpcs:ignore
 			) {
 				if ( $check_only ) {
 					return true;
 				}
-				parse_str($_COOKIE['asl_data'], $s_data); // phpcs:ignore
+				// Values are validated where they are used (ASL_Helpers::toQueryArgs())
+				parse_str(wp_unslash($_COOKIE['asl_data']), $s_data); // phpcs:ignore
 				$_POST['np_asl_data'] = $_COOKIE['asl_data']; // phpcs:ignore
 			} else {
-				$sd = wd_asl()->instances->get(0)['data'];
 				// Probably the search results page visited via URL, not triggered via search bar
-				if ( $sd['override_default_results'] ) {
-					return array( 1, array() );
-				}
-
-				// Something is not right
-				return false;
+				return array( 1, array() );
 			}
 
 			return array( 1, $s_data );
@@ -237,7 +240,7 @@ if ( !class_exists('WD_ASL_SearchOverride_Filter') ) {
 				CompatibilityOptions::instance()->query_soft_check->value;
 
 			// This can't be a search query if none of this is set
-			if ( !isset($wp_query, $wp_query->query_vars, $_GET['s']) ) { // phpcs:ignore
+			if ( !isset($wp_query, $wp_query->query_vars, $_GET['s']) || !is_string($_GET['s']) ) { // phpcs:ignore
 				$is_search = false;
 			} else {
 				// Possible candidates for search below

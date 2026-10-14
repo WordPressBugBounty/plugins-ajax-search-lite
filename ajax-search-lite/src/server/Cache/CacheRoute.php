@@ -9,8 +9,11 @@ use WP_REST_Response;
 use WPDRMS\ASL\Cache\ORM\CacheOptions;
 use WPDRMS\ASL\Cache\Queries\SearchStatisticsQuery;
 use WPDRMS\PluginCore\Rest\AbstractRest;
+use WPDRMS\ASL\Utils\NetworkAdminOnly;
 
 class CacheRoute extends AbstractRest {
+	use NetworkAdminOnly;
+
 	public function registerRoutes( string $route_namespace ): void {
 		register_rest_route(
 			$route_namespace,
@@ -35,7 +38,7 @@ class CacheRoute extends AbstractRest {
 					),
 					'permission_callback' => array(
 						$this,
-						'allowOnlyAdmins',
+						'allowOnlyNetworkAdmins',
 					),
 				),
 			),
@@ -52,7 +55,7 @@ class CacheRoute extends AbstractRest {
 				),
 				'permission_callback' => array(
 					$this,
-					'allowOnlyAdmins',
+					'allowOnlyNetworkAdmins',
 				),
 			)
 		);
@@ -73,18 +76,22 @@ class CacheRoute extends AbstractRest {
 			)
 		);
 
-		register_rest_route(
-			$route_namespace,
-			'results_cache/keyset',
-			array(
-				'methods'             => 'GET',
-				'callback'            => array(
-					$this,
-					'keySet',
-				),
-				'permission_callback' => '__return_true',
-			)
-		);
+		// Public: only the super file cache front-end needs the list of cached searches
+		$cache = CacheOptions::instance();
+		if ( $cache->status->value && $cache->cache_type->value === 'super_file' ) {
+			register_rest_route(
+				$route_namespace,
+				'results_cache/keyset',
+				array(
+					'methods'             => 'GET',
+					'callback'            => array(
+						$this,
+						'keySet',
+					),
+					'permission_callback' => '__return_true',
+				)
+			);
+		}
 
 		register_rest_route(
 			$route_namespace,
@@ -97,7 +104,7 @@ class CacheRoute extends AbstractRest {
 				),
 				'permission_callback' => array(
 					$this,
-					'allowOnlyAdmins',
+					'allowOnlyNetworkAdmins',
 				),
 			)
 		);

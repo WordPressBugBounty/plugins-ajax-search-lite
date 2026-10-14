@@ -965,6 +965,29 @@ jQuery(function($){
     });
 
     /**
+     * Meta keys are not filtered by WordPress, any post author can add one: never use them as HTML
+     */
+    function escHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+    }
+
+    /**
+     * The custom field search results list items
+     */
+    window.wd_cf_search_results_list = function(data_r) {
+        var html = '';
+        $.each(data_r, function(i, v){
+            html += '<li key="' + escHtml(v.meta_key) + '">' + escHtml(v.meta_key) + '</li>';
+        });
+        return html;
+    }
+
+    /**
      * Custom field selectors
      */
     window.wd_cf_ajax_callback = function(r, $node, o, parent) {
@@ -982,7 +1005,7 @@ jQuery(function($){
         if ( typeof r == 'object' ) {
             if ( r.length > 0 ) {
                 $.each(r, function(i, v) {
-                    html += '<li class="ui-state-default" data-name="'+v.meta_key+'">'+v.meta_key+'<a class="deleteIcon"></a></li>';
+                    html += '<li class="ui-state-default" data-name="'+escHtml(v.meta_key)+'">'+escHtml(v.meta_key)+'<a class="deleteIcon"></a></li>';
                 });
                 $drg.html(html);
                 $("#sortable" + id + " li").draggable(drag_opts).disableSelection();
@@ -1243,10 +1266,7 @@ jQuery(function($){
                         if ( typeof window[o.callback] != 'undefined' )
                             window[o.callback].apply(null, [data_r, $this, o, parent, id]);
                     } else {
-                        var html = '';
-                        $.each(data_r, function(i, v){
-                            html += '<li key="' + v.meta_key + '">' + v.meta_key + '</li>';
-                        });
+                        var html = window.wd_cf_search_results_list(data_r);
                         if ( html != '')
                             $('.wd_cf_search_res', parent).html('<ul>' + html + '</ul>');
                         else

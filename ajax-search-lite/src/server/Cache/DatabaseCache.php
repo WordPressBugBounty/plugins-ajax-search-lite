@@ -44,10 +44,11 @@ class DatabaseCache implements Cache {
 	/**
 	 * @param string $key Max 14 characters
 	 * @param string $content Max 16MB
+	 * @param string $scope '' for the visitors' entries, a logged-in user's own scope otherwise
 	 * @return bool
 	 * @throws Exception
 	 */
-	public function set( string $key, string $content ): bool {
+	public function set( string $key, string $content, string $scope = '' ): bool {
 		$this->checkKey($key);
 		$this->delete($key);
 
@@ -55,6 +56,7 @@ class DatabaseCache implements Cache {
 			array(
 				'hash'    => $key,
 				'content' => $content,
+				'scope'   => $scope,
 			)
 		);
 		return true;
@@ -81,12 +83,13 @@ class DatabaseCache implements Cache {
 	}
 
 	/**
-	 * Return the list of cached files names from the database (fast)
+	 * Return the list of cached files names from the database (fast): the visitors' and the scope's own
 	 *
+	 * @param string $scope
 	 * @return string[]
 	 */
-	public function keySet(): array {
-		return CacheData::listHashes();
+	public function keySet( string $scope = '' ): array {
+		return CacheData::listHashes($scope);
 	}
 
 

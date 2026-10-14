@@ -131,7 +131,7 @@ class SearchCSVExporter {
 				}
 			}
 
-			fputcsv( $output, $line, ',', '"', '\\' );
+			fputcsv( $output, array_map(array( self::class, 'cell' ), $line), ',', '"', '\\' );
 		}
 
 		fclose( $output ); // phpcs:ignore
@@ -227,7 +227,7 @@ class SearchCSVExporter {
 				);
 			}
 
-			fputcsv( $output, $line, ',', '"', '\\' );
+			fputcsv( $output, array_map(array( self::class, 'cell' ), $line), ',', '"', '\\' );
 		}
 
 		// -----------------------------------------------------------------
@@ -281,9 +281,27 @@ class SearchCSVExporter {
 					)
 				);
 			}
-			fputcsv( $output, $total_line, ',', '"', '\\' );
+			fputcsv( $output, array_map(array( self::class, 'cell' ), $total_line), ',', '"', '\\' );
 		}
 		fclose( $output );
 		die();
+	}
+
+	/**
+	 * A CSV cell a spreadsheet will not run as a formula: the phrases, referers and languages are
+	 * visitor input. Plain numbers (incl. negative changes, percentages) stay as they are.
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	public static function cell( $value ) {
+		if (
+			is_string($value) && $value !== '' &&
+			strpos("=+-@\t\r", $value[0]) !== false &&
+			!preg_match('/^-?\d+(\.\d+)?%?$/', $value)
+		) {
+			return "'" . $value;
+		}
+		return $value;
 	}
 }

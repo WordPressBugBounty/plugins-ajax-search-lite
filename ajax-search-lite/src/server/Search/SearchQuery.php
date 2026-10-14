@@ -83,14 +83,44 @@ class SearchQuery {
 		}
 	}
 
+	/**
+	 * Public statuses for everyone, private posts with read_private_posts, unpublished ones (draft,
+	 * pending, future, trash, custom statuses..) with edit_others_posts.
+	 *
+	 * @param string[] $statuses
+	 * @return string[]
+	 */
+	private static function readableStatuses( array $statuses ): array {
+		$public   = get_post_stati(array( 'public' => true ));
+		$readable = array_values(
+			array_filter(
+				$statuses,
+				function ( $status ) use ( $public ) {
+					if ( $status === 'inherit' || in_array($status, $public, true) ) {
+						return true;
+					}
+					return current_user_can($status === 'private' ? 'read_private_posts' : 'edit_others_posts');
+				}
+			)
+		);
+
+		/**
+		 * The statuses the current user may see in the search results
+		 *
+		 * @param string[] $readable The statuses that passed the rule
+		 * @param string[] $statuses The configured list
+		 */
+		$readable = apply_filters('asl/utils/post_status/readable', $readable, $statuses);
+
+		return is_array($readable) ? array_values($readable) : array();
+	}
+
 	private function processArgs(): void {
 		$args = $this->args;
 		// ---------------- Part 1. Query variables --------------------
 
-		// Do not allow private posts for non-editors
-		if ( !current_user_can('read_private_posts') ) {
-			$args->post_status = array_diff($args->post_status, array( 'private' ));
-		}
+		// Only the statuses this user may see, whatever is configured
+		$args->post_status = self::readableStatuses($args->post_status);
 
 		if ( $args->limit > 0 && count($args->search_type) > 0 ) {
 			$args->_limit = (int) floor($args->limit /count($args->search_type));

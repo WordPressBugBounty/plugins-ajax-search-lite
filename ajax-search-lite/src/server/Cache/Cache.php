@@ -12,9 +12,10 @@ interface Cache {
 	/**
 	 * @param string $key
 	 * @param string $content
+	 * @param string $scope '' for the visitors' entries, a logged-in user's own scope otherwise
 	 * @return bool
 	 */
-	public function set( string $key, string $content ): bool;
+	public function set( string $key, string $content, string $scope = '' ): bool;
 
 	public function delete( string $key ): bool;
 
@@ -39,7 +40,10 @@ interface Cache {
 	public function clear(): int;
 
 	/**
+	 * The visitors' entries and the given scope's own
+	 *
+	 * @param string $scope
 	 * @return string[]
 	 */
-	public function keySet(): array;
+	public function keySet( string $scope = '' ): array;
 }

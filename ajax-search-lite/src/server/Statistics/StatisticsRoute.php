@@ -9,8 +9,11 @@ use WP_REST_Response;
 use WPDRMS\PluginCore\Rest\AbstractRest;
 use WPDRMS\ASL\Statistics\ORM\Search;
 use WPDRMS\ASL\Statistics\ORM\StatisticsOptions;
+use WPDRMS\ASL\Utils\NetworkAdminOnly;
 
 class StatisticsRoute extends AbstractRest {
+	use NetworkAdminOnly;
+
 	public function registerRoutes( string $route_namespace ): void {
 		register_rest_route(
 			$route_namespace,
@@ -35,7 +38,7 @@ class StatisticsRoute extends AbstractRest {
 					),
 					'permission_callback' => array(
 						$this,
-						'allowOnlyAdmins',
+						'allowOnlyNetworkAdmins',
 					),
 				),
 			),
@@ -52,7 +55,7 @@ class StatisticsRoute extends AbstractRest {
 				),
 				'permission_callback' => array(
 					$this,
-					'allowOnlyAdmins',
+					'allowOnlyNetworkAdmins',
 				),
 			)
 		);
@@ -113,7 +116,7 @@ class StatisticsRoute extends AbstractRest {
 				),
 				'permission_callback' => array(
 					$this,
-					'allowOnlyAdmins',
+					'allowOnlyNetworkAdmins',
 				),
 			)
 		);
@@ -273,7 +276,7 @@ class StatisticsRoute extends AbstractRest {
 				),
 				'permission_callback' => array(
 					$this,
-					'allowOnlyAdmins',
+					'allowOnlyNetworkAdmins',
 				),
 			)
 		);

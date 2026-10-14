@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Ajax Search Lite 4.14.5\n"
+"Project-Id-Version: Ajax Search Lite 4.14.6\n"
 "Report-Msgid-Bugs-To: https://github.com/WPDreams/ajax-search-lite\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-07-20T11:20:47+00:00\n"
+"POT-Creation-Date: 2026-10-14T13:07:18+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: ajax-search-lite\n"
@@ -96,8 +96,8 @@ msgstr ""
 
 #: backend/settings.php:129
 #: backend/settings.php:143
-#: backend/tabs/instance/advanced/content.php:42
-#: backend/tabs/instance/advanced/content.php:135
+#: backend/tabs/instance/advanced/content.php:45
+#: backend/tabs/instance/advanced/content.php:138
 #: backend/tabs/instance/advanced_options.php:30
 #: backend/tabs/instance/advanced_options.php:42
 #: backend/tabs/instance/general/behavior.php:18
@@ -208,37 +208,41 @@ msgstr ""
 msgid "Removing shortcode is usually much faster, especially if you have many of them within posts."
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:39
+#: backend/tabs/instance/advanced/content.php:38
+msgid "Removing keeps the text between opening and closing shortcode tags, including the text of members-only or other access-control shortcodes: it may show in the results content. If your posts hide content that way, choose to execute the shortcodes, so the results content shows what the visitor is allowed to see."
+msgstr ""
+
+#: backend/tabs/instance/advanced/content.php:42
 msgid "Title and Content fields"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:50
+#: backend/tabs/instance/advanced/content.php:53
 msgid "Title Field"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:90
+#: backend/tabs/instance/advanced/content.php:93
 msgid "Description Field"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:132
+#: backend/tabs/instance/advanced/content.php:135
 msgid "Advanced Title and Content fields"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:146
+#: backend/tabs/instance/advanced/content.php:149
 msgid "Advanced Title Field (default: {titlefield})"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:149
-#: backend/tabs/instance/advanced/content.php:160
+#: backend/tabs/instance/advanced/content.php:152
+#: backend/tabs/instance/advanced/content.php:163
 msgid "HTML is supported! Use {custom_field_name} format to have custom field values."
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:151
-#: backend/tabs/instance/advanced/content.php:162
+#: backend/tabs/instance/advanced/content.php:154
+#: backend/tabs/instance/advanced/content.php:165
 msgid "More possibilities explained here!"
 msgstr ""
 
-#: backend/tabs/instance/advanced/content.php:157
+#: backend/tabs/instance/advanced/content.php:160
 msgid "Advanced Description Field (default: {descriptionfield})"
 msgstr ""
 
@@ -1273,6 +1277,10 @@ msgstr ""
 msgid "Choose variation"
 msgstr ""
 
+#: src/server/Utils/NetworkAdminOnly.php:26
+msgid "Only a network administrator can change the settings and data shared by every site."
+msgstr ""
+
 #: build/js/analytics.js:109
 #: build/js/analytics.js:144
 #: build/js/cache.js:210
@@ -1631,6 +1639,14 @@ msgstr ""
 
 #: build/js/cache.js:150
 msgid "Great when content is not created or updated frequently."
+msgstr ""
+
+#: build/js/cache.js:150
+msgid "Use the cache for logged-in users?"
+msgstr ""
+
+#: build/js/cache.js:150
+msgid "Each logged-in user gets their own cached results, never served or listed to anyone else."
 msgstr ""
 
 #: build/js/cache.js:150

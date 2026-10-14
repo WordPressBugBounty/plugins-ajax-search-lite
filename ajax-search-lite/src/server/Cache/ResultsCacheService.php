@@ -59,13 +59,16 @@ class ResultsCacheService {
 		add_filter(
 			'asp/ajax/search/response',
 			function ( array $response, int $id, string $s, array $options, int $call_num, $autop ) {
+				if ( !self::cacheable() ) {
+					return $response;
+				}
 				$new_response = array_merge(
 					$response,
 					array(
 						'created' => time(),
 					)
 				);
-				$file_name    = substr(md5($id . $s . wp_json_encode($options) . $autop . $call_num), 0, 14);
+				$file_name    = self::cacheKey($id, $s, $options, $autop, $call_num);
 				if ( defined('JSON_INVALID_UTF8_IGNORE') ) {
 					$text = wp_json_encode(
 						$new_response,
@@ -78,7 +81,7 @@ class ResultsCacheService {
 				}
 				if ( $text !== false ) {
 					try {
-						$this->cache->set($file_name, $text);
+						$this->cache->set($file_name, $text, self::scope());
 					} catch ( Exception $e ) {
 						return $response;
 					}
@@ -92,7 +95,10 @@ class ResultsCacheService {
 		add_filter(
 			'asp/ajax/search/custom_output',
 			function ( string $output, int $id, string $s, array $options, int $call_num, $autop ) {
-				$file_name = substr(md5($id . $s . wp_json_encode($options) . $autop . $call_num), 0, 14);
+				if ( !self::cacheable() ) {
+					return '';
+				}
+				$file_name = self::cacheKey($id, $s, $options, $autop, $call_num);
 				try {
 					$content = $this->cache->get($file_name);
 					if ( $content !== false ) {
@@ -105,6 +111,67 @@ class ResultsCacheService {
 			},
 			999,
 			6
+		);
+	}
+
+	/**
+	 * Whether this request may read and write the cache: the cached responses are served to every
+	 * visitor, so never the ones that may depend on the user (private posts for logged-in users,
+	 * unlocked password protected posts)
+	 */
+	public static function cacheable(): bool {
+		$cacheable = true;
+		if ( is_user_logged_in() ) {
+			// Each logged-in user has their own entries (scope())
+			$cacheable = CacheOptions::instance()->logged_in_users->value;
+		}
+		foreach ( array_keys($_COOKIE) as $name ) {
+			if ( strpos( (string) $name, 'wp-postpass_') === 0 ) {
+				$cacheable = false;
+			}
+		}
+
+		/**
+		 * Whether the current user's search responses may be cached and served from the cache
+		 *
+		 * @param bool $cacheable
+		 */
+		return (bool) apply_filters('asl/results_cache/cacheable', $cacheable);
+	}
+
+	/**
+	 * The cache scope of the current user: '' for visitors, a keyed hash of the user for logged-in
+	 * users, whose entries are their own. The super file cache serves the files to anyone who knows the
+	 * name: no one else can compute it without the site's secret, and the keyset only lists it to them.
+	 */
+	public static function scope(): string {
+		if ( !is_user_logged_in() ) {
+			return '';
+		}
+		return substr(
+			hash_hmac('sha256', 'asl-results-cache|' . get_current_blog_id() . '|' . get_current_user_id(), wp_salt('auth')),
+			0,
+			16
+		);
+	}
+
+	/**
+	 * The cache key of a search, per blog. The super file cache front-end builds the same key
+	 * (src/client/plugin/core/actions/search.ts).
+	 *
+	 * @param int                  $id
+	 * @param string               $s
+	 * @param array<string, mixed> $options
+	 * @param mixed                $autop
+	 * @param int                  $call_num
+	 * @return string
+	 */
+	public static function cacheKey( int $id, string $s, array $options, $autop, int $call_num ): string {
+		$scope = self::scope();
+		return substr(
+			md5($id . $s . wp_json_encode($options) . $autop . $call_num . '|' . get_current_blog_id() . ( $scope !== '' ? '|' . $scope : '' )),
+			0,
+			14
 		);
 	}
 
@@ -125,10 +192,12 @@ class ResultsCacheService {
 	}
 
 	/**
+	 * The visitors' entries and the current user's own
+	 *
 	 * @return string[]
 	 */
 	public function keySet(): array {
-		return $this->cache->keySet();
+		return $this->cache->keySet(self::scope());
 	}
 
 	public function create(): void {

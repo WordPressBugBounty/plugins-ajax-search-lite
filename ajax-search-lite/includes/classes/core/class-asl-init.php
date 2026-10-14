@@ -68,6 +68,14 @@ class WD_ASL_Init {
 		AnalyticsMigration::run();
 		\WPDRMS\ASL\Compatibility\CompatibilityMigration::run();
 
+		// ------------------------- 4.14.6 -----------------------------
+		// Responses cached before the results cache became per user and per blog may hold private
+		// posts or unlocked password protected content: purge them, once
+		if ( get_site_option('asl_results_cache_scope_purged', '') !== '1' ) {
+			ResultsCacheService::instance()->purge();
+			update_site_option('asl_results_cache_scope_purged', '1');
+		}
+
 		/*
 		 * - Get instances
 		 * - Check options
@@ -330,6 +338,8 @@ class WD_ASL_Init {
 				'wp_rocket_exception'   => 'DOMContentLoaded',    // WP Rocket hack to prevent the wrapping of the inline script: https://docs.wp-rocket.me/article/1265-load-javascript-deferred
 				'ajaxurl'               => $ajax_url,
 				'backend_ajaxurl'       => admin_url('admin-ajax.php'),
+				// The front-end builds redirect URLs on it: the copy in the instance settings is in the DOM, post content can forge that
+				'homeurl'               => ASL_Helpers::getHomeUrl(),
 				'asl_url'               => ASL_URL,
 				'rest_url'              => apply_filters('asl/rest/base_url/', rest_url()),
 				'detect_ajax'           => $opts->detect_ajax->value,
@@ -363,10 +373,20 @@ class WD_ASL_Init {
 				'statistics'            => array(
 					'enabled' => StatisticsService::instance()->options->status->value,
 					'uid'     => get_current_user_id(),
+					// Visitors need none, the REST API ignores the nonce without a login cookie
+					'nonce'   => is_user_logged_in() ? wp_create_nonce('wp_rest') : '',
 				),
 				'cache'                 => array(
-					'enabled' => CacheOptions::instance()->status->value,
+					// Never for users who see private posts or post password cookies (ResultsCacheService::cacheable())
+					'enabled' => CacheOptions::instance()->status->value && ResultsCacheService::cacheable(),
+					// The scope of a logged-in user's entries, part of their cache keys
+					'scope'   => CacheOptions::instance()->status->value && ResultsCacheService::cacheable() ?
+						ResultsCacheService::scope() : '',
+					// Authenticates the keyset request of a logged-in user, to list their own entries too
+					'nonce'   => CacheOptions::instance()->status->value && ResultsCacheService::cacheable() && is_user_logged_in() ?
+						wp_create_nonce('wp_rest') : '',
 					'type'    => CacheOptions::instance()->cache_type->value,
+					'blog'    => get_current_blog_id(),
 					'list'    => array(),
 					'url'     => ResultsCacheService::instance()->resultsCacheUrl(),
 				),

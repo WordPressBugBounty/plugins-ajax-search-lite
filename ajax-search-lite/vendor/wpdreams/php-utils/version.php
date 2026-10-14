@@ -7,5 +7,7 @@
  * 1.0.1 — add GPL-2.0-or-later LICENSE file (WordPress.org g1 compliance); no API change.
  * 1.0.2 — security: Str::anyToString() no longer instantiates objects from serialized input
  *         (allowed_classes => false), closing an unauthenticated PHP Object Injection vector.
+ * 1.0.3 — security: Html::escCSS() leaves no "</" in the CSS, so custom CSS printed inside <style> can't end
+ *         the element (the single-pass tag removal could be rebuilt or bypassed).
  */
-return '1.0.2';
+return '1.0.3';

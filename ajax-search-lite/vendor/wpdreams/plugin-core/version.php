@@ -19,5 +19,15 @@
  * 1.3.1 — add GPL-2.0-or-later LICENSE file (WordPress.org g1 compliance); no API change.
  * 1.4.0 — ORM Model gains findAll( $order_by, $order ) — the unbounded
  *         "fetch every row" counterpart of findBy() (plugin-core #18).
+ * 1.5.0 — License client (WPDRMS\PluginCore\License): LicenseManager with LicenseConfig,
+ *         LicenseStatement, LicenseReply, LicenseApi, LicenseStore, LicenseException and
+ *         PublicKeys, for the licence server's versioned routes.
+ * 1.6.0 — Connect activation (plugin-core #22): LicenseConnect (available, start, returned, finish,
+ *         resumable, resume), LicenseManager::activateByCode(), LicenseApi::connectStart() /
+ *         connectFinish(), LicenseReply codes `pending` / `invalid_code` with request(), expiresIn()
+ *         and key(), LicenseConfig `account_url` / `return_url`, ConnectAddress, and the
+ *         LicenseException codes `connect_unavailable`, `connect_expired`, `connect_denied`.
+ * 1.7.0 — LicenseApi sends the WordPress and PHP versions (`wp`, `php`) on activate and check, as
+ *         the licence server keeps them (LicenseApi::telemetry()), for its version report.
  */
-return '1.4.0';
+return '1.7.0';

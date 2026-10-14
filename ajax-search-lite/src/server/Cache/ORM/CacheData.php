@@ -12,24 +12,34 @@ class CacheData extends Model {
 		'hash'                 => 'VARCHAR(14) NOT NULL',
 		'created_at'           => 'TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP',
 		'content'              => 'MEDIUMTEXT',
+		// '' for the visitors' entries, a logged-in user's own scope otherwise (ResultsCacheService::scope())
+		'scope'                => "VARCHAR(16) NOT NULL DEFAULT ''",
 		'INDEX idx_created_at' => '(created_at)',
+		'INDEX idx_scope'      => '(scope)',
 		'PRIMARY KEY'          => '(hash)',
 	);
 
 	public string $hash        = '';
 	public ?string $created_at = null;
 	public string $content     = '';
+	public string $scope       = '';
 
 	public function createdAtTimestamp(): int {
 		return strtotime($this->created_at);
 	}
 
 	/**
+	 * The visitors' entries, and the given scope's own: never another user's
+	 *
+	 * @param string $scope
 	 * @return string[]
 	 */
-	public static function listHashes(): array {
+	public static function listHashes( string $scope = '' ): array {
 		global $wpdb;
-		return $wpdb->get_col( 'SELECT hash FROM ' . self::getTableName() ); // phpcs:ignore
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		return $wpdb->get_col(
+			$wpdb->prepare( 'SELECT hash FROM ' . self::getTableName() . " WHERE scope = '' OR scope = %s", $scope ) // phpcs:ignore
+		);
 	}
 
 	public static function count(): int {
