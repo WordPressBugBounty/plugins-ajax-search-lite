@@ -258,7 +258,25 @@ class WD_ASL_Styles {
 
 		return array(
 			'basic'    => ASL_URL . 'css/style.basic.css',
-			'instance' => ASL_URL . 'css/style-' . $asl_options['theme'] . '.css',
+			'instance' => ASL_URL . 'css/style-' . self::theme($asl_options['theme'] ?? '') . '.css',
 		);
+	}
+
+	/**
+	 * The name of a shipped theme (css/style-{name}.css), or the default theme's: the saved value is
+	 * admin input that ends up in a URL, and not every admin may add markup to the site (a sub-site
+	 * admin on a network has no unfiltered_html).
+	 *
+	 * @param mixed $theme
+	 */
+	public static function theme( $theme ): string {
+		if (
+			is_string($theme) &&
+			preg_match('/^[a-z0-9-]+$/D', $theme) === 1 &&
+			file_exists(ASL_PATH . 'css/style-' . $theme . '.css')
+		) {
+			return $theme;
+		}
+		return wd_asl()->options['asl_defaults']['theme'] ?? 'simple-red';
 	}
 }

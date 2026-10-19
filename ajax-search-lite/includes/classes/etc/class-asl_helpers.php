@@ -1,6 +1,7 @@
 <?php
 
 use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
+use WPDRMS\ASL\Search\RequestOptions;
 use WPDRMS\ASL\Utils\RequestLanguage;
 
 if ( !defined('ABSPATH') ) {
@@ -75,60 +76,6 @@ if ( !class_exists('ASL_Helpers') ) {
 		}
 
 		/**
-		 * Performs a safe sanitation and escape for strings and numeric values in LIKE type queries.
-		 * This is not to be used on whole queries, only values.
-		 *
-		 * @param mixed|array[] $str
-		 * @param bool          $remove_quotes
-		 * @param string        $remove
-		 * @return array|mixed
-		 * @uses wd_mysql_escape_mimic()
-		 * @uses esc_sql()
-		 */
-		public static function escape( $str, bool $remove_quotes = false, string $remove = '' ) {
-
-			// recursively go through if it is an array
-			if ( is_array($str) ) {
-				foreach ( $str as $k => $v ) {
-					$str[ $k ] = self::escape($v, $remove_quotes, $remove);
-				}
-				return $str;
-			}
-
-			if ( is_float( $str) ) {
-				return $str;
-			}
-
-			if ( $remove_quotes ) {
-				$str = str_replace(
-					array(
-						chr(145),
-						chr(146),
-						chr(147),
-						chr(148),
-						chr(150),
-						chr(151),
-						chr(133),
-						"'",
-						'"',
-					),
-					'',
-					$str
-				);
-			}
-			if ( !empty($remove) ) {
-				$str = str_replace(str_split($remove), '', $str);
-			}
-
-			if ( function_exists( 'esc_sql' ) ) {
-				return esc_sql( $str);
-			}
-
-			// Okay, what? Not one function is present, use the one we have
-			return wd_mysql_escape_mimic($str);
-		}
-
-		/**
 		 * Removes gutenberg blocks from the given string by block names array
 		 *
 		 * @param string   $content
@@ -190,181 +137,6 @@ if ( !class_exists('ASL_Helpers') ) {
 			return preg_replace( '/\s+/', ' ', trim(stripcslashes($s)) );
 		}
 
-
-		/**
-		 * Gets the custom field value, supporting ACF get_field() and WooCommerce multi currency
-		 *
-		 * @see ASL_Helpers::woo_formattedPriceWithCurrency()   To get the currency formatted field.
-		 * @see get_field()                                     ACF post meta parsing.
-		 * @since 4.11
-		 *
-		 * @param string $field      Custom field label
-		 * @param object $r          Result object
-		 * @param bool   $use_acf    If true, will use the get_field() function from ACF
-		 * @param array  $args       Search arguments
-		 * @param array  $field_args Additional field arguments
-		 * @return string
-		 */
-		public static function getCFValue( $field, $r, $use_acf = false, $args = array(), $field_args = array() ) {
-			$ret             = '';
-			$price_fields    = array( '_price', '_price_html', '_tax_price', '_sale_price', '_regular_price' );
-			$datetime_fields = array(
-				'_EventStartDate',
-				'_EventStartDateUTC',
-				'_EventEndDate',
-				'_EventEndDateUTC',
-				'_event_start_date',
-				'_event_end_date',
-				'_event_start',
-				'_event_end',
-				'_event_start_local',
-				'_event_end_local',
-			);
-
-			if ( ( in_array($field, $datetime_fields, true) || isset($field_args['date_format']) ) && isset($r->post_type) ) {
-				$mykey_values = get_post_custom_values($field, $r->id);
-				if ( isset($mykey_values[0]) ) {
-					if ( isset($field_args['date_format']) ) {
-						$ret = date_i18n( $field_args['date_format'], strtotime( $mykey_values[0] ) );
-					} else {
-						$ret = date_i18n( get_option( 'date_format' ), strtotime( $mykey_values[0] ) );
-					}
-				}
-			} elseif ( in_array($field, $price_fields, true) &&
-				isset($r->post_type) &&
-				in_array($r->post_type, array( 'product', 'product_variation' ), true) &&
-				function_exists('wc_get_product')
-			) { // Is this a WooCommerce price related field?
-				$ret = self::woo_formattedPriceWithCurrency($r->id, $field, $args);
-			} elseif ( $use_acf && function_exists('get_field') ) { // ..or just a regular field?
-					$mykey_values = get_field($field, $r->id, true);
-				if ( !is_null($mykey_values) && $mykey_values !== '' && $mykey_values !== false ) {
-					if ( is_array($mykey_values) ) {
-						if ( count($mykey_values) > 0 && isset($mykey_values[0]) ) {
-							// Field display mode as Array (both label and value)
-							if ( isset($mykey_values[0]['label']) ) {
-								$labels = array();
-								foreach ( $mykey_values as $choice ) {
-									if ( isset($choice['label']) ) {
-										$labels[] = $choice['label'];
-									}
-								}
-								if ( count($labels) > 0 ) {
-									$ret = implode(', ', $labels);
-								}
-								// Make sure this is not some sort of a repeater or reference
-							} elseif ( !is_object($mykey_values[0]) ) {
-								$ret = implode(', ', $mykey_values);
-							}
-						}
-					} else {
-						$ret = $mykey_values;
-					}
-				}
-			} else {
-				$mykey_values = get_post_custom_values($field, $r->id);
-				if ( isset($mykey_values[0]) ) {
-					$ret = wd_array_to_string( maybe_unserialize( $mykey_values[0] ) );
-				}
-			}
-
-			return $ret;
-		}
-
-		/**
-		 * Gets the WooCommerce formatted currency, supporting multiple currencies WPML, WCML
-		 *
-		 * @since 4.11
-		 * @see wc_get_product()    Getting the WooCommerce product.
-		 * @see $woocommerce_wpml->multi_currency->prices->get_product_price_in_currency() For multi currency parsing.
-		 * @see wc_price()          Price formatting.
-		 *
-		 * @param int    $id         Product or variation ID
-		 * @param string $field      Field label
-		 * @param array  $args       Search arguments
-		 * @return string
-		 */
-		public static function woo_formattedPriceWithCurrency( $id, $field, $args ) {
-			global $woocommerce_wpml;
-			global $sitepress;
-
-			$currency = $args['woo_currency'] ?? ( function_exists('get_woocommerce_currency') ?
-				get_woocommerce_currency() : '' );
-
-			$price = '';
-			$p     = wc_get_product( $id );
-
-			// WCML Section, copied and modified from
-			// ..\wp-content\plugins\wpml-woocommerce\inc\currencies\class-wcml-multi-currency-prices.php
-			// line 139, function product_price_filter(..)
-			if ( isset($sitepress, $woocommerce_wpml, $woocommerce_wpml->multi_currency) ) {
-				$original_object_id = apply_filters( 'translate_object_id', $id, get_post_type($id), false, $sitepress->get_default_language() );
-				$ccr                = get_post_meta($original_object_id, '_custom_conversion_rate', true);
-				if ( in_array($field, array( '_price', '_regular_price', '_sale_price', '_price_html' ), true) && !empty($ccr) && isset($ccr[ $field ][ $currency ]) ) {
-					if ( $field === '_price_html' ) {
-						$field = '_price';
-					}
-					$price_original = get_post_meta($original_object_id, $field, true);
-					$price          = $price_original * $ccr[ $field ][ $currency ];
-				} else {
-					$manual_prices = $woocommerce_wpml->multi_currency->custom_prices->get_product_custom_prices($id, $currency);
-					if ( $field === '_price_html' ) {
-						$field = '_price';
-					}
-					if ( $manual_prices && !empty($manual_prices[ $field ]) ) {
-						$price = $manual_prices[ $field ];
-					} else {
-						// 2. automatic conversion
-						$price = get_post_meta($id, $field, true);
-						$price = apply_filters('wcml_raw_price_amount', $price, $currency );
-					}
-				}
-
-				if ( $price !== '' ) {
-					$price = wc_price($price, array( 'currency' => $currency ));
-				}
-			} else {
-				// For variable products _regular_price, _sale_price are not defined
-				// ..however are most likely used together. So in case of _regular_price display the range,
-				// ..but do not deal with _sale_price at all
-				if ( $p->is_type('variable') && !in_array($field, array( '_sale_price' ), true) ) {
-					$price = $p->get_price_html();
-				} else {
-					switch ( $field ) {
-						case '_regular_price':
-							$price = $p->get_regular_price();
-							break;
-						case '_sale_price':
-							if ( $p->is_on_sale() ) {
-								$price = $p->get_sale_price();
-							} else {
-								$price = '';
-							}
-							break;
-						case '_tax_price':
-							$price = $p->get_price_including_tax();
-							break;
-						case '_price_html':
-							$price = $p->get_price_html();
-							break;
-						default:
-							$price = $p->get_price();
-							break;
-					}
-					if ( $field !== '_price_html' && $price !== '' && function_exists('wc_price') ) {
-						if ( $currency !== '' ) {
-							$price = wc_price($price, array( 'currency' => $currency ));
-						} else {
-							$price = wc_price($price);
-						}
-					}
-				}
-			}
-
-			return $price;
-		}
-
-
 		/**
 		 * Helper method to be used before printing the font styles. Converts font families to apostrophed versions.
 		 *
@@ -402,6 +174,9 @@ if ( !class_exists('ASL_Helpers') ) {
 			if ( !wd_asl()->instances->exists($search_id) ) {
 				return array();
 			}
+
+			// The options the search reads, nothing else: the results cache keys the response on exactly these
+			$o = array_intersect_key($o, array_flip(RequestOptions::KEYS));
 
 			$search = wd_asl()->instances->get(0);
 			$sd     = $search['data'];
@@ -500,9 +275,10 @@ if ( !class_exists('ASL_Helpers') ) {
 			}
 			if ( isset($o['asl_gen']) && is_array($o['asl_gen']) ) {
 				foreach ( array( 'title', 'content', 'excerpt' ) as $field ) {
-					// Only a field the admin enabled, or the visitor sees the checkbox of, can be searched
+					// Only a field the admin enabled, or the visitor sees the checkbox of, can be searched. The excerpt
+					// checkbox is never shown (its wrapper is always hidden), so only the admin can enable the field
 					$tickable = $sd[ 'searchin' . $field ] ||
-						( $sd['show_frontend_search_settings'] && $sd[ 'showsearchin' . $field ] );
+						( $field !== 'excerpt' && $sd['show_frontend_search_settings'] && $sd[ 'showsearchin' . $field ] );
 					if ( $tickable && in_array($field, $o['asl_gen'], true) ) {
 						$args['post_fields'][] = $field;
 					}
@@ -591,8 +367,10 @@ if ( !class_exists('ASL_Helpers') ) {
 				$o['woo_currency'] : ( function_exists('get_woocommerce_currency') ? get_woocommerce_currency() : '' );
 			$args['_page_id']     = isset($o['current_page_id']) && is_scalar($o['current_page_id']) ?
 				intval($o['current_page_id']) : intval($args['_page_id'] ?? 0);
-			// Reset search type and post types for WooCommerce search results page
-			if ( isset($_GET['post_type']) && $_GET['post_type'] === 'product' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			// Reset search type and post types for the WooCommerce search results page. The page URL is not part of
+			// the form data an ajax request posts: the ajax search ignores it, or anyone could add it to the ajax URL
+			// and have a different response cached under the key the form's own requests compute
+			if ( !( $args['_ajax_search'] ?? false ) && isset($_GET['post_type']) && $_GET['post_type'] === 'product' ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 				$old_ptype         = $args['post_type'];
 				$args['post_type'] = array();
 				if ( in_array('product', $old_ptype, true) ) {

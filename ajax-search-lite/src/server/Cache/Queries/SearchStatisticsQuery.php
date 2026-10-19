@@ -3,6 +3,7 @@
 namespace WPDRMS\ASL\Cache\Queries;
 
 use WPDRMS\PluginCore\Traits\SingletonTrait;
+use WPDRMS\ASL\Statistics\BlogScope;
 use WPDRMS\ASL\Statistics\ORM\Search;
 use WPDRMS\ASL\Statistics\Queries\SearchQuery;
 
@@ -30,7 +31,7 @@ class SearchStatisticsQuery {
 		$interval_condition = $past_24_hours ? ' AND date >= DATE_SUB(NOW(), INTERVAL 1 DAY)' : '';
 		return intval(
 			$wpdb->get_var( // phpcs:ignore
-				'SELECT COUNT(*) FROM ' . Search::getTableName() . ' WHERE cached=1' . $interval_condition // phpcs:ignore
+				'SELECT COUNT(*) FROM ' . Search::getTableName() . ' WHERE cached=1 AND ' . BlogScope::condition() . $interval_condition // phpcs:ignore
 			)
 		);
 	}
@@ -41,7 +42,7 @@ class SearchStatisticsQuery {
 		$interval_condition = $past_24_hours ? ' AND date >= DATE_SUB(NOW(), INTERVAL 1 DAY)' : '';
 		return intval(
 			$wpdb->get_var( // phpcs:ignore
-				'SELECT COUNT(*) FROM ' . Search::getTableName() . ' WHERE cached=0' . $interval_condition // phpcs:ignore
+				'SELECT COUNT(*) FROM ' . Search::getTableName() . ' WHERE cached=0 AND ' . BlogScope::condition() . $interval_condition // phpcs:ignore
 			)
 		);
 	}

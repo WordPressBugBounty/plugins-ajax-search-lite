@@ -47,17 +47,17 @@
         },
         {
             "name": "wpdreams/php-utils",
-            "version": "v1.0.3",
-            "version_normalized": "1.0.3.0",
+            "version": "v1.0.4",
+            "version_normalized": "1.0.4.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpdreams/php-utils.git",
-                "reference": "83fb005957eed9fe86e2d4877ba2246a6bf7e7b6"
+                "reference": "07eab880abf5fcc038da0ec459e30bff4b03d32e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpdreams/php-utils/zipball/83fb005957eed9fe86e2d4877ba2246a6bf7e7b6",
-                "reference": "83fb005957eed9fe86e2d4877ba2246a6bf7e7b6",
+                "url": "https://api.github.com/repos/wpdreams/php-utils/zipball/07eab880abf5fcc038da0ec459e30bff4b03d32e",
+                "reference": "07eab880abf5fcc038da0ec459e30bff4b03d32e",
                 "shasum": ""
             },
             "require-dev": {
@@ -73,7 +73,7 @@
                 "yoast/phpunit-polyfills": "*",
                 "zircote/swagger-php": "*"
             },
-            "time": "2026-10-13T18:27:11+00:00",
+            "time": "2026-10-17T12:14:15+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {

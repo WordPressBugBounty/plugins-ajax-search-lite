@@ -6,8 +6,8 @@ use DateInterval;
 use DatePeriod;
 use DateTime;
 use Exception;
-use WPDRMS\ASL\Core\Models\SearchInstance;
 use WPDRMS\PluginCore\Traits\SingletonTrait;
+use WPDRMS\ASL\Statistics\BlogScope;
 use WPDRMS\ASL\Statistics\ORM\Interaction;
 use WPDRMS\ASL\Statistics\ORM\Result;
 use WPDRMS\ASL\Statistics\ORM\Search;
@@ -27,7 +27,7 @@ class SearchQuery {
 		global $wpdb;
 
 		// Last 60 minutes (1-minute intervals)
-		$last_60_minutes_condition = 'date >= DATE_SUB(NOW(), INTERVAL 60 MINUTE)';
+		$last_60_minutes_condition = 'date >= DATE_SUB(NOW(), INTERVAL 60 MINUTE) AND ' . BlogScope::condition();
 		// phpcs:disable
 		$last_60_minutes           = $wpdb->get_results(
 			"SELECT 
@@ -48,7 +48,7 @@ class SearchQuery {
 		);
 
 		// Last 24 hours (hourly intervals)
-		$last_24_hours_condition = 'date >= DATE_SUB(NOW(), INTERVAL 24 HOUR)';
+		$last_24_hours_condition = 'date >= DATE_SUB(NOW(), INTERVAL 24 HOUR) AND ' . BlogScope::condition();
 		$last_24_hours           = $wpdb->get_results(
 			"SELECT 
             TIMESTAMPDIFF(HOUR, date, NOW()) as time,
@@ -144,8 +144,12 @@ class SearchQuery {
 			'compare'           => true,
 			'show_empty_days'   => false,
 		);
-		$args     = array_merge( $defaults, $args );
+		$args     = BlogScope::args( array_merge( $defaults, $args ) );
 
+		// The list filters accept a plain value too
+		foreach ( array( 'user_id', 'asp_id', 'device_type', 'lang', 'referer' ) as $list ) {
+			$args[ $list ] = self::valueList( $args[ $list ] );
+		}
 		$args['compare']           = boolval( $args['compare'] );
 		$args['type']              = $args['type'] === null ? null : intval( $args['type'] );
 		$args['phrase']            = $args['phrase'] === null ? null : strval( $args['phrase'] );
@@ -422,7 +426,7 @@ class SearchQuery {
 			'offset'                      => 0,
 			'compare'                     => true,
 		);
-		$args                  = array_merge( $defaults, $args );
+		$args                  = BlogScope::args( array_merge( $defaults, $args ) );
 		$allowed_popular_field = array( 'phrase', 'referer', 'asp_id', 'type', 'device_type', 'lang' );
 
 		$args['search_id']                   = $args['search_id'] === null ? $args['search_id'] : intval($args['search_id']);
@@ -440,8 +444,11 @@ class SearchQuery {
 		$args['type']              = $args['type'] === null ? $args['type'] : intval($args['type']);
 		$args['has_interaction']   = $args['has_interaction'] === null ? $args['has_interaction'] : boolval($args['has_interaction']);
 		$args['has_found_results'] = $args['has_found_results'] === null ? $args['has_found_results'] : boolval($args['has_found_results']);
-		$args['device_type']       = is_array($args['device_type']) ? $args['device_type'] : array( $args['device_type'] );
-		$variation                 = $args['variation'] === 'latest' ? 'latest' : 'popular';
+		// The list filters accept a plain value too
+		foreach ( array( 'user_id', 'asp_id', 'device_type', 'lang', 'referer' ) as $list ) {
+			$args[ $list ] = self::valueList( $args[ $list ] );
+		}
+		$variation = $args['variation'] === 'latest' ? 'latest' : 'popular';
 
 		$allowed_order_by = array( 'id', 'phrase', 'asp_id', 'type', 'device_type', 'user_name', 'referer' );
 		$args['order_by'] = !in_array($args['order_by'], $allowed_order_by, true) ? 'id' : $args['order_by'];
@@ -699,7 +706,7 @@ class SearchQuery {
              FROM $search_table s
              LEFT JOIN {$wpdb->users} u ON u.ID = s.user_id
              WHERE $where_sql $interaction_sub
-             ORDER BY s.{$args['order_by']} {$args['order']}
+             ORDER BY " . ( $args['order_by'] === 'user_name' ? 'u.display_name' : 's.' . $args['order_by'] ) . " {$args['order']}
              LIMIT %d OFFSET %d",
 				array_merge( $params, array( $args['limit'], $args['offset'] ) )
 			);
@@ -748,16 +755,24 @@ class SearchQuery {
 				}
 				break;
 			case 'asp_id':
-				/**
-				 * @var SearchInstance|empty $instance
-				 */
-				$instance = wd_asp()->instances->get(intval($value));
-				if ( !empty($instance) ) {
-					$ret = "[{$instance->id}] " . $instance->name;
-				}
+				// Lite has the one search instance, without a name
+				$ret = wd_asl()->instances->exists(intval($value)) ? '[' . intval($value) . '] ' . __('Ajax Search Lite', 'ajax-search-lite') : '';
 				break;
 		}
 
 		return $ret;
+	}
+
+	/**
+	 * A list filter as a list: a plain value is a list of one, nothing is an empty list
+	 *
+	 * @param mixed $value
+	 * @return array<int, mixed>
+	 */
+	private static function valueList( $value ): array {
+		if ( is_array($value) ) {
+			return array_values($value);
+		}
+		return $value === null || $value === '' ? array() : array( $value );
 	}
 }

@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.14.6
+Stable tag: 4.14.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,10 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.14.7 =
+* Fixed: Security issues, including an SQL injection through the search phrase reported by Patchstack [CVE-2026-111852](https://www.cve.org/CVERecord?id=CVE-2026-111852)
+* Fixed: A search bar placed inside a link, such as a menu item, initializes again
+
 = 4.14.6 =
 * Fixed: Security issues, including non-public post types being searchable by unauthenticated visitors [CVE-2026-110360](https://www.cve.org/CVERecord?id=CVE-2026-110360)
 * Fixed: Hardened search filters, password-protected and private content, the results cache, statistics and multisite settings

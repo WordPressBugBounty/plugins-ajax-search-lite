@@ -86,10 +86,11 @@ class DatabaseCache implements Cache {
 	 * Return the list of cached files names from the database (fast): the visitors' and the scope's own
 	 *
 	 * @param string $scope
+	 * @param int    $limit 0 for all
 	 * @return string[]
 	 */
-	public function keySet( string $scope = '' ): array {
-		return CacheData::listHashes($scope);
+	public function keySet( string $scope = '', int $limit = 0 ): array {
+		return CacheData::listHashes($scope, $limit);
 	}
 
 

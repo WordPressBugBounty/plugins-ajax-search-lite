@@ -40,10 +40,11 @@ interface Cache {
 	public function clear(): int;
 
 	/**
-	 * The visitors' entries and the given scope's own
+	 * The visitors' entries and the given scope's own, the newest first
 	 *
 	 * @param string $scope
+	 * @param int    $limit 0 for all
 	 * @return string[]
 	 */
-	public function keySet( string $scope = '' ): array;
+	public function keySet( string $scope = '', int $limit = 0 ): array;
 }

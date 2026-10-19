@@ -335,10 +335,19 @@ abstract class AbstractSearch {
 			$limit = 10;
 		}
 
-		return str_replace(
-			array( '{relevance_query}', '{like_query}', '{remaining_limit}' ),
-			array( $relevance, $like_query, $limit ),
-			$this->query
+		/**
+		 * One pass over the template, never over the replaced text: the search phrase is inside the
+		 * relevance and like parts, and a phrase containing a {token} must stay a literal. An array
+		 * str_replace() re-scans each replacement for the following tokens, so a typed {like_query}
+		 * got the WHERE clause (with its quotes) spliced into a string literal: SQL injection.
+		 */
+		return strtr(
+			$this->query,
+			array(
+				'{relevance_query}' => $relevance,
+				'{like_query}'      => $like_query,
+				'{remaining_limit}' => (string) $limit,
+			)
 		);
 	}
 }

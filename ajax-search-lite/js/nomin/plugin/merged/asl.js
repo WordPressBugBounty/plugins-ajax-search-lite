@@ -840,14 +840,37 @@ const trustedHomeUrl = function(domValue) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   hasPostPasswordCookie: function() { return /* binding */ hasPostPasswordCookie; },
+/* harmony export */   normalizeCacheOptions: function() { return /* binding */ normalizeCacheOptions; },
 /* harmony export */   superFileCacheKey: function() { return /* binding */ superFileCacheKey; }
 /* harmony export */ });
 /* harmony import */ var _other__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(627);
 
 
+const isScalar = (value) => typeof value === "string" || typeof value === "number" || typeof value === "boolean";
+const normalizeCacheOptions = function(options, keys) {
+  const normalized = {};
+  if (options === null || typeof options !== "object") {
+    return normalized;
+  }
+  const source = options;
+  for (const key of keys) {
+    if (!Object.prototype.hasOwnProperty.call(source, key)) {
+      continue;
+    }
+    const value = source[key];
+    if (value !== null && typeof value === "object") {
+      normalized[key] = Object.values(value).filter(isScalar).map(String);
+    } else if (isScalar(value)) {
+      normalized[key] = String(value);
+    }
+  }
+  return normalized;
+};
 const superFileCacheKey = function(phrase, options) {
   const scope = window.ASL.cache.scope ?? "";
-  return (0,_other__WEBPACK_IMPORTED_MODULE_0__.md5)(0 + phrase + JSON.stringify(options) + "0|" + window.ASL.cache.blog + (scope !== "" ? "|" + scope : "")).slice(0, 14);
+  const normalized = normalizeCacheOptions(options, window.ASL.cache.option_keys ?? []);
+  const json = Object.keys(normalized).length === 0 ? "[]" : JSON.stringify(normalized);
+  return (0,_other__WEBPACK_IMPORTED_MODULE_0__.md5)(0 + phrase + json + "0|" + window.ASL.cache.blog + (scope !== "" ? "|" + scope : "")).slice(0, 14);
 };
 const hasPostPasswordCookie = function() {
   return document.cookie.split(";").some((cookie) => cookie.trim().startsWith("wp-postpass_"));
@@ -1496,7 +1519,7 @@ var other = __webpack_require__(627);
 ;// ./src/client/plugin/wrapper/settings.ts
 
 const readInstanceSettings = function(search) {
-  const data = search.closest(".asl_w_container")?.querySelector(":scope > .asl_data_container > .asl_init_data");
+  const data = search.closest(".asl_w_container")?.querySelector(".asl_data_container > .asl_init_data");
   if (!data || typeof data.dataset["settings"] === "undefined") {
     return null;
   }

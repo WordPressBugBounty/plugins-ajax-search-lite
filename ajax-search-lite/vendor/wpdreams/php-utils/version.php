@@ -9,5 +9,8 @@
  *         (allowed_classes => false), closing an unauthenticated PHP Object Injection vector.
  * 1.0.3 — security: Html::escCSS() leaves no "</" in the CSS, so custom CSS printed inside <style> can't end
  *         the element (the single-pass tag removal could be rebuilt or bypassed).
+ * 1.0.4 — security: BFI_Thumb_1_3::thumb() only reads a file the URL names inside the uploads or the theme
+ *         folder (realpath): a "../" in an image URL could copy any readable image on the server to a
+ *         public URL under uploads/bfi_thumb.
  */
-return '1.0.3';
+return '1.0.4';

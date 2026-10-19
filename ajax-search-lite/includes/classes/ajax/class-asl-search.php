@@ -29,12 +29,15 @@ if ( !class_exists('WD_ASL_Search_Handler') ) {
 		public function handle( $dont_group = false ) {
 
 			/**
-			 * No sanitization here yet, we want the exact input and deal with it later on
+			 * No sanitization here yet, we want the exact input and deal with it later on.
+			 * The types are checked though: anything but a string phrase, or form data that is neither
+			 * a string nor an array, counts as empty, instead of a TypeError on the typed query arguments
 			 */
-			$s = wp_unslash($_POST['aslp']); // phpcs:ignore
-			if ( is_array($_POST['options']) ) { // phpcs:ignore
+			$s       = isset($_POST['aslp']) && is_string($_POST['aslp']) ? wp_unslash($_POST['aslp']) : ''; // phpcs:ignore
+			$options = array();
+			if ( isset($_POST['options']) && is_array($_POST['options']) ) { // phpcs:ignore
 				$options = $_POST['options']; // phpcs:ignore
-			} else {
+			} elseif ( isset($_POST['options']) && is_string($_POST['options']) ) { // phpcs:ignore
 				parse_str($_POST['options'], $options); // phpcs:ignore
 			}
 

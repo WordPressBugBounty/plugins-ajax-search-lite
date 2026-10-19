@@ -113,7 +113,7 @@ if ( !class_exists('WD_ASL_Search_Shortcode') ) {
 				ob_start();
 				foreach ( $styles['src'] as $style_url ) :
 					// phpcs:ignore
-					?><link rel="stylesheet" href="<?php echo $style_url ?>?ver=<?php echo ASL_CURR_VER_STRING; ?>"><?php
+					?><link rel="stylesheet" href="<?php echo esc_url($style_url . '?ver=' . ASL_CURR_VER_STRING); ?>"><?php
 				endforeach;
 				?>
 				<style>

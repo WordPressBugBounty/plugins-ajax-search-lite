@@ -29,17 +29,21 @@ class CacheData extends Model {
 	}
 
 	/**
-	 * The visitors' entries, and the given scope's own: never another user's
+	 * The visitors' entries, and the given scope's own: never another user's. The newest first.
 	 *
 	 * @param string $scope
+	 * @param int    $limit 0 for all
 	 * @return string[]
 	 */
-	public static function listHashes( string $scope = '' ): array {
+	public static function listHashes( string $scope = '', int $limit = 0 ): array {
 		global $wpdb;
+		$sql = 'SELECT hash FROM ' . self::getTableName() . " WHERE scope = '' OR scope = %s ORDER BY created_at DESC";
+		if ( $limit > 0 ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			return $wpdb->get_col( $wpdb->prepare( $sql . ' LIMIT %d', $scope, $limit ) ); // phpcs:ignore
+		}
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-		return $wpdb->get_col(
-			$wpdb->prepare( 'SELECT hash FROM ' . self::getTableName() . " WHERE scope = '' OR scope = %s", $scope ) // phpcs:ignore
-		);
+		return $wpdb->get_col( $wpdb->prepare( $sql, $scope ) ); // phpcs:ignore
 	}
 
 	public static function count(): int {

@@ -5,12 +5,17 @@ namespace WPDRMS\ASL\Cache;
 use Exception;
 use WPDRMS\ASL\Cache\ORM\CacheOptions;
 use WPDRMS\ASL\Cache\Queries\SearchStatisticsQuery;
+use WPDRMS\ASL\Search\RequestOptions;
 use WPDRMS\PluginCore\Traits\SingletonTrait;
 
 class ResultsCacheService {
 	use SingletonTrait;
 
 	const RESULTS_CACHE_DIR = 'results';
+	// Every new phrase is an entry: the cap bounds the growth a flood of phrases causes
+	const MAX_ENTRIES = 10000;
+	// The keyset is fetched on every page view
+	const KEYSET_LIMIT = 2000;
 
 	public SearchStatisticsQuery $search_statistics_query;
 
@@ -79,7 +84,8 @@ class ResultsCacheService {
 						$new_response
 					);
 				}
-				if ( $text !== false ) {
+				// Over the cap the search is served live, until the retention frees entries
+				if ( $text !== false && $this->cache->count() < self::maxEntries() ) {
 					try {
 						$this->cache->set($file_name, $text, self::scope());
 					} catch ( Exception $e ) {
@@ -157,7 +163,10 @@ class ResultsCacheService {
 
 	/**
 	 * The cache key of a search, per blog. The super file cache front-end builds the same key
-	 * (src/client/plugin/core/actions/search.ts).
+	 * (src/client/global/utils/cache.ts).
+	 *
+	 * Only the posted options the search reads are part of it (RequestOptions): the rest of the request
+	 * cannot change the response, so it must not make another entry of the same response.
 	 *
 	 * @param int                  $id
 	 * @param string               $s
@@ -169,10 +178,30 @@ class ResultsCacheService {
 	public static function cacheKey( int $id, string $s, array $options, $autop, int $call_num ): string {
 		$scope = self::scope();
 		return substr(
-			md5($id . $s . wp_json_encode($options) . $autop . $call_num . '|' . get_current_blog_id() . ( $scope !== '' ? '|' . $scope : '' )),
+			md5($id . $s . wp_json_encode(RequestOptions::normalize($options)) . $autop . $call_num . '|' . get_current_blog_id() . ( $scope !== '' ? '|' . $scope : '' )),
 			0,
 			14
 		);
+	}
+
+	/**
+	 * The number of entries the cache stops at
+	 */
+	public static function maxEntries(): int {
+		/**
+		 * @param int $max_entries
+		 */
+		return max(1, (int) apply_filters('asl/results_cache/max_entries', self::MAX_ENTRIES));
+	}
+
+	/**
+	 * The number of the newest entries the keyset lists
+	 */
+	public static function keysetLimit(): int {
+		/**
+		 * @param int $limit
+		 */
+		return max(1, (int) apply_filters('asl/results_cache/keyset_limit', self::KEYSET_LIMIT));
 	}
 
 	public function purge(): int {
@@ -192,12 +221,12 @@ class ResultsCacheService {
 	}
 
 	/**
-	 * The visitors' entries and the current user's own
+	 * The newest of the visitors' entries and the current user's own
 	 *
 	 * @return string[]
 	 */
 	public function keySet(): array {
-		return $this->cache->keySet(self::scope());
+		return $this->cache->keySet(self::scope(), self::keysetLimit());
 	}
 
 	public function create(): void {

@@ -349,6 +349,30 @@ class BFI_Thumb_1_3 {
 	 * @param $single boolean, if false then an array of data will be returned
 	 * @return string|array
 	 */
+	/**
+	 * The path of the file a URL under $base_url names inside $dir, or '' when the URL is not under it or
+	 * its path climbs out of the directory ("../"). The resized copy is saved under a public URL, so only
+	 * the files of the two folders a URL may name are read: with the plain string mapping, any readable
+	 * image on the server could be copied to a public URL by whoever can put an <img> into a post.
+	 *
+	 * @param string $url
+	 * @param string $base_url
+	 * @param string $dir
+	 * @return string
+	 */
+	private static function localPath( $url, $base_url, $dir ) {
+		$base_url = rtrim( (string) $base_url, '/' );
+		$real_dir = realpath( (string) $dir );
+		if ( $base_url === '' || $real_dir === false || strpos( (string) $url, $base_url . '/' ) !== 0 ) {
+			return '';
+		}
+		$real = realpath( $real_dir . substr( $url, strlen( $base_url ) ) );
+		if ( $real === false || strpos( $real, $real_dir . DIRECTORY_SEPARATOR ) !== 0 ) {
+			return '';
+		}
+		return $real;
+	}
+
 	public static function thumb( $url, $params = array(), $single = true ) {
 		extract( $params );
 
@@ -368,14 +392,10 @@ class BFI_Thumb_1_3 {
 
 		// find the path of the image. Perform 2 checks:
 		// #1 check if the image is in the uploads folder
-		if ( strpos( $url, $upload_url ) !== false ) {
-			$rel_path = str_replace( $upload_url, '', $url );
-			$img_path = $upload_dir . $rel_path;
-
-			// #2 check if the image is in the current theme folder
-		} elseif ( strpos( $url, $theme_url ) !== false ) {
-			$rel_path = str_replace( $theme_url, '', $url );
-			$img_path = $theme_dir . $rel_path;
+		// #2 check if the image is in the current theme folder
+		$img_path = self::localPath( $url, $upload_url, $upload_dir );
+		if ( $img_path === '' ) {
+			$img_path = self::localPath( $url, $theme_url, $theme_dir );
 		}
 
 		// Fail if we can't find the image in our WP local directory

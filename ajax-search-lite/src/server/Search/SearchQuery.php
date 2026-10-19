@@ -568,7 +568,12 @@ class SearchQuery {
 		// For non-ajax searches, we need the WP_Post objects
 		if ( !$args->_ajax_search ) {
 			if ( count($results) > $args->posts_per_page ) {
-				$results = asl_results_to_wp_obj($results, ( $args->posts_per_page * ( $args->page - 1 ) ) - $it_results_start_offset, $args->posts_per_page);
+				$from = ( $args->posts_per_page * ( $args->page - 1 ) ) - $it_results_start_offset;
+				// Past the last page, or a page number so big the offset overflowed into a float: an empty page, like in WordPress
+				if ( !is_int($from) || $from > count($results) ) {
+					$from = count($results);
+				}
+				$results = asl_results_to_wp_obj($results, $from, $args->posts_per_page);
 			} else {
 				$results = asl_results_to_wp_obj($results, 0, $args->posts_per_page);
 			}

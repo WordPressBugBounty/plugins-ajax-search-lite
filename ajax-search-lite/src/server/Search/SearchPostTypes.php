@@ -534,25 +534,18 @@ class SearchPostTypes extends AbstractSearch {
 		ORDER BY {args_orderby} p_type_priority ASC, $orderby_primary, $orderby_secondary, id DESC
 		LIMIT $query_limit";
 
-		// Place the argument query fields
-		if ( isset($args['cpt_query']) && is_array($args['cpt_query']) ) {
-			$this->query = str_replace(
-				array( '{args_fields}', '{args_join}', '{args_where}', '{args_orderby}' ),
-				array( $args['cpt_query']['fields'], $args['cpt_query']['join'], $args['cpt_query']['where'], $args['cpt_query']['orderby'] ),
-				$this->query
-			);
-		} else {
-			$this->query = str_replace(
-				array( '{args_fields}', '{args_join}', '{args_where}', '{args_orderby}' ),
-				'',
-				$this->query
-			);
-		}
-		if ( isset($args['cpt_query']['groupby']) && $args['cpt_query']['groupby'] !== '' ) {
-			$this->query = str_replace('{args_groupby}', $args['cpt_query']['groupby'], $this->query);
-		} else {
-			$this->query = str_replace('{args_groupby}', "$wpdb->posts.ID", $this->query);
-		}
+		// Place the argument query fields, in one pass (strtr never re-scans the replaced text)
+		$cpt_query   = isset($args['cpt_query']) && is_array($args['cpt_query']) ? $args['cpt_query'] : array();
+		$this->query = strtr(
+			$this->query,
+			array(
+				'{args_fields}'  => $cpt_query['fields'] ?? '',
+				'{args_join}'    => $cpt_query['join'] ?? '',
+				'{args_where}'   => $cpt_query['where'] ?? '',
+				'{args_orderby}' => $cpt_query['orderby'] ?? '',
+				'{args_groupby}' => isset($cpt_query['groupby']) && $cpt_query['groupby'] !== '' ? $cpt_query['groupby'] : "$wpdb->posts.ID",
+			)
+		);
 
 		$words = $args['_exact_matches'] && $s !== '' ? array( $s ) : $_s;
 		/**
@@ -757,8 +750,16 @@ class SearchPostTypes extends AbstractSearch {
 	private function validatedInstanceOptions( array $sd ): array {
 		$args = &$this->args;
 
+		// Registered, or a well-formed name (a key of at most 20 characters, like register_post_type() requires and
+		// wp_posts.post_type stores): the plugin registering a post type is not necessarily loaded in the search
+		// request (a selective plugin loader on ajax requests), its posts are still in the database
 		$args['post_type']          = array_values(
-			array_filter($args['post_type'], fn( $type ) => is_string($type) && post_type_exists($type))
+			array_filter(
+				$args['post_type'],
+				fn( $type ) => is_string($type) && (
+					post_type_exists($type) || ( $type !== '' && strlen($type) <= 20 && sanitize_key($type) === $type )
+				)
+			)
 		);
 		$args['post_status']        = array_values(
 			array_filter($args['post_status'], fn( $status ) => is_string($status) && get_post_status_object($status) !== null)
@@ -796,6 +797,17 @@ class SearchPostTypes extends AbstractSearch {
 		$sd['author_field'] = isset($sd['author_field']) && in_array($sd['author_field'], array( 'display_name', 'user_nicename', 'user_login' ), true) ?
 			$sd['author_field'] : 'display_name';
 
+		// Post type ordering (no UI in Lite, the settings form still stores any posted key): well-formed type names,
+		// in a list, as the ORDER BY CASE is built from the values and their positions
+		$sd['use_post_type_order'] = !empty($sd['use_post_type_order']);
+		$sd['post_type_order']     = isset($sd['post_type_order']) && is_array($sd['post_type_order']) ?
+			array_values(
+				array_filter(
+					$sd['post_type_order'],
+					fn( $type ) => is_string($type) && $type !== '' && strlen($type) <= 20 && sanitize_key($type) === $type
+				)
+			) : array();
+
 		return $sd;
 	}
 
@@ -808,7 +820,8 @@ class SearchPostTypes extends AbstractSearch {
 
 		foreach ( $args['post_tax_filter'] as $item ) {
 			$tax_term_query = '';
-			$taxonomy       = $item['taxonomy'];
+			// Escaped once here, the name and the term ids reach the SQL below
+			$taxonomy = esc_sql( (string) $item['taxonomy'] );
 
 			// Is there an argument set to allow empty items for this taxonomy filter?
 			$allow_empty_tax_term = $item['allow_empty'] ?? ( $taxonomy === 'post_tag' ? $args['_post_tags_empty'] : $args['_post_allow_empty_tax_term'] );
@@ -831,7 +844,7 @@ class SearchPostTypes extends AbstractSearch {
 			// ... SUBSELECT:   excludes all the object_ids that are part of the array
 			// This is used because of multiple object_ids (posts in more than 1 tag)
 			if ( !empty($item['exclude']) ) {
-				$words          = implode( ',', $item['exclude'] );
+				$words          = implode( ',', array_map('intval', $item['exclude']) );
 				$tax_term_query = " (
 					$empty_terms_query
 
@@ -850,7 +863,7 @@ class SearchPostTypes extends AbstractSearch {
 				)";
 			}
 			if ( !empty($item['include']) ) {
-				$words = implode( ',', $item['include'] );
+				$words = implode( ',', array_map('intval', $item['include']) );
 				if ( !empty($tax_term_query) ) {
 					$tax_term_query .= ' AND ';
 				}
@@ -918,6 +931,24 @@ class SearchPostTypes extends AbstractSearch {
 		return $term_query;
 	}
 
+	/**
+	 * A value compared as a bare number in the SQL: anything that is not a number is 0
+	 *
+	 * @param mixed $value
+	 */
+	private static function numericOperand( $value ): string {
+		return is_numeric($value) ? (string) $value : '0';
+	}
+
+	/**
+	 * AND or OR, nothing else reaches the SQL between the parts
+	 *
+	 * @param mixed $logic
+	 */
+	private static function logicOperator( $logic ): string {
+		return is_string($logic) && strtoupper($logic) === 'AND' ? 'AND' : 'OR';
+	}
+
 	protected function buildCffQuery( string $post_id_field ): string {
 		global $wpdb;
 		$args  = $this->args;
@@ -925,9 +956,12 @@ class SearchPostTypes extends AbstractSearch {
 
 		$post_meta_allow_missing = $args['post_meta_allow_missing'];
 		foreach ( $args['post_meta_filter'] as $data ) {
-			$operator                         = $data['operator'];
-			$posted                           = $data['value'];
-			$field                            = $data['key'];
+			$operator = $data['operator'];
+			// Escaped once here: the values reach the SQL below as string literals, the ones compared as numbers are cast there
+			$posted                           = is_array($data['value']) ?
+				array_map(fn( $v ) => is_scalar($v) ? esc_sql( (string) $v ) : '', $data['value']) :
+				esc_sql( (string) $data['value'] );
+			$field                            = esc_sql( (string) $data['key'] );
 			$logic_and_separate_custom_fields = $data['logic_and_separate_custom_fields'] ?? false;
 			$values_count                     = 1;
 
@@ -988,7 +1022,7 @@ class SearchPostTypes extends AbstractSearch {
 				}
 				// Check BETWEEN first -> range slider
 			} elseif ( $operator === 'BETWEEN' ) {
-				$current_part = "($wpdb->postmeta.meta_value BETWEEN " . $posted[0] . ' AND ' . $posted[1] . ' )';
+				$current_part = "($wpdb->postmeta.meta_value BETWEEN " . self::numericOperand($posted[0] ?? '') . ' AND ' . self::numericOperand($posted[1] ?? '') . ' )';
 				// If not BETWEEN but value is array, then drop-down or checkboxes
 			} elseif ( $operator === 'ACF_POST_OBJECT' ) {
 				if ( is_array($posted) ) {
@@ -999,7 +1033,7 @@ class SearchPostTypes extends AbstractSearch {
 							$wpdb->postmeta.meta_value LIKE '%\"" . $v . "\"%'
 						)";
 					}
-					$logic        = $data['logic'] ?? 'OR';
+					$logic        = self::logicOperator($data['logic'] ?? 'OR');
 					$current_part = '(' . implode(' ' . $logic . ' ', $values) . ')';
 				} else {
 					$current_part = "(
@@ -1009,7 +1043,7 @@ class SearchPostTypes extends AbstractSearch {
 				}
 			} elseif ( is_array($posted) ) {
 				// Is there a logic sent?
-				$logic        = $data['logic'] ?? 'OR';
+				$logic        = self::logicOperator($data['logic'] ?? 'OR');
 				$values_count = count($posted);
 				if ( $logic_and_separate_custom_fields && $logic === 'AND' ) {
 					$logic = 'OR';
@@ -1050,9 +1084,9 @@ class SearchPostTypes extends AbstractSearch {
 								$values .= "$wpdb->postmeta.meta_value $_op '%" . $v . "'";
 							}
 						} elseif ( $values !== '' ) {
-								$values .= " $logic $wpdb->postmeta.meta_value $operator " . $v;
+								$values .= " $logic $wpdb->postmeta.meta_value $operator " . self::numericOperand($v);
 						} else {
-							$values .= "$wpdb->postmeta.meta_value $operator " . $v;
+							$values .= "$wpdb->postmeta.meta_value $operator " . self::numericOperand($v);
 						}
 					}
 				}
@@ -1073,7 +1107,7 @@ class SearchPostTypes extends AbstractSearch {
 				$current_part = "($wpdb->postmeta.meta_value $_op '%$posted')";
 			} else {
 				// Numeric operations or problematic stuff left
-				$current_part = "($wpdb->postmeta.meta_value $operator $posted  )";
+				$current_part = "($wpdb->postmeta.meta_value $operator " . self::numericOperand($posted) . ' )';
 			}
 
 			// Finally, add the current part to the parts array
@@ -1150,7 +1184,9 @@ class SearchPostTypes extends AbstractSearch {
 		$date_query_parts = array();
 
 		foreach ( $args['post_date_filter'] as $date_filter ) {
-			$date = $date_filter['date'] ?? $date_filter['year'] . '-' . sprintf('%02d', $date_filter['month']) . '-' . sprintf('%02d', $date_filter['day']);
+			$date = esc_sql(
+				(string) ( $date_filter['date'] ?? $date_filter['year'] . '-' . sprintf('%02d', $date_filter['month']) . '-' . sprintf('%02d', $date_filter['day']) )
+			);
 
 			if ( $date_filter['interval'] === 'before' ) {
 				$op                 = $date_filter['operator'] === 'exclude' ? '>' : '<=';
@@ -1382,7 +1418,8 @@ class SearchPostTypes extends AbstractSearch {
 		for ( $k = $start; $k <$end; $k++ ) {
 			$r = &$pageposts[ $k ];
 			// Like in WordPress core, the body of a password protected post is only shown once the visitor entered the password
-			if ( $args['has_password'] && post_password_required($r->id) ) {
+			$locked = $args['has_password'] && post_password_required($r->id);
+			if ( $locked ) {
 				$r->content = '';
 				$r->excerpt = '';
 			}
@@ -1395,8 +1432,9 @@ class SearchPostTypes extends AbstractSearch {
 
 			if ( $image_settings['show_images'] ) {
 				$image_args = array(
-					'get_content'        => $get_content,
-					'get_excerpt'        => $get_excerpt,
+					// The parser reads the body from the database when it was not selected: not a locked one, it only sees the blanked fields
+					'get_content'        => $get_content && !$locked,
+					'get_excerpt'        => $get_excerpt && !$locked,
 					'image_sources'      => array(
 						$image_settings['image_source1'],
 						$image_settings['image_source2'],

@@ -5,6 +5,7 @@ use WPDRMS\ASL\Analytics\ORM\AnalyticsOptions;
 use WPDRMS\ASL\Cache\ORM\CacheOptions;
 use WPDRMS\ASL\Cache\ResultsCacheService;
 use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
+use WPDRMS\ASL\Search\RequestOptions;
 use WPDRMS\ASL\Statistics\StatisticsService;
 
 if ( !defined('ABSPATH') ) {
@@ -378,17 +379,19 @@ class WD_ASL_Init {
 				),
 				'cache'                 => array(
 					// Never for users who see private posts or post password cookies (ResultsCacheService::cacheable())
-					'enabled' => CacheOptions::instance()->status->value && ResultsCacheService::cacheable(),
+					'enabled'     => CacheOptions::instance()->status->value && ResultsCacheService::cacheable(),
 					// The scope of a logged-in user's entries, part of their cache keys
-					'scope'   => CacheOptions::instance()->status->value && ResultsCacheService::cacheable() ?
+					'scope'       => CacheOptions::instance()->status->value && ResultsCacheService::cacheable() ?
 						ResultsCacheService::scope() : '',
 					// Authenticates the keyset request of a logged-in user, to list their own entries too
-					'nonce'   => CacheOptions::instance()->status->value && ResultsCacheService::cacheable() && is_user_logged_in() ?
+					'nonce'       => CacheOptions::instance()->status->value && ResultsCacheService::cacheable() && is_user_logged_in() ?
 						wp_create_nonce('wp_rest') : '',
-					'type'    => CacheOptions::instance()->cache_type->value,
-					'blog'    => get_current_blog_id(),
-					'list'    => array(),
-					'url'     => ResultsCacheService::instance()->resultsCacheUrl(),
+					'type'        => CacheOptions::instance()->cache_type->value,
+					'blog'        => get_current_blog_id(),
+					'list'        => array(),
+					'url'         => ResultsCacheService::instance()->resultsCacheUrl(),
+					// The posted options the keys are built from, the front-end hashes the same ones
+					'option_keys' => RequestOptions::KEYS,
 				),
 			),
 			'before',

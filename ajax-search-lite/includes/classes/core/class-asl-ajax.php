@@ -25,25 +25,10 @@ if ( !class_exists('WD_ASL_Ajax') ) {
 		 * @var array
 		 */
 		private static $actions = array(
-			'ajaxsearchlite_search'       => array(
+			'ajaxsearchlite_search' => array(
 				'handler' => 'Search',
 				'priv'    => true,
 				'nopriv'  => true,
-			),
-			'ajaxsearchlite_autocomplete' => array(
-				'handler' => 'Autocomplete',
-				'priv'    => true,
-				'nopriv'  => true,
-			),
-			'ajaxsearchlite_preview'      => array(
-				'handler' => 'Preview',
-				'priv'    => true,
-				'nopriv'  => false,
-			),
-			'asl_maintenance_admin_ajax'  => array(
-				'handler' => 'Maintenance',
-				'priv'    => true,
-				'nopriv'  => false,
 			),
 		);
 
