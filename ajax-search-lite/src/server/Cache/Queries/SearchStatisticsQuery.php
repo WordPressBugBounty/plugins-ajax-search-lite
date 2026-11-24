@@ -1,8 +1,9 @@
 <?php
 
 namespace WPDRMS\ASL\Cache\Queries;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
-use WPDRMS\PluginCore\Traits\SingletonTrait;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Traits\SingletonTrait;
 use WPDRMS\ASL\Statistics\BlogScope;
 use WPDRMS\ASL\Statistics\ORM\Search;
 use WPDRMS\ASL\Statistics\Queries\SearchQuery;

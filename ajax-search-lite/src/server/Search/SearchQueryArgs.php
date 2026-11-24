@@ -1,9 +1,10 @@
 <?php /** @noinspection PhpUnused */
 
 namespace WPDRMS\ASL\Search;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use ArrayAccess;
-use WPDRMS\PluginCore\Traits\ObjectAsArrayTrait;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Traits\ObjectAsArrayTrait;
 
 /**
  * Search Query Arguments via ArrayAccess to solve type checks, but also
@@ -294,8 +295,8 @@ class SearchQueryArgs implements ArrayAccess {
 			// Numeric Operators
 			//      '<' -> less than
 			//      '>' -> more than
-			//      '<>' -> not equals
-			//      '=' -> equals
+			//      '<>' -> not equals (a text value compares as text, see '=')
+			//      '=' -> equals (a text value with no ' or \ compares as text, '' as the number 0)
 			//      'BETWEEN' -> between two values
 			// String Operators
 			//      'LIKE'

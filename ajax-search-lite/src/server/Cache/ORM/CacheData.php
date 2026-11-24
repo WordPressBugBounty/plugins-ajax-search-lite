@@ -1,8 +1,9 @@
 <?php
 
 namespace WPDRMS\ASL\Cache\ORM;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
-use WPDRMS\PluginCore\ORM\Model;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\ORM\Model;
 
 class CacheData extends Model {
 	protected static string $table_name = 'asp_cache';

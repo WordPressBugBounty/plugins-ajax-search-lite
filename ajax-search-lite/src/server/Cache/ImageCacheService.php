@@ -1,10 +1,11 @@
 <?php
 
 namespace WPDRMS\ASL\Cache;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
-use WPDRMS\PluginCore\Traits\SingletonTrait;
-use WPDRMS\Utils\FileManager;
-use WPDRMS\Utils\BFI_Thumb_1_3;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Traits\SingletonTrait;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\FileManager;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\BFI_Thumb_1_3;
 
 class ImageCacheService {
 	use SingletonTrait;

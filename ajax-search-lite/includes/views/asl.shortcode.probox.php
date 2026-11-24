@@ -30,7 +30,7 @@ if ( !defined('ABSPATH') ) {
 					tabindex="0"
 					name='phrase'
 					placeholder='<?php echo esc_attr(asl_icl_t( 'Search bar placeholder text', w_isset_def($style['defaultsearchtext'], '') )); ?>'
-					value='<?php echo esc_attr(apply_filters('asl_print_search_query', get_search_query())); ?>'
+					value='<?php echo esc_attr(\WPDRMS\ASL\Utils\Brackets::inert( (string) apply_filters('asl_print_search_query', get_search_query()))); // Printed text from the request ?>'
 					autocomplete="off"/>
 			<input aria-label="<?php echo esc_attr(asl_icl_t('Search autocomplete input aria-Label', $style['aria_search_autocomplete_label'])); ?>"
 					type='text'

@@ -5,7 +5,7 @@ Tags: search, better search, live search, product search, woocommerce search
 Requires at least: 3.5
 Requires PHP: 7.4
 Tested up to: 7.1
-Stable tag: 4.14.7
+Stable tag: 4.14.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,6 +139,24 @@ notify the developers of this plugin.
 2. Administrator area – nice and smooth
 
 == Changelog ==
+= 4.14.8 =
+* Fixed: Security issues, including shortcodes in the search phrase running on pages with the search block, reported by Patchstack
+* Fixed: Hardened how the search query and the advanced title and description fields are built
+* Fixed: An exact keyword exception with a bracket, a slash or a plus (like "c++") no longer empties every search phrase
+* Fixed: Text without spaces, such as Chinese, Japanese or Thai text and long URLs, is shortened instead of lost in results and Google suggestions
+* Fixed: A post with no image in its content or excerpt gets its image from the next source or the Default image again
+* Fixed: Ordering results by menu order no longer logs an "Undefined property" warning
+* Fixed: A custom field "=" or "<>" rule with a text value, added in code, compares as text again
+* Fixed: An advanced title or description field whose snippet returns a list (such as an ACF checkbox field) shows empty instead of breaking the live search on PHP 8
+* Fixed: A malformed "more results" request gets an empty page instead of an error on PHP 8
+* Fixed: WPML 5.0: building a result link in another language no longer leaves WPML switched to that language
+* Fixed: Enfold with a transparent header: the menu search icon opens the search box on every click
+* Fixed: A posts list marked with the asl_es_ class is live-loaded by the magnifier and Enter even when the results page live loader is off
+* Fixed: The "Exclude terms" picker of the advanced field editor keeps its saved terms
+* Fixed: Search statistics requests no longer cause server errors when statistics are off or no date range is given
+* Fixed: MariaDB: the statistics table is no longer altered at every plugin update
+* Changed: The bundled libraries are scoped to Ajax Search Lite, so another plugin's copy can't conflict with them
+
 = 4.14.7 =
 * Fixed: Security issues, including an SQL injection through the search phrase reported by Patchstack [CVE-2026-111852](https://www.cve.org/CVERecord?id=CVE-2026-111852)
 * Fixed: A search bar placed inside a link, such as a menu item, initializes again

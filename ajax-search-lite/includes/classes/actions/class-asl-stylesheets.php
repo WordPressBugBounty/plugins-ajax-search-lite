@@ -1,6 +1,7 @@
 <?php
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
-use WPDRMS\Utils\Html;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Html;
 
 if ( !defined('ABSPATH') ) {
 	die('-1');

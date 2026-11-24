@@ -1,10 +1,12 @@
 <?php /** @noinspection PhpComposerExtensionStubsInspection */
 
 namespace WPDRMS\ASL\Suggest;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use Exception;
 use WPDRMS\ASL\Utils\RequestLanguage;
-use WPDRMS\Utils\MB;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\MB;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Str;
 
 if ( !defined('ABSPATH') ) {
 	die("You can't access this file directly.");
@@ -79,7 +81,7 @@ class SuggestGoogle extends AbstractSuggest {
 			}
 			foreach ( $keywords as $keyword ) {
 				$t   = MB::strtolower($keyword);
-				$str = wd_substr_at_word($keyword, $this->args['maxCharsPerWord'], '');
+				$str = Str::truncateAtWord($keyword, $this->args['maxCharsPerWord'], '');
 				if (
 					$t !== $q &&
 					( '' !== $str )

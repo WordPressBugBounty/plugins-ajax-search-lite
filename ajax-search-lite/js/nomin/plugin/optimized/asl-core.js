@@ -181,7 +181,7 @@ external_global_namespaceObject.AslPlugin.prototype.usingLiveLoader = function()
   const $this = this;
   if ($this._usingLiveLoader !== void 0) return $this._usingLiveLoader;
   const o = $this.o;
-  const idClass = "asp_es_" + o.id;
+  const idClass = "asl_es_" + o.id;
   const altSelectors = this.getLiveLoadAltSelectors().join(",");
   if (document.getElementsByClassName(idClass).length) {
     return $this._usingLiveLoader = true;

@@ -28,6 +28,15 @@ class RequestLanguage {
 	}
 
 	/**
+	 * Whether WPML's language switches nest (WPML 5.0 and later): `switch_lang( $code )` opens a scope, even for
+	 * the current language, and only `switch_lang( null )` closes one. Before 5.0 null rewinds to the request's
+	 * first language instead. A switch that is restored picks its restore by this.
+	 */
+	public static function wpmlNests(): bool {
+		return defined('ICL_SITEPRESS_VERSION') && version_compare( (string) ICL_SITEPRESS_VERSION, '5.0', '>=');
+	}
+
+	/**
 	 * @param mixed $code
 	 * @return string The code when Polylang is active and it is one of its languages, '' otherwise
 	 */

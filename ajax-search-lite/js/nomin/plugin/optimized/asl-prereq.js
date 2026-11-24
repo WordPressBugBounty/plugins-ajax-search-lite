@@ -1,7 +1,7 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 993:
+/***/ 589:
 /***/ (function(module, exports) {
 
 !(function(e, t) {
@@ -562,7 +562,7 @@
 
 /***/ }),
 
-/***/ 806:
+/***/ 745:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -629,7 +629,7 @@ const Base64 = {
 
 /***/ }),
 
-/***/ 665:
+/***/ 540:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -646,9 +646,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   trustedHomeUrl: function() { return /* binding */ trustedHomeUrl; },
 /* harmony export */   whichjQuery: function() { return /* binding */ whichjQuery; }
 /* harmony export */ });
-/* harmony import */ var domini__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(993);
+/* harmony import */ var domini__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(589);
 /* harmony import */ var domini__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(domini__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _interval_until_execute__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(919);
+/* harmony import */ var _interval_until_execute__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(688);
 
 
 
@@ -833,7 +833,7 @@ const trustedHomeUrl = function(domValue) {
 
 /***/ }),
 
-/***/ 155:
+/***/ 842:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -843,7 +843,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   normalizeCacheOptions: function() { return /* binding */ normalizeCacheOptions; },
 /* harmony export */   superFileCacheKey: function() { return /* binding */ superFileCacheKey; }
 /* harmony export */ });
-/* harmony import */ var _other__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(627);
+/* harmony import */ var _other__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(994);
 
 
 const isScalar = (value) => typeof value === "string" || typeof value === "number" || typeof value === "boolean";
@@ -879,7 +879,7 @@ const hasPostPasswordCookie = function() {
 
 /***/ }),
 
-/***/ 451:
+/***/ 628:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -921,7 +921,7 @@ const isTouchDevice = () => {
 
 /***/ }),
 
-/***/ 91:
+/***/ 958:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -988,7 +988,7 @@ const Hooks = {
 
 /***/ }),
 
-/***/ 685:
+/***/ 484:
 /***/ (function(__unused_webpack_module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -1007,7 +1007,7 @@ window.WPD.utils = utilities;
 
 /***/ }),
 
-/***/ 919:
+/***/ 688:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1040,7 +1040,7 @@ function intervalUntilExecute(f, criteria, interval = 100, maxTries = 50) {
 
 /***/ }),
 
-/***/ 627:
+/***/ 994:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1208,14 +1208,14 @@ function isNumeric(input) {
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 var map = {
-	"./base64.ts": 806,
-	"./browser.ts": 665,
-	"./cache.ts": 155,
-	"./device.ts": 451,
-	"./hooks-filters.ts": 91,
-	"./index.ts": 685,
-	"./interval-until-execute.ts": 919,
-	"./other.ts": 627
+	"./base64.ts": 745,
+	"./browser.ts": 540,
+	"./cache.ts": 842,
+	"./device.ts": 628,
+	"./hooks-filters.ts": 958,
+	"./index.ts": 484,
+	"./interval-until-execute.ts": 688,
+	"./other.ts": 994
 };
 
 
@@ -1313,8 +1313,8 @@ var __webpack_exports__ = {};
 !function() {
 "use strict";
 
-// EXTERNAL MODULE: ./node_modules/domini/dist/domini.js
-var domini = __webpack_require__(993);
+// EXTERNAL MODULE: ../../../node_modules/1ae08c8edac0cc3329c95e625e1482e927671c7a9bb6b1a4ef539818b4950778/node_modules/domini/dist/domini.js
+var domini = __webpack_require__(589);
 var domini_default = /*#__PURE__*/__webpack_require__.n(domini);
 ;// ./src/client/global/WPD.ts
 
@@ -1330,7 +1330,7 @@ window.WPD.domini = window.WPD.dom;
 window.WPD.DoMini = window.WPD.dom;
 
 // EXTERNAL MODULE: ./src/client/global/utils/index.ts
-var utils = __webpack_require__(685);
+var utils = __webpack_require__(484);
 ;// ./src/client/plugin/wrapper/Instances.ts
 
 
@@ -1513,9 +1513,9 @@ const onSafeDocumentReady = (callback) => {
 /* harmony default export */ var utils_onSafeDocumentReady = (onSafeDocumentReady);
 
 // EXTERNAL MODULE: ./src/client/global/utils/browser.ts
-var browser = __webpack_require__(665);
+var browser = __webpack_require__(540);
 // EXTERNAL MODULE: ./src/client/global/utils/other.ts
-var other = __webpack_require__(627);
+var other = __webpack_require__(994);
 ;// ./src/client/plugin/wrapper/settings.ts
 
 const readInstanceSettings = function(search) {

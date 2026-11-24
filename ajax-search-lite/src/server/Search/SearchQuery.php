@@ -1,9 +1,10 @@
 <?php
 namespace WPDRMS\ASL\Search;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use WPDRMS\ASL\Cache\ORM\CacheOptions;
 use WPDRMS\ASL\Suggest\KeywordSuggest;
-use WPDRMS\Utils\Str;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Str;
 
 defined('ABSPATH') || die("You can't access this file directly.");
 
@@ -688,7 +689,9 @@ class SearchQuery {
 			$exceptions = stripslashes( str_replace(array( ' ,', ', ', ' , ' ), ',', $sd['kw_exceptions_e']) );
 			$exceptions = explode(',', $exceptions);
 			foreach ( $exceptions as &$v ) {
-				$v = '/\b' . $v . '\b/ui';
+				// A literal word, never a pattern: a stored exception with a regex character neither
+				// empties the phrase (a pattern that does not compile) nor matches anything but itself
+				$v = '/\b' . preg_quote($v, '/') . '\b/ui';
 			}
 			unset($v);
 			if ( count($exceptions) > 0 ) {

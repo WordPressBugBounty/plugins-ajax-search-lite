@@ -1,10 +1,11 @@
 <?php
 
 namespace WPDRMS\ASL\Statistics;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use wpdb;
 use WPDRMS\ASL\Search\SearchQueryArgs;
-use WPDRMS\PluginCore\Traits\SingletonTrait;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Traits\SingletonTrait;
 use WPDRMS\ASL\Search\SearchQuery as ASP_SearchQuery;
 use WPDRMS\ASL\Statistics\Exporters\SearchCSVExporter;
 use WPDRMS\ASL\Statistics\ORM\Search;
@@ -12,8 +13,8 @@ use WPDRMS\ASL\Statistics\ORM\StatisticsOptions;
 use WPDRMS\ASL\Statistics\Queries\InteractionQuery;
 use WPDRMS\ASL\Statistics\Queries\ResultQuery;
 use WPDRMS\ASL\Statistics\Queries\SearchQuery;
-use WPDRMS\Utils\MB;
-use WPDRMS\Utils\Server;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\MB;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Server;
 
 /**
  * @phpstan-type Searches array<array{

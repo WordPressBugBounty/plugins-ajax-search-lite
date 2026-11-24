@@ -8,13 +8,15 @@
  */
 
 namespace WPDRMS\ASL\Search;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
 use WPDRMS\ASL\Utils\AdvancedField\AdvancedFieldParser;
-use WPDRMS\Utils\Html;
-use WPDRMS\Utils\MB;
-use WPDRMS\Utils\Post;
-use WPDRMS\Utils\Str;
+use WPDRMS\ASL\Utils\RequestLanguage;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Html;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\MB;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Post;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Str;
 
 defined( 'ABSPATH' ) || die( "You can't access this file directly." );
 
@@ -463,13 +465,6 @@ class SearchPostTypes extends AbstractSearch {
 		}
 		/*---------------------------------------------------------------*/
 
-		/**
-		 * This is the main query.
-		 *
-		 * The ttid field is a bit tricky as the term_taxonomy_id doesn't always equal term_id,
-		 * so we need the LEFT JOINS :(
-		 */
-
 		$orderby_primary   = str_replace( 'post_', $wpdb->posts . '.post_', $args['post_primary_order'] );
 		$orderby_secondary = str_replace( 'post_', $wpdb->posts . '.post_', $args['post_secondary_order'] );
 
@@ -480,72 +475,6 @@ class SearchPostTypes extends AbstractSearch {
 		if ( $args['post_secondary_order_metatype'] === 'numeric' ) {
 			$orderby_secondary = str_replace('customfs', 'CAST(customfs as SIGNED)', $orderby_secondary);
 		}
-
-		$this->query = "
-		SELECT
-			$add_select
-			{args_fields}
-			$wpdb->posts.post_title as `title`,
-			$wpdb->posts.post_title as `post_title`,
-			$wpdb->posts.ID as id,
-			$this->c_blogid as `blogid`,
-			$wpdb->posts.post_date as `date`,
-			$wpdb->posts.post_date as `post_date`,
-			$wpdb->posts.post_modified as post_modified,
-			$select_content as `content`,
-			$select_excerpt as `excerpt`,
-			$wpdb->posts.post_type as `post_type`,
-			'pagepost' as `content_type`,
-			'post_page_cpt' as `g_content_type`,
-			(SELECT
-				$wpdb->users." . $sd['author_field'] . " as `author`
-				FROM $wpdb->users
-				WHERE $wpdb->users.ID = $wpdb->posts.post_author
-			) as `author`,
-			$wpdb->posts.post_author as `post_author`,
-			$wpdb->posts.post_type as `post_type`,
-			$p_type_priority as `p_type_priority`,
-			{relevance_query} as `relevance`,
-			$custom_field_selectp as `customfp`,
-			$custom_field_selects as `customfs`
-		FROM $wpdb->posts
-			$term_join
-			$add_join
-			{args_join}
-		WHERE
-			$post_types
-			$term_query
-			$user_query
-			AND $cf_select
-			$post_statuses
-			$post_password_query
-			AND {like_query}
-			$exclude_posts
-			$include_posts
-			$post_parents
-			$post_parents_exclude
-			AND ( $wpml_query )
-			$polylang_query
-			$date_query
-			$add_where
-			{args_where}
-		GROUP BY
-			{args_groupby}
-		ORDER BY {args_orderby} p_type_priority ASC, $orderby_primary, $orderby_secondary, id DESC
-		LIMIT $query_limit";
-
-		// Place the argument query fields, in one pass (strtr never re-scans the replaced text)
-		$cpt_query   = isset($args['cpt_query']) && is_array($args['cpt_query']) ? $args['cpt_query'] : array();
-		$this->query = strtr(
-			$this->query,
-			array(
-				'{args_fields}'  => $cpt_query['fields'] ?? '',
-				'{args_join}'    => $cpt_query['join'] ?? '',
-				'{args_where}'   => $cpt_query['where'] ?? '',
-				'{args_orderby}' => $cpt_query['orderby'] ?? '',
-				'{args_groupby}' => isset($cpt_query['groupby']) && $cpt_query['groupby'] !== '' ? $cpt_query['groupby'] : "$wpdb->posts.ID",
-			)
-		);
 
 		$words = $args['_exact_matches'] && $s !== '' ? array( $s ) : $_s;
 		/**
@@ -721,8 +650,80 @@ class SearchPostTypes extends AbstractSearch {
 			$relevance_added = true;
 		}
 
-		$querystr      = $this->buildQuery( $this->parts );
-		$querystr      = apply_filters('asl_query_cpt', $querystr, $args, $args['_id'], $args['_ajax_search']);
+		$keyword_parts   = $this->buildKeywordParts( $this->parts );
+		$relevance_query = $keyword_parts['relevance'];
+		$like_query      = $keyword_parts['like'];
+
+		// The query parts of the arguments
+		$cpt_query    = isset($args['cpt_query']) && is_array($args['cpt_query']) ? $args['cpt_query'] : array();
+		$args_fields  = $cpt_query['fields'] ?? '';
+		$args_join    = $cpt_query['join'] ?? '';
+		$args_where   = $cpt_query['where'] ?? '';
+		$args_orderby = $cpt_query['orderby'] ?? '';
+		$args_groupby = isset($cpt_query['groupby']) && $cpt_query['groupby'] !== '' ? $cpt_query['groupby'] : "$wpdb->posts.ID";
+
+		/**
+		 * This is the main query, written once with every part in place. Nothing replaces text in it afterwards, so
+		 * each part reaches the database exactly as it was built.
+		 *
+		 * The ttid field is a bit tricky as the term_taxonomy_id doesn't always equal term_id,
+		 * so we need the LEFT JOINS :(
+		 */
+		$this->query = "
+		SELECT
+			$add_select
+			$args_fields
+			$wpdb->posts.post_title as `title`,
+			$wpdb->posts.post_title as `post_title`,
+			$wpdb->posts.ID as id,
+			$this->c_blogid as `blogid`,
+			$wpdb->posts.post_date as `date`,
+			$wpdb->posts.post_date as `post_date`,
+			$wpdb->posts.post_modified as post_modified,
+			$wpdb->posts.menu_order as menu_order,
+			$select_content as `content`,
+			$select_excerpt as `excerpt`,
+			$wpdb->posts.post_type as `post_type`,
+			'pagepost' as `content_type`,
+			'post_page_cpt' as `g_content_type`,
+			(SELECT
+				$wpdb->users." . $sd['author_field'] . " as `author`
+				FROM $wpdb->users
+				WHERE $wpdb->users.ID = $wpdb->posts.post_author
+			) as `author`,
+			$wpdb->posts.post_author as `post_author`,
+			$wpdb->posts.post_type as `post_type`,
+			$p_type_priority as `p_type_priority`,
+			$relevance_query as `relevance`,
+			$custom_field_selectp as `customfp`,
+			$custom_field_selects as `customfs`
+		FROM $wpdb->posts
+			$term_join
+			$add_join
+			$args_join
+		WHERE
+			$post_types
+			$term_query
+			$user_query
+			AND $cf_select
+			$post_statuses
+			$post_password_query
+			AND $like_query
+			$exclude_posts
+			$include_posts
+			$post_parents
+			$post_parents_exclude
+			AND ( $wpml_query )
+			$polylang_query
+			$date_query
+			$add_where
+			$args_where
+		GROUP BY
+			$args_groupby
+		ORDER BY $args_orderby p_type_priority ASC, $orderby_primary, $orderby_secondary, id DESC
+		LIMIT $query_limit";
+
+		$querystr      = apply_filters('asl_query_cpt', $this->query, $args, $args['_id'], $args['_ajax_search']);
 		$all_pageposts = $wpdb->get_results( $querystr ); // @phpcs:ignore
 
 		// Get the real count, up to 500
@@ -733,7 +734,7 @@ class SearchPostTypes extends AbstractSearch {
 			$this->results_count = $this->remaining_limit;
 		}
 		// Slice the needed ones only
-		$all_pageposts = array_slice($all_pageposts, $args['_call_num'] * $this->remaining_limit, $this->remaining_limit);
+		$all_pageposts = array_slice($all_pageposts, $this->pageOffset(count($all_pageposts), $this->remaining_limit), $this->remaining_limit);
 
 		$this->results      = $all_pageposts;
 		$this->return_count = count($this->results);
@@ -941,6 +942,33 @@ class SearchPostTypes extends AbstractSearch {
 	}
 
 	/**
+	 * The quoted SQL literal for a custom field "=" / "<>" rule whose value is text, or null when the value
+	 * stays on the numeric path (numericOperand()).
+	 *
+	 * The numeric path turns text into 0, and MySQL holds any non-numeric text equal to 0, so "= 'English'"
+	 * matched every post that has the field (#156, since 4.14.7). Only a value with no single quote and no
+	 * backslash is quoted: such a value cannot leave a single-quoted literal, so it is safe unescaped. Pass the
+	 * value as the caller set it, not the esc_sql() copy, which turns a double quote into \" and would send
+	 * '"English"' back to the numeric path. Numbers, numeric text and the empty string stay numeric.
+	 * Port of Ajax Search Pro's AbstractSearch::metaFilterTextLiteral() (#614).
+	 *
+	 * @param string $operator The rule's operator
+	 * @param mixed  $value    The rule's value, or one value of a list
+	 */
+	private static function metaFilterTextLiteral( string $operator, $value ): ?string {
+		if ( $operator !== '=' && $operator !== '<>' ) {
+			return null;
+		}
+		if ( !is_string($value) || $value === '' || is_numeric(trim($value)) ) {
+			return null;
+		}
+		if ( strpbrk($value, "'\\") !== false ) {
+			return null;
+		}
+		return "'" . $value . "'";
+	}
+
+	/**
 	 * AND or OR, nothing else reaches the SQL between the parts
 	 *
 	 * @param mixed $logic
@@ -957,7 +985,8 @@ class SearchPostTypes extends AbstractSearch {
 		$post_meta_allow_missing = $args['post_meta_allow_missing'];
 		foreach ( $args['post_meta_filter'] as $data ) {
 			$operator = $data['operator'];
-			// Escaped once here: the values reach the SQL below as string literals, the ones compared as numbers are cast there
+			// Escaped once here: the values reach the SQL below as string literals, the ones compared as numbers are cast there.
+			// "=" and "<>" read the value as set (metaFilterTextLiteral()), which quotes only text that needs no escaping.
 			$posted                           = is_array($data['value']) ?
 				array_map(fn( $v ) => is_scalar($v) ? esc_sql( (string) $v ) : '', $data['value']) :
 				esc_sql( (string) $data['value'] );
@@ -1055,7 +1084,7 @@ class SearchPostTypes extends AbstractSearch {
 						$values .= "$wpdb->postmeta.meta_value $operator ('" . $val . "')";
 					}
 				} else {
-					foreach ( $posted as $v ) {
+					foreach ( $posted as $i => $v ) {
 						if ( $operator === 'ELIKE' || $operator === 'NOT ELIKE' ) {
 							$_op = $operator === 'ELIKE' ? 'LIKE' : 'NOT LIKE';
 							if ( $values !== '' ) {
@@ -1083,10 +1112,13 @@ class SearchPostTypes extends AbstractSearch {
 							} else {
 								$values .= "$wpdb->postmeta.meta_value $_op '%" . $v . "'";
 							}
-						} elseif ( $values !== '' ) {
-								$values .= " $logic $wpdb->postmeta.meta_value $operator " . self::numericOperand($v);
 						} else {
-							$values .= "$wpdb->postmeta.meta_value $operator " . self::numericOperand($v);
+							$operand = self::metaFilterTextLiteral($operator, $data['value'][ $i ]) ?? self::numericOperand($v);
+							if ( $values !== '' ) {
+								$values .= " $logic $wpdb->postmeta.meta_value $operator " . $operand;
+							} else {
+								$values .= "$wpdb->postmeta.meta_value $operator " . $operand;
+							}
 						}
 					}
 				}
@@ -1107,7 +1139,8 @@ class SearchPostTypes extends AbstractSearch {
 				$current_part = "($wpdb->postmeta.meta_value $_op '%$posted')";
 			} else {
 				// Numeric operations or problematic stuff left
-				$current_part = "($wpdb->postmeta.meta_value $operator " . self::numericOperand($posted) . ' )';
+				$operand      = self::metaFilterTextLiteral($operator, $data['value']) ?? self::numericOperand($posted);
+				$current_part = "($wpdb->postmeta.meta_value $operator " . $operand . ' )';
 			}
 
 			// Finally, add the current part to the parts array
@@ -1301,11 +1334,12 @@ class SearchPostTypes extends AbstractSearch {
 								case 'id ASC':
 									$diff = $a->id - $b->id;
 									break;
+								// Results added through the asl_pagepost_results filter may not carry it
 								case 'menu_order DESC':
-									$diff = $b->menu_order - $a->menu_order;
+									$diff = (int) ( $b->menu_order ?? 0 ) - (int) ( $a->menu_order ?? 0 );
 									break;
 								case 'menu_order ASC':
-									$diff = $a->menu_order - $b->menu_order;
+									$diff = (int) ( $a->menu_order ?? 0 ) - (int) ( $b->menu_order ?? 0 );
 									break;
 								case 'customfp DESC':
 									if ( $order_metatype === 'numeric' ) {
@@ -1505,10 +1539,16 @@ class SearchPostTypes extends AbstractSearch {
 					if ( is_array($l) && isset($l['language_code']) ) {
 						/** @noinspection All */
 						$_lang = ICL_LANGUAGE_CODE;
+						// WPML 5.0 nests switches (a code opens a scope, only null closes one); 4.x rewinds null to
+						// the request's first language, so there it is switched back by name.
+						$_restore = RequestLanguage::wpmlNests() ? null : $_lang;
 						do_action( 'wpml_switch_language', $l['language_code'] );
-						$r->link = get_permalink($r->id);
-						$r->link = apply_filters('wpml_permalink', $r->link, $l['language_code'], true);
-						do_action( 'wpml_switch_language', $_lang );
+						try {
+							$r->link = get_permalink($r->id);
+							$r->link = apply_filters('wpml_permalink', $r->link, $l['language_code'], true);
+						} finally {
+							do_action( 'wpml_switch_language', $_restore );
+						}
 					}
 				}
 			}
@@ -1538,7 +1578,7 @@ class SearchPostTypes extends AbstractSearch {
 						break;
 					case '1':
 						if ( MB::strlen( $r->excerpt ) >= 200 ) {
-							$r->title = wd_substr_at_word( $r->excerpt, 200 );
+							$r->title = Str::truncateAtWord( $r->excerpt, 200 );
 						} else {
 							$r->title = $r->excerpt;
 						}
@@ -1568,7 +1608,7 @@ class SearchPostTypes extends AbstractSearch {
 				$r->title = AdvancedFieldParser::instance()->parse($sd['advtitlefield'], $r);
 			}
 
-			$r->title = wd_substr_at_word($r->title, $sd['post_type_res_title_length']);
+			$r->title = Str::truncateAtWord($r->title, $sd['post_type_res_title_length']);
 
 			if ( ! isset( $sd['striptagsexclude'] ) ) {
 				$sd['striptagsexclude'] = '<a><span>';
@@ -1632,7 +1672,7 @@ class SearchPostTypes extends AbstractSearch {
 			if ( $sd['description_context'] && count( $_s ) > 0 && $s !== '' ) {
 				$_content = Str::getContext($_content, $description_length, $sd['description_context_depth'], $s, $_s);
 			} elseif ( $_content !== '' && ( MB::strlen( $_content ) > $description_length ) ) {
-				$_content = wd_substr_at_word($_content, $description_length);
+				$_content = Str::truncateAtWord($_content, $description_length);
 			}
 			$r->content = $_content;
 
@@ -1650,7 +1690,7 @@ class SearchPostTypes extends AbstractSearch {
 					if ( $sd['description_context'] && count( $_s ) > 0 && $s !== '' ) {
 						$value = Str::getContext($value, $description_length, $sd['description_context_depth'], $s, $_s);
 					} elseif ( $value !== '' && ( MB::strlen( $value ) > $description_length ) ) {
-						$value = wd_substr_at_word($value, $description_length);
+						$value = Str::truncateAtWord($value, $description_length);
 					}
 					return $value;
 				};

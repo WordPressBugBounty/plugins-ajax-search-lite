@@ -1,6 +1,7 @@
 <?php
 
 namespace WPDRMS\ASL\Utils;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use WP_Error;
 
@@ -9,7 +10,7 @@ use WP_Error;
  * options and its tables use the network prefix. On a multisite only a network admin may change them,
  * otherwise a sub-site admin could wipe or reset another site's data.
  *
- * Used with \WPDRMS\PluginCore\Rest\AbstractRest (allowOnlyAdmins()).
+ * Used with \AjaxSearchLite\Vendor\WPDRMS\PluginCore\Rest\AbstractRest (allowOnlyAdmins()).
  */
 trait NetworkAdminOnly {
 	/**

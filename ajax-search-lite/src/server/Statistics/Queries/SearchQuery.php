@@ -1,12 +1,13 @@
 <?php
 
 namespace WPDRMS\ASL\Statistics\Queries;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use DateInterval;
 use DatePeriod;
 use DateTime;
-use Exception;
-use WPDRMS\PluginCore\Traits\SingletonTrait;
+use InvalidArgumentException;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Traits\SingletonTrait;
 use WPDRMS\ASL\Statistics\BlogScope;
 use WPDRMS\ASL\Statistics\ORM\Interaction;
 use WPDRMS\ASL\Statistics\ORM\Result;
@@ -117,14 +118,34 @@ class SearchQuery {
 	}
 
 	/**
+	 * A calendar date as the Statistics screen sends it: Y-m-d, and a day that exists
+	 *
+	 * @param mixed $value
+	 */
+	public static function isDate( $value ): bool {
+		if ( !is_string($value) ) {
+			return false;
+		}
+		$date = DateTime::createFromFormat('!Y-m-d', $value);
+		return $date !== false && $date->format('Y-m-d') === $value;
+	}
+
+	/**
 	 * Get daily search volume with full metrics: searches, results shown, interactions.
+	 *
+	 * The volume is always asked for a date range (start_date and end_date, see isDate()): the days are filled and
+	 * the previous period is compared within it.
 	 *
 	 * @param Array<string, mixed> $args
 	 * @return array
-	 * @throws Exception
+	 * @throws InvalidArgumentException Without a date range.
 	 */
 	public function getSearchesVolume( array $args = array() ): array {
 		global $wpdb;
+
+		if ( !self::isDate($args['start_date'] ?? null) || !self::isDate($args['end_date'] ?? null) ) {
+			throw new InvalidArgumentException('The search volume needs a start_date and an end_date (Y-m-d).');
+		}
 
 		$defaults = array(
 			'start_date'        => null,
@@ -164,16 +185,11 @@ class SearchQuery {
 		// -----------------------------------------------------------------
 		// Build shared WHERE
 		// -----------------------------------------------------------------
-		$where  = array( '1=1' );
-		$params = array();
-
-		if ( $args['start_date'] !== null && $args['end_date'] !== null ) {
-			$start_date = date( 'Y-m-d 00:00:00', strtotime( $args['start_date'] ) );
-			$end_date   = date( 'Y-m-d 23:59:59', strtotime( $args['end_date'] ) );
-			$where[]    = 's.date BETWEEN %s AND %s';
-			$params[]   = $start_date;
-			$params[]   = $end_date;
-		}
+		// The date range is always the first two parameters: the compare period replaces them
+		$start_date = $args['start_date'] . ' 00:00:00';
+		$end_date   = $args['end_date'] . ' 23:59:59';
+		$where      = array( '1=1', 's.date BETWEEN %s AND %s' );
+		$params     = array( $start_date, $end_date );
 
 		if ( ! empty( $args['user_id'] ) ) {
 			$placeholders = implode( ',', array_fill( 0, count( $args['user_id'] ), '%d' ) );

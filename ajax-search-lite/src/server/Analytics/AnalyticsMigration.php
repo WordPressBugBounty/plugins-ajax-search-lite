@@ -1,8 +1,9 @@
 <?php
 
 namespace WPDRMS\ASL\Analytics;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
-use WPDRMS\AdminUI\Options\EventConfigItem;
+use AjaxSearchLite\Vendor\WPDRMS\AdminUI\Options\EventConfigItem;
 use WPDRMS\ASL\Analytics\ORM\AnalyticsOptions;
 
 /**

@@ -1,6 +1,7 @@
 <?php
 
 namespace WPDRMS\ASL\Options\Routes;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 if ( !defined('ABSPATH') ) {
 	die("You can't access this file directly.");
@@ -9,7 +10,7 @@ if ( !defined('ABSPATH') ) {
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use WPDRMS\PluginCore\Rest\AbstractRest;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Rest\AbstractRest;
 
 class TaxonomyTermsRoute extends AbstractRest {
 	public function registerRoutes( string $route_namespace = '' ): void {

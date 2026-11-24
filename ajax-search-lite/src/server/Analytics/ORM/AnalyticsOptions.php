@@ -1,11 +1,12 @@
 <?php
 
 namespace WPDRMS\ASL\Analytics\ORM;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
-use WPDRMS\AdminUI\Data\AbstractOptionDataSiteOption;
-use WPDRMS\AdminUI\Options\BoolOption;
-use WPDRMS\AdminUI\Options\EventConfigArrayOption;
-use WPDRMS\AdminUI\Options\StringOption;
+use AjaxSearchLite\Vendor\WPDRMS\AdminUI\Data\AbstractOptionDataSiteOption;
+use AjaxSearchLite\Vendor\WPDRMS\AdminUI\Options\BoolOption;
+use AjaxSearchLite\Vendor\WPDRMS\AdminUI\Options\EventConfigArrayOption;
+use AjaxSearchLite\Vendor\WPDRMS\AdminUI\Options\StringOption;
 
 /**
  * Analytics options — stores GA/GTM event configuration per trigger point.

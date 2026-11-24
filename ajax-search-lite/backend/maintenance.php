@@ -1,7 +1,8 @@
 <div class="wdo" id="wdo"><div id="asp-root"></div></div>
 <?php
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
-use WPDRMS\Utils\Script;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Script;
 
 $metadata = require_once ASL_PATH . 'build/css/wdo-global.asset.php';
 wp_enqueue_style(

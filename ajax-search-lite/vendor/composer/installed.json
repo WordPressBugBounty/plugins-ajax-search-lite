@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "wpdreams/admin-ui",
-            "version": "v1.15.0",
-            "version_normalized": "1.15.0.0",
+            "version": "v1.21.0",
+            "version_normalized": "1.21.0.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpdreams/admin-ui.git",
-                "reference": "bb940cc4f956f3800f88298071257b1627f5035d"
+                "reference": "c095022ec03e7b0ec8e6dd6ccbfc08e2b5454d42"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpdreams/admin-ui/zipball/bb940cc4f956f3800f88298071257b1627f5035d",
-                "reference": "bb940cc4f956f3800f88298071257b1627f5035d",
+                "url": "https://api.github.com/repos/wpdreams/admin-ui/zipball/c095022ec03e7b0ec8e6dd6ccbfc08e2b5454d42",
+                "reference": "c095022ec03e7b0ec8e6dd6ccbfc08e2b5454d42",
                 "shasum": ""
             },
             "require": {
@@ -32,14 +32,10 @@
                 "yoast/phpunit-polyfills": "*",
                 "zircote/swagger-php": "*"
             },
-            "time": "2026-10-13T12:48:08+00:00",
+            "time": "2026-11-14T22:02:24+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "WPDRMS\\AdminUI\\": "src/"
-                }
-            },
+            "autoload": [],
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -47,17 +43,17 @@
         },
         {
             "name": "wpdreams/php-utils",
-            "version": "v1.0.4",
-            "version_normalized": "1.0.4.0",
+            "version": "v1.0.7",
+            "version_normalized": "1.0.7.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpdreams/php-utils.git",
-                "reference": "07eab880abf5fcc038da0ec459e30bff4b03d32e"
+                "reference": "5c1db6be5a4db20b8405b041937376f46be7d0bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpdreams/php-utils/zipball/07eab880abf5fcc038da0ec459e30bff4b03d32e",
-                "reference": "07eab880abf5fcc038da0ec459e30bff4b03d32e",
+                "url": "https://api.github.com/repos/wpdreams/php-utils/zipball/5c1db6be5a4db20b8405b041937376f46be7d0bb",
+                "reference": "5c1db6be5a4db20b8405b041937376f46be7d0bb",
                 "shasum": ""
             },
             "require-dev": {
@@ -73,14 +69,10 @@
                 "yoast/phpunit-polyfills": "*",
                 "zircote/swagger-php": "*"
             },
-            "time": "2026-10-17T12:14:15+00:00",
+            "time": "2026-11-15T21:56:14+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "WPDRMS\\Utils\\": "src/"
-                }
-            },
+            "autoload": [],
             "license": [
                 "GPL-2.0-or-later"
             ],
@@ -88,17 +80,17 @@
         },
         {
             "name": "wpdreams/plugin-core",
-            "version": "v1.7.0",
-            "version_normalized": "1.7.0.0",
+            "version": "v1.9.0",
+            "version_normalized": "1.9.0.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:wpdreams/plugin-core.git",
-                "reference": "48d0a4217d5f27ebc27e239d12fe27bffad1c97f"
+                "reference": "e730a2de95b1e64aa78daee76a7df89e62ae7063"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wpdreams/plugin-core/zipball/48d0a4217d5f27ebc27e239d12fe27bffad1c97f",
-                "reference": "48d0a4217d5f27ebc27e239d12fe27bffad1c97f",
+                "url": "https://api.github.com/repos/wpdreams/plugin-core/zipball/e730a2de95b1e64aa78daee76a7df89e62ae7063",
+                "reference": "e730a2de95b1e64aa78daee76a7df89e62ae7063",
                 "shasum": ""
             },
             "require-dev": {
@@ -114,14 +106,10 @@
                 "yoast/phpunit-polyfills": "*",
                 "zircote/swagger-php": "*"
             },
-            "time": "2026-10-07T08:29:32+00:00",
+            "time": "2026-11-13T12:57:14+00:00",
             "type": "library",
             "installation-source": "dist",
-            "autoload": {
-                "psr-4": {
-                    "WPDRMS\\PluginCore\\": "src/"
-                }
-            },
+            "autoload": [],
             "license": [
                 "GPL-2.0-or-later"
             ],

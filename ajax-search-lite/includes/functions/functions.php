@@ -1,9 +1,10 @@
 <?php
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 /** @noinspection RegExpRedundantEscape */
 
 use WPDRMS\ASL\Analytics\ORM\AnalyticsOptions;
 use WPDRMS\ASL\Utils\Polylang\StringTranslations;
-use WPDRMS\Utils\Str;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Str;
 
 if ( !function_exists('w_isset_def') ) {
 	function w_isset_def( &$v, $d ) {

@@ -1,6 +1,7 @@
 <?php
 
 namespace WPDRMS\ASL\Cache;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use Exception;
 use WP_Error;
@@ -8,7 +9,7 @@ use WP_REST_Request;
 use WP_REST_Response;
 use WPDRMS\ASL\Cache\ORM\CacheOptions;
 use WPDRMS\ASL\Cache\Queries\SearchStatisticsQuery;
-use WPDRMS\PluginCore\Rest\AbstractRest;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Rest\AbstractRest;
 use WPDRMS\ASL\Utils\NetworkAdminOnly;
 
 class CacheRoute extends AbstractRest {

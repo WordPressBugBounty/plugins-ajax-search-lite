@@ -1,9 +1,10 @@
 <?php
 
 namespace WPDRMS\ASL\Utils\AdvancedField\Types;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use stdClass;
-use WPDRMS\Utils\Html;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Html;
 
 class WooCommercePrice extends AbstractWooCommerceBase implements AdvancedFieldTypeInterface {
 	private string $currency;

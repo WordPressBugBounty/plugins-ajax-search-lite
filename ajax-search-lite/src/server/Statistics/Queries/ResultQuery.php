@@ -1,8 +1,9 @@
 <?php
 
 namespace WPDRMS\ASL\Statistics\Queries;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
-use WPDRMS\PluginCore\Traits\SingletonTrait;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Traits\SingletonTrait;
 
 class ResultQuery {
 

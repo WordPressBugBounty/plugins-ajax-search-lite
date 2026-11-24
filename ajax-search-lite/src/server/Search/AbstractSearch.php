@@ -1,9 +1,10 @@
 <?php
 namespace WPDRMS\ASL\Search;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use stdClass;
-use WPDRMS\Utils\MB;
-use WPDRMS\Utils\Str;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\MB;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Str;
 
 defined('ABSPATH') || die("You can't access this file directly.");
 
@@ -43,10 +44,6 @@ abstract class AbstractSearch {
 	 * @var int the remaining limit (number of items to look for)
 	 */
 	protected int $remaining_limit;
-	/**
-	 * @var int the start of the limit
-	 */
-	protected int $limit_start = 0;
 	/**
 	 * @var int remaining limit modifier
 	 */
@@ -231,6 +228,19 @@ abstract class AbstractSearch {
 	protected function postProcess(): void {}
 
 	/**
+	 * The offset of the current page (the "more results" call number) in a list of $count results: $count,
+	 * an empty page, when the page is past the end or the offset is no integer (a call number so big that
+	 * the product overflowed into a float, which array_slice() rejects with a TypeError)
+	 *
+	 * @param int $count    the number of results
+	 * @param int $per_page the page size
+	 */
+	protected function pageOffset( int $count, int $per_page ): int {
+		$offset = $this->args['_call_num'] * $per_page;
+		return is_int($offset) && $offset >= 0 && $offset <= $count ? $offset : $count;
+	}
+
+	/**
 	 * Converts the keyword to the correct case and sets up the pre-suff fields.
 	 *
 	 * @param string $s
@@ -273,13 +283,14 @@ abstract class AbstractSearch {
 	}
 
 	/**
-	 * Builds the query from the parts
+	 * The keyword parts of the query: the relevance expression and the keyword condition. The caller writes them
+	 * into its query directly, with the other parts.
 	 *
 	 * @param QueryParts $parts
 	 *
-	 * @return string query
+	 * @return array{relevance: string, like: string}
 	 */
-	protected function buildQuery( array $parts ): string {
+	protected function buildKeywordParts( array $parts ): array {
 
 		$args     = &$this->args;
 		$kw_logic = str_replace('ex', '', $args['keyword_logic'] );
@@ -325,29 +336,9 @@ abstract class AbstractSearch {
 		}
 		/*---------------------------------------------------------------*/
 
-		if ( isset($this->remaining_limit) ) {
-			if ( $this->limit_start !== 0 ) {
-				$limit = $this->limit_start . ', ' . $this->remaining_limit;
-			} else {
-				$limit = $this->remaining_limit;
-			}
-		} else {
-			$limit = 10;
-		}
-
-		/**
-		 * One pass over the template, never over the replaced text: the search phrase is inside the
-		 * relevance and like parts, and a phrase containing a {token} must stay a literal. An array
-		 * str_replace() re-scans each replacement for the following tokens, so a typed {like_query}
-		 * got the WHERE clause (with its quotes) spliced into a string literal: SQL injection.
-		 */
-		return strtr(
-			$this->query,
-			array(
-				'{relevance_query}' => $relevance,
-				'{like_query}'      => $like_query,
-				'{remaining_limit}' => (string) $limit,
-			)
+		return array(
+			'relevance' => $relevance,
+			'like'      => $like_query,
 		);
 	}
 }

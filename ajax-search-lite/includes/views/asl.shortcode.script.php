@@ -96,4 +96,4 @@ wd_asl()->instances->add_script_data($real_id, $search_config);
 	id="asl_init_id_<?php echo esc_attr($id); ?>"
 	data-asl-id="<?php echo esc_attr($id); ?>"
 	data-asl-instance="1"
-	data-settings="<?php echo esc_attr(wp_json_encode($search_config)); ?>"></div>
+	data-settings="<?php echo esc_attr(\WPDRMS\ASL\Utils\Brackets::inert( (string) wp_json_encode($search_config))); // The script reads the decoded attribute ?>"></div>

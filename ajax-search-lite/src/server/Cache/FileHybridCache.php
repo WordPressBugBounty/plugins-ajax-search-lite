@@ -1,10 +1,11 @@
 <?php
 
 namespace WPDRMS\ASL\Cache;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use Exception;
 use WPDRMS\ASL\Cache\ORM\CacheData;
-use WPDRMS\Utils\FileManager;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\FileManager;
 
 /**
  * Fast file hybrid cache

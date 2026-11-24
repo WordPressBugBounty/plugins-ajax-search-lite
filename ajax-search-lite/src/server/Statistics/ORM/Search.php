@@ -1,22 +1,23 @@
 <?php
 
 namespace WPDRMS\ASL\Statistics\ORM;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
-use WPDRMS\PluginCore\ORM\Model;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\ORM\Model;
 
 class Search extends Model {
 	protected static string $table_name = 'asp_stat_searches';
 	protected static array $columns     = array(
 		'id'                => 'BIGINT(20) NOT NULL AUTO_INCREMENT',
 		'phrase'            => 'VARCHAR(255) NOT NULL',
-		'type'              => 'TINYINT NOT NULL', // 0 results page redirection, 1 live search
+		'type'              => 'TINYINT(4) NOT NULL', // 0 results page redirection, 1 live search
 		'date'              => 'DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP',
 		'user_id'           => 'BIGINT(20)',
 		'asp_id'            => 'BIGINT(20)', // Ajax Search Pro search instance ID
 		'blog_id'           => 'BIGINT(20)', // Blog ID, only for multisite setup
-		'page'              => 'MEDIUMINT NOT NULL', // Results page number
-		'found_results'     => 'MEDIUMINT NOT NULL', // Total results found
-		'device_type'       => 'TINYINT NOT NULL', // 1 desktop, 2 tablet, 3 mobile
+		'page'              => 'MEDIUMINT(9) NOT NULL', // Results page number
+		'found_results'     => 'MEDIUMINT(9) NOT NULL', // Total results found
+		'device_type'       => 'TINYINT(4) NOT NULL', // 1 desktop, 2 tablet, 3 mobile
 		'lang'              => 'VARCHAR(5)',       // NULL, "en", "de" etc..
 		'referer'           => 'VARCHAR(255)',
 		'cached'            => 'TINYINT(1) NOT NULL DEFAULT 0',

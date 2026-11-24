@@ -6,7 +6,4 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
-    'WPDRMS\\Utils\\' => array($vendorDir . '/wpdreams/php-utils/src'),
-    'WPDRMS\\PluginCore\\' => array($vendorDir . '/wpdreams/plugin-core/src'),
-    'WPDRMS\\AdminUI\\' => array($vendorDir . '/wpdreams/admin-ui/src'),
 );

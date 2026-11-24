@@ -1,12 +1,13 @@
 <?php
 
 namespace WPDRMS\ASL\Cache;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use Exception;
 use WPDRMS\ASL\Cache\ORM\CacheOptions;
 use WPDRMS\ASL\Cache\Queries\SearchStatisticsQuery;
 use WPDRMS\ASL\Search\RequestOptions;
-use WPDRMS\PluginCore\Traits\SingletonTrait;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Traits\SingletonTrait;
 
 class ResultsCacheService {
 	use SingletonTrait;

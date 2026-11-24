@@ -1,12 +1,13 @@
 <?php
 
 namespace WPDRMS\ASL\Utils\AdvancedField\Types;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use stdClass;
 use WPDRMS\ASL\Compatibility\ORM\CompatibilityOptions;
-use WPDRMS\Utils\Post;
-use WPDRMS\Utils\Str;
-use WPDRMS\Utils\User;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Post;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Str;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\User;
 
 /**
  * Handles special and built in advanced field types related to results fields

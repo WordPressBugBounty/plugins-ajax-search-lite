@@ -1,14 +1,16 @@
 <?php
 
 namespace WPDRMS\ASL\Statistics;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use Exception;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
-use WPDRMS\PluginCore\Rest\AbstractRest;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Rest\AbstractRest;
 use WPDRMS\ASL\Statistics\ORM\Search;
 use WPDRMS\ASL\Statistics\ORM\StatisticsOptions;
+use WPDRMS\ASL\Statistics\Queries\SearchQuery;
 use WPDRMS\ASL\Utils\NetworkAdminOnly;
 
 class StatisticsRoute extends AbstractRest {
@@ -134,6 +136,7 @@ class StatisticsRoute extends AbstractRest {
 					$this,
 					'allowOnlyAdmins',
 				),
+				'args'                => self::dateRangeArgs(),
 			)
 		);
 
@@ -166,6 +169,7 @@ class StatisticsRoute extends AbstractRest {
 					$this,
 					'allowOnlyAdmins',
 				),
+				'args'                => self::dateRangeArgs(),
 			)
 		);
 
@@ -284,16 +288,33 @@ class StatisticsRoute extends AbstractRest {
 
 
 	/**
+	 * The search volume routes are always asked for a date range: both dates, as SearchQuery::isDate() accepts
+	 * them. Without one WordPress answers 400.
+	 *
+	 * @return array<string, array<string, mixed>>
+	 */
+	private static function dateRangeArgs(): array {
+		$date = array(
+			'required'          => true,
+			'type'              => 'string',
+			'validate_callback' => fn( $value ) => SearchQuery::isDate($value),
+		);
+		return array(
+			'start_date' => $date,
+			'end_date'   => $date,
+		);
+	}
+
+	/**
 	 * @param WP_REST_Request $request
 	 * @return WP_Error|WP_REST_Response
 	 */
 	public function addStatisticsSearches( WP_REST_Request $request ) {
 		try {
 			$options = StatisticsOptions::instance();
-			if (
-				!$options->status->value
-			) {
-				throw new Exception('Search statistics is disabled.');
+			// A page cached while statistics was on still posts its searches: nothing to record is not an error
+			if ( !$options->status->value ) {
+				return new WP_REST_Response(null, 204);
 			}
 			$params = $request->get_json_params();
 			StatisticsService::instance()->registerCachedSearchesQueries( $params );

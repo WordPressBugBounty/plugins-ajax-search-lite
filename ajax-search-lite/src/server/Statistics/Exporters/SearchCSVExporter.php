@@ -1,9 +1,10 @@
 <?php
 
 namespace WPDRMS\ASL\Statistics\Exporters;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use Exception;
-use WPDRMS\PluginCore\Traits\SingletonTrait;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Traits\SingletonTrait;
 use WPDRMS\ASL\Statistics\StatisticsService;
 
 class SearchCSVExporter {

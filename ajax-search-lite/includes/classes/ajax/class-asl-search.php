@@ -21,6 +21,12 @@ if ( !class_exists('WD_ASL_Search_Handler') ) {
 	class WD_ASL_Search_Handler extends WD_ASL_Handler_Abstract {
 
 		/**
+		 * More "more results" pages than any search has: intval() saturates at PHP_INT_MAX, and the engine
+		 * multiplies the call number by the page size, which must stay an integer
+		 */
+		const MAX_CALL_NUM = 100000;
+
+		/**
 		 * Oversees and handles the search request
 		 *
 		 * @param bool $dont_group
@@ -42,7 +48,7 @@ if ( !class_exists('WD_ASL_Search_Handler') ) {
 			}
 
 			$id          = 0;
-			$call_num    = isset($_POST['asl_call_num']) ? intval(wp_unslash($_POST['asl_call_num'])) : 0; // phpcs:ignore
+			$call_num    = isset($_POST['asl_call_num']) && is_scalar($_POST['asl_call_num']) ? min(max(intval(wp_unslash($_POST['asl_call_num'])), 0), self::MAX_CALL_NUM) : 0; // phpcs:ignore
 			$is_new_client = isset($_POST['asl_req_json']); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$instance    = wd_asl()->instances->get($id);
 			$sd          = &$instance['data'];

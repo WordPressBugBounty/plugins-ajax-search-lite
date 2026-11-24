@@ -1,6 +1,7 @@
 <?php
 
 namespace WPDRMS\ASL\Core;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 if ( !defined('ABSPATH') ) {
 	die("You can't access this file directly.");
@@ -10,9 +11,10 @@ use WPDRMS\ASL\Analytics\AnalyticsRoute;
 use WPDRMS\ASL\BlockEditor\ASLBlock;
 use WPDRMS\ASL\Cache\CacheRoute;
 use WPDRMS\ASL\Compatibility\CompatibilityRoute;
+use WPDRMS\ASL\Integration\Enfold\EnfoldSearchIcon;
 use WPDRMS\ASL\Maintenance\MaintenanceRoute;
 use WPDRMS\ASL\Statistics\StatisticsRoute;
-use WPDRMS\PluginCore\Traits\SingletonTrait;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Traits\SingletonTrait;
 use WPDRMS\ASL\Options\Routes\SearchOptionsRoute;
 use WPDRMS\ASL\Options\Routes\TaxonomyTermsRoute;
 
@@ -25,7 +27,7 @@ class Factory {
 	use SingletonTrait;
 
 	const SUPPORTED_INTERFACES = array(
-		'Rest'  => array(
+		'Rest'        => array(
 			TaxonomyTermsRoute::class,
 			SearchOptionsRoute::class,
 			StatisticsRoute::class,
@@ -34,8 +36,11 @@ class Factory {
 			CompatibilityRoute::class,
 			MaintenanceRoute::class,
 		),
-		'Block' => array(
+		'Block'       => array(
 			ASLBlock::class,
+		),
+		'Integration' => array(
+			EnfoldSearchIcon::class,
 		),
 	);
 

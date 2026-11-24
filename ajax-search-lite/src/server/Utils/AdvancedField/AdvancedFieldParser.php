@@ -1,11 +1,12 @@
 <?php
 
 namespace WPDRMS\ASL\Utils\AdvancedField;
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use InvalidArgumentException;
 use stdClass;
-use WPDRMS\PluginCore\Traits\SingletonTrait;
-use WPDRMS\Utils\Str;
+use AjaxSearchLite\Vendor\WPDRMS\PluginCore\Traits\SingletonTrait;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\Str;
 
 class AdvancedFieldParser {
 	use SingletonTrait;
@@ -24,6 +25,16 @@ class AdvancedFieldParser {
 
 	private PostFieldTypeFactory $post_type_field_factory;
 	private UserFieldTypeFactory $user_type_field_factory;
+
+	/**
+	 * The values substituted during the parse in progress, by placeholder. The template is the administrator's,
+	 * the values are the posts' (every author writes them): a value is data, so a `{field}` or a `[shortcode]`
+	 * inside one is never resolved. The template is scanned with placeholders in the values' place, and the values
+	 * take their place last, after every pass and after do_shortcode().
+	 *
+	 * @var array<string, string>
+	 */
+	private array $values = array();
 
 	private function __construct() {
 		$this->post_type_field_factory = new PostFieldTypeFactory();
@@ -78,7 +89,26 @@ class AdvancedFieldParser {
 	 * @return string
 	 */
 	public function parse( string $text, stdClass $result ): string {
-		return $this->process( stripslashes($text), $result );
+		// A handler may parse another template meanwhile
+		$outer_values = $this->values;
+		$this->values = array();
+		try {
+			$out = strtr( $this->process( stripslashes($text), $result ), $this->values );
+		} finally {
+			$this->values = $outer_values;
+		}
+		return $out;
+	}
+
+	/**
+	 * The placeholder standing for a value until the parse is over, see $values
+	 *
+	 * @param string $value
+	 */
+	private function placeholder( string $value ): string {
+		$placeholder                  = "\x1A" . 'asl-advanced-field-' . count($this->values) . "\x1A";
+		$this->values[ $placeholder ] = $value;
+		return $placeholder;
 	}
 
 	/**
@@ -149,8 +179,10 @@ class AdvancedFieldParser {
 				}
 				$val = Str::fixSSLURLs($val);
 
-				if ( isset($field_args['maxlength']) ) {
-					$val = wd_substr_at_word($val, $field_args['maxlength']);
+				// Only a numeric cap is one: a non-number (`maxlength=''`) would reach the cut as a string length,
+				// a TypeError.
+				if ( isset($field_args['maxlength']) && is_numeric($field_args['maxlength']) ) {
+					$val = Str::truncateAtWord($val, (int) $field_args['maxlength']);
 				}
 
 				if ( $result->content_type === 'pagepost' || $result->content_type === 'attachment' ) {
@@ -158,8 +190,14 @@ class AdvancedFieldParser {
 				} elseif ( $result->content_type === 'user' ) {
 					$val = apply_filters('asl_user_advanced_field_value', $val, $field, $result, $field_args);
 				}
-				$val           = apply_filters('asl/utils/advanced-field/value', $val, $field, $result, $field_args);
-				$field_pattern = str_replace( '{' . $complete_field . '}', $val, $field_pattern );
+				$val = apply_filters('asl/utils/advanced-field/value', $val, $field, $result, $field_args);
+				/*
+				 * A snippet on the filters above may return null (a branch without `return`) or an array (ACF's
+				 * get_field() on a checkbox field): such a value renders as an empty field instead of a TypeError.
+				 * A number still renders.
+				 */
+				$val           = is_scalar($val) ? (string) $val : '';
+				$field_pattern = str_replace( '{' . $complete_field . '}', $this->placeholder($val), $field_pattern );
 			}
 		}
 
@@ -168,6 +206,19 @@ class AdvancedFieldParser {
 			$field_pattern = str_replace(
 				array( '____shortcode_start____', '____shortcode_end____' ),
 				array( '[', ']' ),
+				$field_pattern
+			);
+			/*
+			 * Only the template's own [[shortcodes]] run. A value written into a shortcode tag by the template
+			 * ([[gallery ids={_ids}]]) is passed to it without brackets, so it can neither close that tag nor open
+			 * another; every other value is still a placeholder while the shortcodes run, see $values.
+			 */
+			$bracketless   = str_replace(array( '[', ']' ), '', $this->values);
+			$field_pattern = preg_replace_callback(
+				'/\[[^\[\]]*\]/',
+				function ( $tag ) use ( $bracketless ) {
+					return strtr($tag[0], $bracketless);
+				},
 				$field_pattern
 			);
 			$field_pattern = do_shortcode($field_pattern);

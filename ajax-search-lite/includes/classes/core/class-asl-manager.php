@@ -1,10 +1,11 @@
 <?php
+\defined( 'ABSPATH' ) || exit; \defined( 'ASL_SCOPED' ) || ! \defined( 'ASL_PATH' ) || require_once ASL_PATH . 'vendor-prefixed/autoload.php';
 
 use WPDRMS\ASL\Cache\ResultsCacheService;
 use WPDRMS\ASL\Core\Factory;
 use WPDRMS\ASL\Statistics\StatisticsService;
 use WPDRMS\ASL\Utils\Polylang\StringTranslations;
-use WPDRMS\Utils\FileManager;
+use AjaxSearchLite\Vendor\WPDRMS\Utils\FileManager;
 
 if ( !defined('ABSPATH') ) {
 	die('-1');
@@ -339,6 +340,11 @@ if ( !class_exists('WD_ASL_Manager') ) {
 				// Editor blocks
 				foreach ( $factory->get( 'Block' ) as $block ) {
 					$block->register();
+				}
+
+				// Fixes and bridges for other plugins and themes
+				foreach ( $factory->get( 'Integration' ) as $integration ) {
+					$integration->register();
 				}
 
 				if ( $this->context === 'backend' ) {
